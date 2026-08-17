@@ -1,6 +1,6 @@
 "use client";
 
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { FieldError } from "@/components/ui/field";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
@@ -9,6 +9,9 @@ import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerShema, type RegisterTypes } from "@/schema/registerSchem";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { toast } from "sonner";
 
 export default function RegisterForm() {
   const {
@@ -19,7 +22,25 @@ export default function RegisterForm() {
     resolver: zodResolver(registerShema),
   });
 
-  const submit = () => {};
+  const { mutate } = useMutation({
+    mutationFn: async (data: RegisterTypes) => {
+      const response = await axios.post("/api/register", data);
+
+      return response.data;
+    },
+    onSuccess: (data) => {
+      toast.success(data.message);
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message ?? "Wystąpił błąd");
+      }
+    },
+  });
+
+  const submit = (data: RegisterTypes) => {
+    mutate(data);
+  };
 
   return (
     <CardContent className="w-96">
@@ -37,7 +58,6 @@ export default function RegisterForm() {
           />
           <FieldError errors={[errors.email]} className="" />
         </div>
-
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Hasło</Label>
@@ -64,7 +84,6 @@ export default function RegisterForm() {
           />
           <FieldError errors={[errors.confirmPassword]} className="" />
         </div>
-
         <Button type="submit" className="w-full">
           Zarejestruj się
         </Button>

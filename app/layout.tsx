@@ -1,8 +1,13 @@
 import "./globals.css";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
-import { ThemeProvider } from "@/components/theme-provider";
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+import { Providers } from "./providers";
+import { Toaster } from "@/components/ui/sonner";
+
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
@@ -12,14 +17,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <Providers>{children}</Providers>
+        <Toaster />
       </body>
     </html>
   );
