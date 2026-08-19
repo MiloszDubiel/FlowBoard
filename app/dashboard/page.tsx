@@ -1,3 +1,6 @@
+import MainPage from "@/components/MainPage";
+import axios from "axios";
+
 export default async function DashboardPage({
   params,
   searchParams,
@@ -11,11 +14,5 @@ export default async function DashboardPage({
   const { boardID } = await params;
   const { filter, search } = await searchParams;
 
-  return (
-    <div>
-      <p>Board: {boardID}</p>
-      <p>Filter: {filter}</p>
-      <p>Search: {search}</p>
-    </div>
-  );
+  return <MainPage />;
 }
