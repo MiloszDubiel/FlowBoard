@@ -31,10 +31,11 @@ export async function POST(request: Request) {
     data: {
       name: body.name,
       email: body.email,
-      password: hash,
+      passwordHash: hash,
     },
   });
 
+  //Zawsze musi zwrócic NextResponse
   return NextResponse.json(
     { message: "Pomyślnie zarejestrowano" },
     { status: 201 },

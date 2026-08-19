@@ -1,6 +1,5 @@
 "use client";
 
-import { FieldError } from "@/components/ui/field";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
@@ -8,24 +7,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerShema, type RegisterTypes } from "@/schema/register.schem";
+import { type LoginTypes, loginSchema } from "@/schema/login.schema";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
 
-export default function RegisterForm() {
+export default function LoginForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterTypes>({
-    resolver: zodResolver(registerShema),
+  } = useForm<LoginTypes>({
+    resolver: zodResolver(loginSchema),
   });
 
   const { mutate } = useMutation({
-    mutationFn: async (data: RegisterTypes) => {
-      const response = await axios.post("/api/register", data);
-
+    mutationFn: async (data: LoginTypes) => {
+      const response = await axios.post("/api/auth/login", data);
       return response.data;
     },
     onSuccess: (data) => {
@@ -38,7 +36,7 @@ export default function RegisterForm() {
     },
   });
 
-  const submit = (data: RegisterTypes) => {
+  const submit = (data: LoginTypes) => {
     mutate(data);
   };
 
@@ -53,49 +51,43 @@ export default function RegisterForm() {
           <Input
             id="email"
             type="email"
-            placeholder="Email"
             {...register("email")}
+            placeholder="email"
           />
-          <FieldError errors={[errors.email]} className="" />
         </div>
+
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Hasło</Label>
+
+            <Link
+              href="/forgot-password"
+              className="text-sm text-muted-foreground hover:text-primary"
+            >
+              Nie pamiętasz hasła?
+            </Link>
           </div>
 
           <Input
             id="password"
             type="password"
-            placeholder="••••••••"
             {...register("password")}
-          />
-          <FieldError errors={[errors.password]} className="" />
-        </div>
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="password">Powtórz hasło</Label>
-          </div>
-
-          <Input
-            id="password"
-            type="password"
             placeholder="••••••••"
-            {...register("confirmPassword")}
           />
-          <FieldError errors={[errors.confirmPassword]} className="" />
         </div>
+
         <Button type="submit" className="w-full">
-          Zarejestruj się
+          Zaloguj się
         </Button>
       </form>
 
       <div className="mt-6 text-center text-sm text-muted-foreground">
-        Masz już konto?{" "}
+        Nie masz jeszcze konta?{" "}
         <Link
-          href="/login"
+          href="/register"
           className="font-medium text-primary hover:underline"
         >
-          Zaloguj się
+          Zarejestruj się
         </Link>
       </div>
     </CardContent>

@@ -22,3 +22,53 @@ export * from './enums';
  * 
  */
 export type User = Prisma.UserModel
+/**
+ * Model Board
+ * 
+ */
+export type Board = Prisma.BoardModel
+/**
+ * Model BoardMember
+ * 
+ */
+export type BoardMember = Prisma.BoardMemberModel
+/**
+ * Model List
+ * 
+ */
+export type List = Prisma.ListModel
+/**
+ * Model Card
+ * 
+ */
+export type Card = Prisma.CardModel
+/**
+ * Model CardMember
+ * 
+ */
+export type CardMember = Prisma.CardMemberModel
+/**
+ * Model Label
+ * 
+ */
+export type Label = Prisma.LabelModel
+/**
+ * Model CardLabel
+ * 
+ */
+export type CardLabel = Prisma.CardLabelModel
+/**
+ * Model Comment
+ * 
+ */
+export type Comment = Prisma.CommentModel
+/**
+ * Model Attachment
+ * 
+ */
+export type Attachment = Prisma.AttachmentModel
+/**
+ * Model Activity
+ * 
+ */
+export type Activity = Prisma.ActivityModel

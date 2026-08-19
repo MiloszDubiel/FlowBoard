@@ -23,6 +23,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useUser } from "@/queries/auth/useUser";
+import CreateProject from "../project/CreateProject";
+import { useState } from "react";
 
 const mainItems = [
   {
@@ -66,6 +69,9 @@ const secondaryItems = [
 ];
 
 export default function AppSidebar() {
+  const { data: user = [] } = useUser();
+  const [open, setOpen] = useState(false);
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -102,10 +108,13 @@ export default function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between bg-or">
             <SidebarGroupLabel>Projekty</SidebarGroupLabel>
 
-            <SidebarMenuButton className="size-7">
+            <SidebarMenuButton
+              className="size-7 flex justify-center items-center cursor-pointer"
+              onClick={() => setOpen(true)}
+            >
               <Plus />
             </SidebarMenuButton>
           </div>
@@ -161,14 +170,15 @@ export default function AppSidebar() {
           </div>
 
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium">Miłosz</p>
+            <p className="truncate text-sm font-medium">{user?.name}</p>
 
             <p className="truncate text-xs text-muted-foreground">
-              milosz@example.com
+              {user?.email}
             </p>
           </div>
         </div>
       </SidebarFooter>
+      <CreateProject open={open} onOpenChange={setOpen} />
     </Sidebar>
   );
 }

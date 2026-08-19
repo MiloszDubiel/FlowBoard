@@ -1,4 +1,4 @@
-import AppSidebar from "@/components/AppSidebar";
+import AppSidebar from "@/components/dashboard/AppSidebar";
 
 export default function DashboardLayout({
   children,
@@ -7,10 +7,8 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="min-h-screen w-full">
-
       <div className="flex">
         <AppSidebar />
-
         <main className="flex-1">{children}</main>
       </div>
     </div>

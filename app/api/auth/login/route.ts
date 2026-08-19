@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const compare = await bcrypt.compare(password, user.password || "");
+  const compare = await bcrypt.compare(password, user.passwordHash || "");
 
   if (!compare) {
     return NextResponse.json(
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
 
   const token = await createToken(user.id);
 
-  const response = NextResponse.json({ message: "Zalogowano" });
+  const response = NextResponse.json({ message: "Zalogowano", user });
 
   response.cookies.set("token", token, {
     httpOnly: true,
