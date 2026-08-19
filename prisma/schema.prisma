@@ -12,9 +12,256 @@ datasource db {
   provider = "mysql"
 }
 
-model User { 
-  id    Int     @id @default(autoincrement()) 
-  email String  @unique
-  password  String?
+
+// =========================
+// USER
+// =========================
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String
+  avatarUrl    String?
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  boards       Board[]
+  memberships  BoardMember[]
+  cardsCreated Card[] @relation("CardCreator")
+  cardMembers  CardMember[]
+  comments     Comment[]
+  attachments  Attachment[]
+  activities   Activity[]
+
+  @@map("users")
+}
+
+
+// =========================
+// BOARD
+// =========================
+
+model Board {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  ownerId     Int
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  owner       User         @relation(fields: [ownerId], references: [id])
+  members     BoardMember[]
+  lists       List[]
+  labels      Label[]
+  activities  Activity[]
+
+  @@index([ownerId])
+  @@map("boards")
+}
+
+
+// =========================
+// BOARD MEMBERS
+// =========================
+
+model BoardMember {
+  id        Int      @id @default(autoincrement())
+  boardId   Int
+  userId    Int
+  role      BoardRole @default(MEMBER)
+  joinedAt  DateTime @default(now())
+
+  board     Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  user      User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([boardId, userId])
+  @@index([userId])
+  @@map("board_members")
+}
+
+enum BoardRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+
+// =========================
+// LIST
+// =========================
+
+model List {
+  id        Int      @id @default(autoincrement())
+  boardId   Int
+  name      String
+  position  Int
+
   createdAt DateTime @default(now())
-} 
+  updatedAt DateTime @updatedAt
+
+  board     Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  cards     Card[]
+
+  @@index([boardId])
+  @@map("lists")
+}
+
+
+// =========================
+// CARD
+// =========================
+
+model Card {
+  id          Int      @id @default(autoincrement())
+  listId      Int
+  title       String
+  description String?  @db.Text
+  position    Int
+  dueDate     DateTime?
+
+  createdById Int
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  list        List       @relation(fields: [listId], references: [id], onDelete: Cascade)
+  createdBy   User       @relation("CardCreator", fields: [createdById], references: [id])
+  members     CardMember[]
+  labels      CardLabel[]
+  comments    Comment[]
+  attachments Attachment[]
+  activities  Activity[]
+
+  @@index([listId])
+  @@index([createdById])
+  @@map("cards")
+}
+
+
+// =========================
+// CARD MEMBERS
+// =========================
+
+model CardMember {
+  cardId Int
+  userId Int
+
+  card   Card @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([cardId, userId])
+  @@index([userId])
+  @@map("card_members")
+}
+
+
+// =========================
+// LABEL
+// =========================
+
+model Label {
+  id        Int      @id @default(autoincrement())
+  boardId   Int
+  name      String
+  color     String
+
+  createdAt DateTime @default(now())
+
+  board     Board      @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  cards     CardLabel[]
+
+  @@index([boardId])
+  @@map("labels")
+}
+
+
+// =========================
+// CARD LABEL
+// =========================
+
+model CardLabel {
+  cardId  Int
+  labelId Int
+
+  card    Card  @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  label   Label @relation(fields: [labelId], references: [id], onDelete: Cascade)
+
+  @@id([cardId, labelId])
+  @@index([labelId])
+  @@map("card_labels")
+}
+
+
+// =========================
+// COMMENT
+// =========================
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  cardId    Int
+  userId    Int
+  content   String   @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  card      Card @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([cardId])
+  @@index([userId])
+  @@map("comments")
+}
+
+
+// =========================
+// ATTACHMENT
+// =========================
+
+model Attachment {
+  id        Int      @id @default(autoincrement())
+  cardId    Int
+  userId    Int
+
+  fileName  String
+  fileUrl   String
+  fileSize  Int?
+
+  createdAt DateTime @default(now())
+
+  card      Card @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([cardId])
+  @@index([userId])
+  @@map("attachments")
+}
+
+
+// =========================
+// ACTIVITY
+// =========================
+
+model Activity {
+  id        Int      @id @default(autoincrement())
+  boardId   Int
+  cardId    Int?
+  userId    Int
+
+  type      String
+  metadata  Json?
+
+  createdAt DateTime @default(now())
+
+  board     Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  card      Card? @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  user      User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([boardId])
+  @@index([cardId])
+  @@index([userId])
+  @@map("activities")
+}

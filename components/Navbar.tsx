@@ -28,21 +28,27 @@ export default function Navbar() {
           </Button>
 
           <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button variant="ghost" size="icon" aria-label="Menu użytkownika">
-                <User />
-              </Button>
-            </DropdownMenuTrigger>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Menu użytkownika"
+                >
+                  <User />
+                </Button>
+              }
+            ></DropdownMenuTrigger>
 
             <DropdownMenuContent align="end">
               <DropdownMenuGroup>
                 <DropdownMenuLabel>Moje konto</DropdownMenuLabel>
 
-                <DropdownMenuItem >
+                <DropdownMenuItem>
                   <Link href="/dashboard/profile">Profil</Link>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem >
+                <DropdownMenuItem>
                   <Link href="/dashboard/settings">Ustawienia</Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>

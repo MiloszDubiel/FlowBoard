@@ -1,13 +1,18 @@
-import Navbar from "@/components/Navbar";
+import AppSidebar from "@/components/AppSidebar";
+
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <Navbar />
-      <main>{children}</main>
-    </>
+    <div className="min-h-screen w-full">
+
+      <div className="flex">
+        <AppSidebar />
+
+        <main className="flex-1">{children}</main>
+      </div>
+    </div>
   );
 }

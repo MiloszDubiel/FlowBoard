@@ -8,7 +8,7 @@ import {
 import Link from "next/link";
 export default function Home() {
   return (
-    <main className="min-h-scree">
+    <main className="min-h-screen w-full">
       <section className="mx-auto flex max-w-7xl flex-col items-center px-6 py-24 text-center">
         <h1 className="text-5xl font-bold tracking-tight">
           Zarządzaj projektami z{" "}

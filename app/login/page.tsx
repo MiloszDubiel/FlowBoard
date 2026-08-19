@@ -9,7 +9,7 @@ import LoginForm from "@/components/LoginForm";
 
 export default function LoginPage() {
   return (
-    <main className="flex min-h-screen items-center justify-cente px-4">
+    <section className="flex min-h-screen items-center justify-cente px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Witaj </CardTitle>
@@ -17,6 +17,6 @@ export default function LoginPage() {
         </CardHeader>
         <LoginForm />
       </Card>
-    </main>
+    </section>
   );
 }

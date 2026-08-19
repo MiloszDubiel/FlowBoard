@@ -16,7 +16,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={cn("h-full", "antialiased", "font-sans", geist.variable)}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full  min-w-full">
         <Providers>{children}</Providers>
         <Toaster />
       </body>
