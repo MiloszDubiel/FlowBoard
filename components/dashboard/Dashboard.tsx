@@ -20,42 +20,36 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import CreateProject from "../project/CreateProject";
-
-const projects = [
-  {
-    id: 1,
-    name: "FlowBoard",
-    description: "Aplikacja do zarządzania projektami",
-    color: "bg-blue-500",
-    progress: 75,
-    tasks: 24,
-    completed: 18,
-    members: 4,
-  },
-  //   {
-  //     id: 2,
-  //     name: "MyITStore",
-  //     description: "Sklep internetowy",
-  //     color: "bg-purple-500",
-  //     progress: 50,
-  //     tasks: 32,
-  //     completed: 16,
-  //     members: 3,
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Portfolio",
-  //     description: "Moje portfolio developerskie",
-  //     color: "bg-green-500",
-  //     progress: 30,
-  //     tasks: 10,
-  //     completed: 3,
-  //     members: 1,
-  //   },
-];
-
+import { useDashboard } from "@/queries/dashboard/useDashboard";
+import { Project } from "@/types/project.type";
+import EditProject from "../project/EditProject";
+import ConfirmModal from "../modals/ConfirmModal";
+import { useDashboardMuts } from "@/mutations/dashboard/useDashboardMuts";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+const boardColorClasses: Record<string, string> = {
+  ORANGE: "bg-orange-500",
+  BLUE: "bg-blue-500",
+  GREEN: "bg-green-500",
+  RED: "bg-red-500",
+  PURPLE: "bg-purple-500",
+  PINK: "bg-pink-500",
+};
 const Dashboard = () => {
+  const {
+    getProjects: { data: projects = [] },
+  } = useDashboard();
+
+  const [openConfirm, setOpenConfirm] = useState(false);
   const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editedProject, setEditedProject] = useState<Project | undefined>();
+  const queryClient = useQueryClient();
+
+  const {
+    deleteProject: { mutate },
+  } = useDashboardMuts(editedProject?.id);
+
   return (
     <div className="mx-auto max-w-7xl px-6 py-8">
       <div className="mb-8 flex items-center justify-between">
@@ -67,7 +61,7 @@ const Dashboard = () => {
           </p>
         </div>
 
-        <Button>
+        <Button onClick={() => setOpen(true)} className="cursor-pointer ">
           <Plus className="mr-2 h-4 w-4" />
           Nowy projekt
         </Button>
@@ -98,10 +92,11 @@ const Dashboard = () => {
               <p className="text-sm text-muted-foreground">Ukończone zadania</p>
 
               <p className="text-2xl font-bold">
-                {projects.reduce(
-                  (total, project) => total + project.completed,
+                {/* {projects.reduce(
+                  (total: number, project: Project) =>
+                    total + project.completed,
                   0,
-                )}
+                )} */}
               </p>
             </div>
           </CardContent>
@@ -117,7 +112,10 @@ const Dashboard = () => {
               <p className="text-sm text-muted-foreground">Wszystkie zadania</p>
 
               <p className="text-2xl font-bold">
-                {projects.reduce((total, project) => total + project.tasks, 0)}
+                {/* {projects.reduce(
+                  (total: number, project: Project) => total + project.tasks,
+                  0,
+                )} */}
               </p>
             </div>
           </CardContent>
@@ -142,7 +140,7 @@ const Dashboard = () => {
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project) => (
+          {projects.map((project: Project) => (
             <Card
               key={project.id}
               className="group transition-shadow hover:shadow-md"
@@ -151,7 +149,7 @@ const Dashboard = () => {
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <div
-                      className={`h-10 w-10 rounded-lg ${project.color} flex items-center justify-center text-white`}
+                      className={`h-10 w-10 rounded-lg ${boardColorClasses[project.color]} flex items-center justify-center text-white`}
                     >
                       <FolderKanban className="h-5 w-5" />
                     </div>
@@ -183,9 +181,22 @@ const Dashboard = () => {
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem>Otwórz projekt</DropdownMenuItem>
 
-                      <DropdownMenuItem>Edytuj projekt</DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setEditedProject(project);
+                          setOpenEdit(true);
+                        }}
+                      >
+                        Edytuj projekt
+                      </DropdownMenuItem>
 
-                      <DropdownMenuItem className="text-destructive">
+                      <DropdownMenuItem
+                        className="text-destructive"
+                        onClick={() => {
+                          setEditedProject(project);
+                          setOpenConfirm(true);
+                        }}
+                      >
                         Usuń projekt
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -198,15 +209,17 @@ const Dashboard = () => {
                   <div className="mb-2 flex justify-between text-sm">
                     <span className="text-muted-foreground">Postęp</span>
 
-                    <span className="font-medium">{project.progress}%</span>
+                    {/* <span className="font-medium">{project.progress}%</span> */}
                   </div>
 
                   <div className="h-2 overflow-hidden rounded-full bg-muted">
                     <div
                       className={`h-full ${project.color} transition-all`}
-                      style={{
-                        width: `${project.progress}%`,
-                      }}
+                      style={
+                        {
+                          // width: `${project.progress}%`,
+                        }
+                      }
                     />
                   </div>
                 </div>
@@ -216,14 +229,14 @@ const Dashboard = () => {
                     <CheckCircle2 className="h-4 w-4" />
 
                     <span>
-                      {project.completed}/{project.tasks} zadań
+                      {/* {project.completed}/{project.tasks} zadań */}
                     </span>
                   </div>
 
                   <div className="flex items-center gap-1.5">
                     <Users className="h-4 w-4" />
 
-                    <span>{project.members}</span>
+                    {/* <span>{project.members}</span> */}
                   </div>
                 </div>
               </CardContent>
@@ -232,7 +245,7 @@ const Dashboard = () => {
 
           <button
             type="button"
-            className="flex min-h-57.5 flex-col items-center justify-center rounded-xl border border-dashed bg-background text-muted-foreground transition-colors hover:border-primary hover:bg-muted/50 hover:text-foreground"
+            className="flex min-h-57.5 flex-col items-center justify-center rounded-xl border border-dashed bg-background text-muted-foreground transition-colors hover:border-primary hover:bg-muted/50 hover:text-foreground cursor-pointer"
             onClick={() => setOpen(true)}
           >
             <div className="mb-3 rounded-full bg-muted p-3">
@@ -245,6 +258,27 @@ const Dashboard = () => {
           </button>
         </div>
         <CreateProject open={open} onOpenChange={setOpen} />
+        <EditProject
+          open={openEdit}
+          onOpenChange={setOpenEdit}
+          project={editedProject}
+        />
+        <ConfirmModal
+          open={openConfirm}
+          onOpenChange={setOpen}
+          onSubmit={() => {
+            mutate(undefined, {
+              onSuccess: (data) => {
+                queryClient.invalidateQueries({ queryKey: ["projects"] });
+                toast.success(data.message);
+              },
+            });
+            setOpenConfirm(false);
+          }}
+          onCancel={() => {
+            setOpenConfirm(false);
+          }}
+        />
       </section>
     </div>
   );

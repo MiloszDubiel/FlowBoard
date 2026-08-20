@@ -26,6 +26,8 @@ import {
 import { useUser } from "@/queries/auth/useUser";
 import CreateProject from "../project/CreateProject";
 import { useState } from "react";
+import { useDashboard } from "@/queries/dashboard/useDashboard";
+import { Project } from "@/types/project.type";
 
 const mainItems = [
   {
@@ -71,6 +73,9 @@ const secondaryItems = [
 export default function AppSidebar() {
   const { data: user = [] } = useUser();
   const [open, setOpen] = useState(false);
+  const {
+    getProjects: { data: projects = [] },
+  } = useDashboard();
 
   return (
     <Sidebar>
@@ -121,23 +126,16 @@ export default function AppSidebar() {
 
           <SidebarGroupContent>
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <a href="/dashboard/projects/flowboard">
-                    <span className="size-2 rounded-full bg-blue-500" />
-                    <span>FlowBoard</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <a href="/dashboard/projects/myitstore">
-                    <span className="size-2 rounded-full bg-green-500" />
-                    <span>MyITStore</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              {projects.map((el: Project) => (
+                <SidebarMenuItem key={el.id}>
+                  <SidebarMenuButton>
+                    <a href="/dashboard/projects/flowboard">
+                      <span className="size-2 rounded-full bg-blue-500" />
+                      <span>{el.name}</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

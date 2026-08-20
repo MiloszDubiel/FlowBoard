@@ -9,6 +9,16 @@
 * 🟢 You can import this file directly.
 */
 
+export const Color = {
+  GREEN: 'GREEN',
+  BLUE: 'BLUE',
+  RED: 'RED',
+  ORANGE: 'ORANGE'
+} as const
+
+export type Color = (typeof Color)[keyof typeof Color]
+
+
 export const BoardRole = {
   OWNER: 'OWNER',
   ADMIN: 'ADMIN',

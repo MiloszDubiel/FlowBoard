@@ -232,6 +232,7 @@ export type UserWhereInput = {
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  projects?: Prisma.ProjectListRelationFilter
   boards?: Prisma.BoardListRelationFilter
   memberships?: Prisma.BoardMemberListRelationFilter
   cardsCreated?: Prisma.CardListRelationFilter
@@ -249,6 +250,7 @@ export type UserOrderByWithRelationInput = {
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  projects?: Prisma.ProjectOrderByRelationAggregateInput
   boards?: Prisma.BoardOrderByRelationAggregateInput
   memberships?: Prisma.BoardMemberOrderByRelationAggregateInput
   cardsCreated?: Prisma.CardOrderByRelationAggregateInput
@@ -270,6 +272,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  projects?: Prisma.ProjectListRelationFilter
   boards?: Prisma.BoardListRelationFilter
   memberships?: Prisma.BoardMemberListRelationFilter
   cardsCreated?: Prisma.CardListRelationFilter
@@ -314,6 +317,7 @@ export type UserCreateInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput
   boards?: Prisma.BoardCreateNestedManyWithoutOwnerInput
   memberships?: Prisma.BoardMemberCreateNestedManyWithoutUserInput
   cardsCreated?: Prisma.CardCreateNestedManyWithoutCreatedByInput
@@ -331,6 +335,7 @@ export type UserUncheckedCreateInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutOwnerInput
   memberships?: Prisma.BoardMemberUncheckedCreateNestedManyWithoutUserInput
   cardsCreated?: Prisma.CardUncheckedCreateNestedManyWithoutCreatedByInput
@@ -347,6 +352,7 @@ export type UserUpdateInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput
   boards?: Prisma.BoardUpdateManyWithoutOwnerNestedInput
   memberships?: Prisma.BoardMemberUpdateManyWithoutUserNestedInput
   cardsCreated?: Prisma.CardUpdateManyWithoutCreatedByNestedInput
@@ -364,6 +370,7 @@ export type UserUncheckedUpdateInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput
   boards?: Prisma.BoardUncheckedUpdateManyWithoutOwnerNestedInput
   memberships?: Prisma.BoardMemberUncheckedUpdateManyWithoutUserNestedInput
   cardsCreated?: Prisma.CardUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -471,6 +478,20 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type UserCreateNestedOneWithoutProjectsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProjectsInput, Prisma.UserUncheckedCreateWithoutProjectsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProjectsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutProjectsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProjectsInput, Prisma.UserUncheckedCreateWithoutProjectsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProjectsInput
+  upsert?: Prisma.UserUpsertWithoutProjectsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProjectsInput, Prisma.UserUpdateWithoutProjectsInput>, Prisma.UserUncheckedUpdateWithoutProjectsInput>
+}
+
 export type UserCreateNestedOneWithoutBoardsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutBoardsInput, Prisma.UserUncheckedCreateWithoutBoardsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutBoardsInput
@@ -569,6 +590,88 @@ export type UserUpdateOneRequiredWithoutActivitiesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutActivitiesInput, Prisma.UserUpdateWithoutActivitiesInput>, Prisma.UserUncheckedUpdateWithoutActivitiesInput>
 }
 
+export type UserCreateWithoutProjectsInput = {
+  name?: string | null
+  email: string
+  passwordHash: string
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  boards?: Prisma.BoardCreateNestedManyWithoutOwnerInput
+  memberships?: Prisma.BoardMemberCreateNestedManyWithoutUserInput
+  cardsCreated?: Prisma.CardCreateNestedManyWithoutCreatedByInput
+  cardMembers?: Prisma.CardMemberCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutProjectsInput = {
+  id?: number
+  name?: string | null
+  email: string
+  passwordHash: string
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  boards?: Prisma.BoardUncheckedCreateNestedManyWithoutOwnerInput
+  memberships?: Prisma.BoardMemberUncheckedCreateNestedManyWithoutUserInput
+  cardsCreated?: Prisma.CardUncheckedCreateNestedManyWithoutCreatedByInput
+  cardMembers?: Prisma.CardMemberUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutProjectsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutProjectsInput, Prisma.UserUncheckedCreateWithoutProjectsInput>
+}
+
+export type UserUpsertWithoutProjectsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutProjectsInput, Prisma.UserUncheckedUpdateWithoutProjectsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutProjectsInput, Prisma.UserUncheckedCreateWithoutProjectsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutProjectsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutProjectsInput, Prisma.UserUncheckedUpdateWithoutProjectsInput>
+}
+
+export type UserUpdateWithoutProjectsInput = {
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  boards?: Prisma.BoardUpdateManyWithoutOwnerNestedInput
+  memberships?: Prisma.BoardMemberUpdateManyWithoutUserNestedInput
+  cardsCreated?: Prisma.CardUpdateManyWithoutCreatedByNestedInput
+  cardMembers?: Prisma.CardMemberUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutProjectsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  boards?: Prisma.BoardUncheckedUpdateManyWithoutOwnerNestedInput
+  memberships?: Prisma.BoardMemberUncheckedUpdateManyWithoutUserNestedInput
+  cardsCreated?: Prisma.CardUncheckedUpdateManyWithoutCreatedByNestedInput
+  cardMembers?: Prisma.CardMemberUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+}
+
 export type UserCreateWithoutBoardsInput = {
   name?: string | null
   email: string
@@ -576,6 +679,7 @@ export type UserCreateWithoutBoardsInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput
   memberships?: Prisma.BoardMemberCreateNestedManyWithoutUserInput
   cardsCreated?: Prisma.CardCreateNestedManyWithoutCreatedByInput
   cardMembers?: Prisma.CardMemberCreateNestedManyWithoutUserInput
@@ -592,6 +696,7 @@ export type UserUncheckedCreateWithoutBoardsInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput
   memberships?: Prisma.BoardMemberUncheckedCreateNestedManyWithoutUserInput
   cardsCreated?: Prisma.CardUncheckedCreateNestedManyWithoutCreatedByInput
   cardMembers?: Prisma.CardMemberUncheckedCreateNestedManyWithoutUserInput
@@ -623,6 +728,7 @@ export type UserUpdateWithoutBoardsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput
   memberships?: Prisma.BoardMemberUpdateManyWithoutUserNestedInput
   cardsCreated?: Prisma.CardUpdateManyWithoutCreatedByNestedInput
   cardMembers?: Prisma.CardMemberUpdateManyWithoutUserNestedInput
@@ -639,6 +745,7 @@ export type UserUncheckedUpdateWithoutBoardsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput
   memberships?: Prisma.BoardMemberUncheckedUpdateManyWithoutUserNestedInput
   cardsCreated?: Prisma.CardUncheckedUpdateManyWithoutCreatedByNestedInput
   cardMembers?: Prisma.CardMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -654,6 +761,7 @@ export type UserCreateWithoutMembershipsInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput
   boards?: Prisma.BoardCreateNestedManyWithoutOwnerInput
   cardsCreated?: Prisma.CardCreateNestedManyWithoutCreatedByInput
   cardMembers?: Prisma.CardMemberCreateNestedManyWithoutUserInput
@@ -670,6 +778,7 @@ export type UserUncheckedCreateWithoutMembershipsInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutOwnerInput
   cardsCreated?: Prisma.CardUncheckedCreateNestedManyWithoutCreatedByInput
   cardMembers?: Prisma.CardMemberUncheckedCreateNestedManyWithoutUserInput
@@ -701,6 +810,7 @@ export type UserUpdateWithoutMembershipsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput
   boards?: Prisma.BoardUpdateManyWithoutOwnerNestedInput
   cardsCreated?: Prisma.CardUpdateManyWithoutCreatedByNestedInput
   cardMembers?: Prisma.CardMemberUpdateManyWithoutUserNestedInput
@@ -717,6 +827,7 @@ export type UserUncheckedUpdateWithoutMembershipsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput
   boards?: Prisma.BoardUncheckedUpdateManyWithoutOwnerNestedInput
   cardsCreated?: Prisma.CardUncheckedUpdateManyWithoutCreatedByNestedInput
   cardMembers?: Prisma.CardMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -732,6 +843,7 @@ export type UserCreateWithoutCardsCreatedInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput
   boards?: Prisma.BoardCreateNestedManyWithoutOwnerInput
   memberships?: Prisma.BoardMemberCreateNestedManyWithoutUserInput
   cardMembers?: Prisma.CardMemberCreateNestedManyWithoutUserInput
@@ -748,6 +860,7 @@ export type UserUncheckedCreateWithoutCardsCreatedInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutOwnerInput
   memberships?: Prisma.BoardMemberUncheckedCreateNestedManyWithoutUserInput
   cardMembers?: Prisma.CardMemberUncheckedCreateNestedManyWithoutUserInput
@@ -779,6 +892,7 @@ export type UserUpdateWithoutCardsCreatedInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput
   boards?: Prisma.BoardUpdateManyWithoutOwnerNestedInput
   memberships?: Prisma.BoardMemberUpdateManyWithoutUserNestedInput
   cardMembers?: Prisma.CardMemberUpdateManyWithoutUserNestedInput
@@ -795,6 +909,7 @@ export type UserUncheckedUpdateWithoutCardsCreatedInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput
   boards?: Prisma.BoardUncheckedUpdateManyWithoutOwnerNestedInput
   memberships?: Prisma.BoardMemberUncheckedUpdateManyWithoutUserNestedInput
   cardMembers?: Prisma.CardMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -810,6 +925,7 @@ export type UserCreateWithoutCardMembersInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput
   boards?: Prisma.BoardCreateNestedManyWithoutOwnerInput
   memberships?: Prisma.BoardMemberCreateNestedManyWithoutUserInput
   cardsCreated?: Prisma.CardCreateNestedManyWithoutCreatedByInput
@@ -826,6 +942,7 @@ export type UserUncheckedCreateWithoutCardMembersInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutOwnerInput
   memberships?: Prisma.BoardMemberUncheckedCreateNestedManyWithoutUserInput
   cardsCreated?: Prisma.CardUncheckedCreateNestedManyWithoutCreatedByInput
@@ -857,6 +974,7 @@ export type UserUpdateWithoutCardMembersInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput
   boards?: Prisma.BoardUpdateManyWithoutOwnerNestedInput
   memberships?: Prisma.BoardMemberUpdateManyWithoutUserNestedInput
   cardsCreated?: Prisma.CardUpdateManyWithoutCreatedByNestedInput
@@ -873,6 +991,7 @@ export type UserUncheckedUpdateWithoutCardMembersInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput
   boards?: Prisma.BoardUncheckedUpdateManyWithoutOwnerNestedInput
   memberships?: Prisma.BoardMemberUncheckedUpdateManyWithoutUserNestedInput
   cardsCreated?: Prisma.CardUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -888,6 +1007,7 @@ export type UserCreateWithoutCommentsInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput
   boards?: Prisma.BoardCreateNestedManyWithoutOwnerInput
   memberships?: Prisma.BoardMemberCreateNestedManyWithoutUserInput
   cardsCreated?: Prisma.CardCreateNestedManyWithoutCreatedByInput
@@ -904,6 +1024,7 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutOwnerInput
   memberships?: Prisma.BoardMemberUncheckedCreateNestedManyWithoutUserInput
   cardsCreated?: Prisma.CardUncheckedCreateNestedManyWithoutCreatedByInput
@@ -935,6 +1056,7 @@ export type UserUpdateWithoutCommentsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput
   boards?: Prisma.BoardUpdateManyWithoutOwnerNestedInput
   memberships?: Prisma.BoardMemberUpdateManyWithoutUserNestedInput
   cardsCreated?: Prisma.CardUpdateManyWithoutCreatedByNestedInput
@@ -951,6 +1073,7 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput
   boards?: Prisma.BoardUncheckedUpdateManyWithoutOwnerNestedInput
   memberships?: Prisma.BoardMemberUncheckedUpdateManyWithoutUserNestedInput
   cardsCreated?: Prisma.CardUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -966,6 +1089,7 @@ export type UserCreateWithoutAttachmentsInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput
   boards?: Prisma.BoardCreateNestedManyWithoutOwnerInput
   memberships?: Prisma.BoardMemberCreateNestedManyWithoutUserInput
   cardsCreated?: Prisma.CardCreateNestedManyWithoutCreatedByInput
@@ -982,6 +1106,7 @@ export type UserUncheckedCreateWithoutAttachmentsInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutOwnerInput
   memberships?: Prisma.BoardMemberUncheckedCreateNestedManyWithoutUserInput
   cardsCreated?: Prisma.CardUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1013,6 +1138,7 @@ export type UserUpdateWithoutAttachmentsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput
   boards?: Prisma.BoardUpdateManyWithoutOwnerNestedInput
   memberships?: Prisma.BoardMemberUpdateManyWithoutUserNestedInput
   cardsCreated?: Prisma.CardUpdateManyWithoutCreatedByNestedInput
@@ -1029,6 +1155,7 @@ export type UserUncheckedUpdateWithoutAttachmentsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput
   boards?: Prisma.BoardUncheckedUpdateManyWithoutOwnerNestedInput
   memberships?: Prisma.BoardMemberUncheckedUpdateManyWithoutUserNestedInput
   cardsCreated?: Prisma.CardUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1044,6 +1171,7 @@ export type UserCreateWithoutActivitiesInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput
   boards?: Prisma.BoardCreateNestedManyWithoutOwnerInput
   memberships?: Prisma.BoardMemberCreateNestedManyWithoutUserInput
   cardsCreated?: Prisma.CardCreateNestedManyWithoutCreatedByInput
@@ -1060,6 +1188,7 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutOwnerInput
   memberships?: Prisma.BoardMemberUncheckedCreateNestedManyWithoutUserInput
   cardsCreated?: Prisma.CardUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1091,6 +1220,7 @@ export type UserUpdateWithoutActivitiesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput
   boards?: Prisma.BoardUpdateManyWithoutOwnerNestedInput
   memberships?: Prisma.BoardMemberUpdateManyWithoutUserNestedInput
   cardsCreated?: Prisma.CardUpdateManyWithoutCreatedByNestedInput
@@ -1107,6 +1237,7 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput
   boards?: Prisma.BoardUncheckedUpdateManyWithoutOwnerNestedInput
   memberships?: Prisma.BoardMemberUncheckedUpdateManyWithoutUserNestedInput
   cardsCreated?: Prisma.CardUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1121,6 +1252,7 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
  */
 
 export type UserCountOutputType = {
+  projects: number
   boards: number
   memberships: number
   cardsCreated: number
@@ -1131,6 +1263,7 @@ export type UserCountOutputType = {
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  projects?: boolean | UserCountOutputTypeCountProjectsArgs
   boards?: boolean | UserCountOutputTypeCountBoardsArgs
   memberships?: boolean | UserCountOutputTypeCountMembershipsArgs
   cardsCreated?: boolean | UserCountOutputTypeCountCardsCreatedArgs
@@ -1148,6 +1281,13 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the UserCountOutputType
    */
   select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountProjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProjectWhereInput
 }
 
 /**
@@ -1208,6 +1348,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   avatarUrl?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  projects?: boolean | Prisma.User$projectsArgs<ExtArgs>
   boards?: boolean | Prisma.User$boardsArgs<ExtArgs>
   memberships?: boolean | Prisma.User$membershipsArgs<ExtArgs>
   cardsCreated?: boolean | Prisma.User$cardsCreatedArgs<ExtArgs>
@@ -1232,6 +1373,7 @@ export type UserSelectScalar = {
 
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "passwordHash" | "avatarUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  projects?: boolean | Prisma.User$projectsArgs<ExtArgs>
   boards?: boolean | Prisma.User$boardsArgs<ExtArgs>
   memberships?: boolean | Prisma.User$membershipsArgs<ExtArgs>
   cardsCreated?: boolean | Prisma.User$cardsCreatedArgs<ExtArgs>
@@ -1245,6 +1387,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
+    projects: Prisma.$ProjectPayload<ExtArgs>[]
     boards: Prisma.$BoardPayload<ExtArgs>[]
     memberships: Prisma.$BoardMemberPayload<ExtArgs>[]
     cardsCreated: Prisma.$CardPayload<ExtArgs>[]
@@ -1601,6 +1744,7 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  projects<T extends Prisma.User$projectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   boards<T extends Prisma.User$boardsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$boardsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   memberships<T extends Prisma.User$membershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$membershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   cardsCreated<T extends Prisma.User$cardsCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$cardsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1989,6 +2133,30 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Users to delete.
    */
   limit?: number
+}
+
+/**
+ * User.projects
+ */
+export type User$projectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Project
+   */
+  select?: Prisma.ProjectSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Project
+   */
+  omit?: Prisma.ProjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProjectInclude<ExtArgs> | null
+  where?: Prisma.ProjectWhereInput
+  orderBy?: Prisma.ProjectOrderByWithRelationInput | Prisma.ProjectOrderByWithRelationInput[]
+  cursor?: Prisma.ProjectWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProjectScalarFieldEnum | Prisma.ProjectScalarFieldEnum[]
 }
 
 /**

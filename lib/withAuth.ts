@@ -1,14 +1,26 @@
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
 
+type RouteContext = {
+  params: Promise<Record<string, string>>;
+};
+
 export function withAuth(
-  handler: (user: any, request: Request) => Promise<Response>,
+  handler: (
+    user: any,
+    request: Request,
+    context: RouteContext,
+  ) => Promise<Response>,
 ) {
-  return async (request: Request) => {
+  return async (request: Request, context: RouteContext) => {
     try {
       const user = await requireAuth();
 
-      return await handler(user, request);
+      try {
+        return await handler(user, request, context);
+      } catch (err) {
+        console.log(err);
+      }
     } catch {
       return NextResponse.json(
         {

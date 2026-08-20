@@ -11,6 +11,7 @@ import { type LoginTypes, loginSchema } from "@/schema/login.schema";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const {
@@ -20,6 +21,7 @@ export default function LoginForm() {
   } = useForm<LoginTypes>({
     resolver: zodResolver(loginSchema),
   });
+  const router = useRouter();
 
   const { mutate } = useMutation({
     mutationFn: async (data: LoginTypes) => {
@@ -28,6 +30,7 @@ export default function LoginForm() {
     },
     onSuccess: (data) => {
       toast.success(data.message);
+      router.push("/dashboard");
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
@@ -52,7 +55,7 @@ export default function LoginForm() {
             id="email"
             type="email"
             {...register("email")}
-            placeholder="email"
+            placeholder="Email"
           />
         </div>
 

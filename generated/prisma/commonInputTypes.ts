@@ -137,6 +137,23 @@ export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeFilter<$PrismaModel>
 }
 
+export type EnumColorFilter<$PrismaModel = never> = {
+  equals?: $Enums.Color | Prisma.EnumColorFieldRefInput<$PrismaModel>
+  in?: $Enums.Color[]
+  notIn?: $Enums.Color[]
+  not?: Prisma.NestedEnumColorFilter<$PrismaModel> | $Enums.Color
+}
+
+export type EnumColorWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Color | Prisma.EnumColorFieldRefInput<$PrismaModel>
+  in?: $Enums.Color[]
+  notIn?: $Enums.Color[]
+  not?: Prisma.NestedEnumColorWithAggregatesFilter<$PrismaModel> | $Enums.Color
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumColorFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumColorFilter<$PrismaModel>
+}
+
 export type EnumBoardRoleFilter<$PrismaModel = never> = {
   equals?: $Enums.BoardRole | Prisma.EnumBoardRoleFieldRefInput<$PrismaModel>
   in?: $Enums.BoardRole[]
@@ -395,6 +412,23 @@ export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeFilter<$PrismaModel>
+}
+
+export type NestedEnumColorFilter<$PrismaModel = never> = {
+  equals?: $Enums.Color | Prisma.EnumColorFieldRefInput<$PrismaModel>
+  in?: $Enums.Color[]
+  notIn?: $Enums.Color[]
+  not?: Prisma.NestedEnumColorFilter<$PrismaModel> | $Enums.Color
+}
+
+export type NestedEnumColorWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Color | Prisma.EnumColorFieldRefInput<$PrismaModel>
+  in?: $Enums.Color[]
+  notIn?: $Enums.Color[]
+  not?: Prisma.NestedEnumColorWithAggregatesFilter<$PrismaModel> | $Enums.Color
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumColorFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumColorFilter<$PrismaModel>
 }
 
 export type NestedEnumBoardRoleFilter<$PrismaModel = never> = {

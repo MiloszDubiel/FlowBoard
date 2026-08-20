@@ -16,13 +16,45 @@ export const POST = withAuth(async (user, request) => {
 
   const { name, description } = result.data;
 
-  await prisma.board.create({
-    data: {
-      ownerId: creatorID,
-      name,
-      description,
-    },
+  await prisma.$transaction(async (tx) => {
+    const project = await tx.project.create({
+      data: {
+        name,
+        description,
+        ownerId: user.userID,
+      },
+    });
+
+    const board = await tx.board.create({
+      data: {
+        name: "Główny",
+        projectId: project.id,
+        ownerId: user.userID,
+      },
+    });
+
+    return {
+      project,
+      board,
+    };
   });
 
   return NextResponse.json({ message: "Utworzono projekt" }, { status: 201 });
 });
+
+export const GET = withAuth(async (user, request) => {
+  const creatorID = user.userID;
+
+  try {
+    const projects = await prisma.project.findMany({
+      where: {
+        ownerId: creatorID,
+      },
+    });
+    return NextResponse.json(projects, { status: 200 });
+  } catch (err) {
+    console.log(err);
+    return NextResponse.json({ status: 404 });
+  }
+});
+

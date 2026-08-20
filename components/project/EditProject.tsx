@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -20,16 +20,19 @@ import { useForm } from "react-hook-form";
 import { addProjectSchema, AddProjectType } from "@/schema/addproject.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { Project } from "@/types/project.type";
 
-type CreateProjectProps = {
+type EditProjectProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  project: Project | undefined;
 };
 
-export default function CreateProject({
+export default function EditProject({
   open,
   onOpenChange,
-}: CreateProjectProps) {
+  project = undefined,
+}: EditProjectProps) {
   const router = useRouter();
 
   const {
@@ -39,15 +42,33 @@ export default function CreateProject({
     handleSubmit,
   } = useForm<AddProjectType>({
     resolver: zodResolver(addProjectSchema),
+    defaultValues: {
+      name: project?.name,
+      description: project?.description,
+    },
   });
+
+  //Defualt values tylko przy pierwszym renderze
+  useEffect(() => {
+    if (project) {
+      reset({
+        name: project.name,
+        description: project.description ?? "",
+      });
+    }
+  }, [project, reset]);
 
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: AddProjectType) => {
-      const response = await axios.post("/api/projects", data, {
-        withCredentials: true,
-      });
+      const response = await axios.patch(
+        `/api/projects/${project?.id}`,
+        { ...data },
+        {
+          withCredentials: true,
+        },
+      );
 
       return response.data;
     },
@@ -72,12 +93,12 @@ export default function CreateProject({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} >
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-125">
         <DialogHeader>
-          <DialogTitle>Stwórz projekt</DialogTitle>
+          <DialogTitle>Edytuj projekt</DialogTitle>
           <DialogDescription>
-            Utwórz projekt, aby zoorganizować swoją pracę
+            Edytuj projekt, który już istnieje
           </DialogDescription>
         </DialogHeader>
 
@@ -124,7 +145,7 @@ export default function CreateProject({
               disabled={isPending}
               className="cursor-pointer"
             >
-              {isPending ? "Tworzenie..." : "Utwórz projekt"}
+              {isPending ? "Edytowanie..." : "Edytuj projekt"}
             </Button>
           </div>
         </form>
