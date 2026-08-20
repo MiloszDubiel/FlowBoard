@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 export const POST = withAuth(async (user, request) => {
   const body = await request.json();
+
   const result = addProjectSchema.safeParse(body);
 
   if (!result.success) {
@@ -13,7 +14,7 @@ export const POST = withAuth(async (user, request) => {
 
   const creatorID = user.userID;
 
-  const { name, description } = (request as any).body;
+  const { name, description } = result.data;
 
   await prisma.board.create({
     data: {

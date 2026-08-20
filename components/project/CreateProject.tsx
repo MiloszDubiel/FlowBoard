@@ -43,7 +43,9 @@ export default function CreateProject({
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: AddProjectType) => {
-      const response = await axios.post("/api/projects", data);
+      const response = await axios.post("/api/projects", data, {
+        withCredentials: true,
+      });
 
       return response.data;
     },

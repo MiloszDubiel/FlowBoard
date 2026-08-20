@@ -7,6 +7,7 @@ export function withAuth(
   return async (request: Request) => {
     try {
       const user = await requireAuth();
+
       return await handler(user, request);
     } catch {
       return NextResponse.json(
