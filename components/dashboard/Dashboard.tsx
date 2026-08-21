@@ -27,6 +27,7 @@ import ConfirmModal from "../modals/ConfirmModal";
 import { useDashboardMuts } from "@/mutations/dashboard/useDashboardMuts";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import Link from "next/link";
 const boardColorClasses: Record<string, string> = {
   ORANGE: "bg-orange-500",
   BLUE: "bg-blue-500",
@@ -179,7 +180,11 @@ const Dashboard = () => {
                     ></DropdownMenuTrigger>
 
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>Otwórz projekt</DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Link href={`/board/${project.id}`}>
+                          Otwórz projekt
+                        </Link>
+                      </DropdownMenuItem>
 
                       <DropdownMenuItem
                         onClick={() => {
