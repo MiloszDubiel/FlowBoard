@@ -1,7 +1,4 @@
 import { ReactNode } from "react";
-import { Users } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
 import AppSidebar from "@/components/dashboard/AppSidebar";
 
 interface BoardLayoutProps {
