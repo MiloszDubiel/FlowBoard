@@ -23,11 +23,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { useUser } from "@/queries/auth/useUser";
 import CreateProject from "../project/CreateProject";
 import { useState } from "react";
-import { useDashboard } from "@/queries/dashboard/useDashboard";
-import { Project } from "@/types/project.type";
+import { useUser } from "@/hooks/useUser";
 
 const mainItems = [
   {
@@ -71,11 +69,11 @@ const secondaryItems = [
 ];
 
 export default function AppSidebar() {
-  const { data: user = [] } = useUser();
+  const { user } = useUser();
+
+
+  console.log(user)
   const [open, setOpen] = useState(false);
-  const {
-    getProjects: { data: projects = [] },
-  } = useDashboard();
 
   return (
     <Sidebar>
@@ -126,7 +124,7 @@ export default function AppSidebar() {
 
           <SidebarGroupContent>
             <SidebarMenu>
-              {projects.map((el: Project) => (
+              {/* {projects.map((el: Project) => (
                 <SidebarMenuItem key={el.id}>
                   <SidebarMenuButton>
                     <a href="/dashboard/projects/flowboard">
@@ -135,7 +133,7 @@ export default function AppSidebar() {
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              ))}
+              ))} */}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

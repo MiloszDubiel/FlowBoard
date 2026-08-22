@@ -12,7 +12,7 @@ export default async function BoardPage({
   const { id } = await params;
 
   const user = await getCurrentUser();
-  const board = await getBoard(Number(id), Number(user?.userID));
+  const board = (await getBoard(Number(id), Number(user?.userID))) ?? [];
 
   return (
     <>

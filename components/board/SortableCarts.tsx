@@ -1,3 +1,5 @@
+"use client";
+
 import { useSortable } from "@dnd-kit/react/sortable";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRef, useState } from "react";

@@ -16,12 +16,14 @@ import { DragDropProvider } from "@dnd-kit/react";
 import axios from "axios";
 import { isSortable } from "@dnd-kit/react/sortable";
 import { useMutation } from "@tanstack/react-query";
+import BoardMembersModal from "./BoardMembers";
 
 export default function Board({ columns, board }: any) {
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenEdit, setOpenEdit] = useState<boolean>(false);
   const [editedList, setEditedList] = useState<List>();
   const [deletedList, setDeleteList] = useState<boolean>(false);
+  const [showMembers, setShowMembers] = useState<boolean>(false);
   const {
     deleteList: { mutate },
   } = useList(editedList?.id);
@@ -47,7 +49,11 @@ export default function Board({ columns, board }: any) {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="outline" className="cursor-pointer">
+          <Button
+            variant="outline"
+            className="cursor-pointer"
+            onClick={() => setShowMembers(true)}
+          >
             <Users className="mr-2 h-4 w-4" />
             Członkowie
           </Button>
@@ -70,12 +76,11 @@ export default function Board({ columns, board }: any) {
                   const [removed] = newItems.splice(initialIndex, 1);
                   newItems.splice(index, 0, removed);
 
-                  // Aktualizujemy position zgodnie z nową kolejnością
                   const updatedLists = newItems.map((list, index) => ({
                     ...list,
                     position: index,
                   }));
-                  console.table(updatedLists);
+
                   reorderLists(updatedLists);
                 }
               }
@@ -85,6 +90,7 @@ export default function Board({ columns, board }: any) {
               <SortableList
                 column={column}
                 id={column.id}
+                key={column.id}
                 index={index}
                 onEdit={(list: any) => {
                   setOpenEdit(true);
@@ -132,6 +138,7 @@ export default function Board({ columns, board }: any) {
           setDeleteList(false);
         }}
       />
+      <BoardMembersModal open={showMembers} onOpenChange={setShowMembers} />
     </>
   );
 }
