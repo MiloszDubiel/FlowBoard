@@ -21,6 +21,8 @@ type ConfirmModalProps = {
   onOpenChange: (isOpen: boolean) => void;
   onSubmit: () => void;
   onCancel: () => void;
+  title: string;
+  message: string;
 };
 
 export default function ConfirmModal({
@@ -28,20 +30,20 @@ export default function ConfirmModal({
   onOpenChange,
   onSubmit,
   onCancel,
+  title,
+  message,
 }: ConfirmModalProps) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Save changes?</AlertDialogTitle>
-          <AlertDialogDescription>
-            Are you sure you want to save these changes?
-          </AlertDialogDescription>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>{message}</AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={onCancel}>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onSubmit}>Confirm</AlertDialogAction>
+          <AlertDialogCancel onClick={onCancel}>Anuluj</AlertDialogCancel>
+          <AlertDialogAction onClick={onSubmit}>Zatwierdź</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

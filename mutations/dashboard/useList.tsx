@@ -1,11 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
-export const useDashboardMuts = (id: number | undefined) => {
-  const deleteProject = useMutation({
+export const useList = (id: number | undefined) => {
+  const deleteList = useMutation({
     mutationFn: async () => {
       if (!id) return;
-      const response = await axios.delete(`/api/projects/${id}`, {
+      const response = await axios.delete(`/api/list/${id}`, {
         withCredentials: true,
       });
       return response.data;
@@ -13,6 +13,6 @@ export const useDashboardMuts = (id: number | undefined) => {
   });
 
   return {
-    deleteProject,
+    deleteList,
   };
 };

@@ -1,10 +1,17 @@
 import { prisma } from "@/lib/prisma";
 import { withAuth } from "@/lib/withAuth";
+import { addListSchema } from "@/schema/addlist.schema";
 import { NextResponse } from "next/server";
-import { date } from "zod";
+import { z } from "zod";
 
 export const POST = withAuth(async (user, request, context) => {
   const { name, id } = await request.json();
+
+  const result = addListSchema.safeParse({ name });
+
+  if (!result.success) {
+    return NextResponse.json({ message: "Niepoprawne dane" }, { status: 400 });
+  }
 
   const board = await prisma.board.findFirst({
     where: {
@@ -34,11 +41,20 @@ export const POST = withAuth(async (user, request, context) => {
     );
   }
 
+  const lastList = await prisma.list.findFirst({
+    where: {
+      boardId: Number(id),
+    },
+    orderBy: {
+      position: "desc",
+    },
+  });
+
   const list = await prisma.list.create({
     data: {
       boardId: board.id,
       name,
-      position: 1,
+      position: lastList ? lastList.position + 1 : 0,
     },
   });
 

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { FieldError } from "@/components/ui/field";
@@ -13,21 +13,28 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { addListSchema, AddListType } from "@/schema/addlist.schema";
+import { List } from "@/generated/prisma/client";
 
-type AddListProps = {
+type EditListProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   boardID: number;
+  list: List | undefined;
 };
 
-export default function AddList({ open, onOpenChange, boardID }: AddListProps) {
+export default function EditList({
+  open,
+  onOpenChange,
+  boardID,
+  list,
+}: EditListProps) {
   const router = useRouter();
 
   const {
@@ -37,13 +44,24 @@ export default function AddList({ open, onOpenChange, boardID }: AddListProps) {
     handleSubmit,
   } = useForm<AddListType>({
     resolver: zodResolver(addListSchema),
+    defaultValues: {
+      name: list?.name,
+    },
   });
+
+  //Defualt values tylko przy pierwszym renderze
+  useEffect(() => {
+    if (list) {
+      reset({
+        name: list.name,
+      });
+    }
+  }, [list, reset]);
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (name: AddListType) => {
-      const { data } = await axios.post(`/api/list/`, {
+      const { data } = await axios.patch(`/api/list/${list?.id}`, {
         ...name,
-        id: boardID,
       });
 
       return data;
@@ -69,10 +87,8 @@ export default function AddList({ open, onOpenChange, boardID }: AddListProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-125">
         <DialogHeader>
-          <DialogTitle>Stwórz listę</DialogTitle>
-          <DialogDescription>
-            Utwórz listę, aby móc do niej dodawać zadania
-          </DialogDescription>
+          <DialogTitle>Edytuj listę</DialogTitle>
+          <DialogDescription>Edytuj istniejącą listę</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(submit)} className="space-y-5">
@@ -105,7 +121,7 @@ export default function AddList({ open, onOpenChange, boardID }: AddListProps) {
               disabled={isPending}
               className="cursor-pointer"
             >
-              {isPending ? "Tworzenie..." : "Utwórz listę"}
+              {isPending ? "Edytowanie..." : "Edituj listę"}
             </Button>
           </div>
         </form>

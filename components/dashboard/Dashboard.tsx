@@ -20,14 +20,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import CreateProject from "../project/CreateProject";
-import { useDashboard } from "@/queries/dashboard/useDashboard";
 import { Project } from "@/types/project.type";
 import EditProject from "../project/EditProject";
 import ConfirmModal from "../modals/ConfirmModal";
-import { useDashboardMuts } from "@/mutations/dashboard/useDashboardMuts";
-import { useQueryClient } from "@tanstack/react-query";
+import { useDashboard } from "@/mutations/dashboard/useDashboard";
+
 import { toast } from "sonner";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 const boardColorClasses: Record<string, string> = {
   ORANGE: "bg-orange-500",
   BLUE: "bg-blue-500",
@@ -36,20 +37,17 @@ const boardColorClasses: Record<string, string> = {
   PURPLE: "bg-purple-500",
   PINK: "bg-pink-500",
 };
-const Dashboard = () => {
-  const {
-    getProjects: { data: projects = [] },
-  } = useDashboard();
-
+const Dashboard = ({ projects }: any) => {
+  const route = useRouter();
   const [openConfirm, setOpenConfirm] = useState(false);
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [editedProject, setEditedProject] = useState<Project | undefined>();
-  const queryClient = useQueryClient();
+
 
   const {
     deleteProject: { mutate },
-  } = useDashboardMuts(editedProject?.id);
+  } = useDashboard(editedProject?.id);
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-8">
@@ -270,11 +268,13 @@ const Dashboard = () => {
         />
         <ConfirmModal
           open={openConfirm}
+          title="Usunąć?"
+          message={`Czy na pewno checsz usunąć projekt: ${editedProject?.name}?`}
           onOpenChange={setOpen}
           onSubmit={() => {
             mutate(undefined, {
               onSuccess: (data) => {
-                queryClient.invalidateQueries({ queryKey: ["projects"] });
+                route.refresh();
                 toast.success(data.message);
               },
             });

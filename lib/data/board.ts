@@ -7,14 +7,18 @@ export const getBoard = async (id: number, userID: number) => {
       ownerId: userID,
     },
     include: {
-      members: true,
       lists: {
+        orderBy: {
+          position: "asc",
+        },
         include: {
-          cards: true,
+          cards: {
+            orderBy: {
+              position: "asc",
+            },
+          },
         },
       },
-      labels: true,
-      activities: true,
     },
   });
 };
