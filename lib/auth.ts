@@ -25,7 +25,7 @@ export async function createToken(userID: number) {
       alg: "HS256", //Sposób podpisu algorytmeme
     })
     .setIssuedAt()
-    .setExpirationTime("15m") //Czas waznosci tokena
+    .setExpirationTime("7d") //Czas waznosci tokena
     .sign(encodedSecret); //Podpiswyanie tokena sekretem
 }
 

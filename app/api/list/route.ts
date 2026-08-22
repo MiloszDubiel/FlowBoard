@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { withAuth } from "@/lib/withAuth";
 import { addListSchema } from "@/schema/addlist.schema";
 import { NextResponse } from "next/server";
-import { z } from "zod";
+
 
 export const POST = withAuth(async (user, request, context) => {
   const { name, id } = await request.json();

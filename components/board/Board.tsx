@@ -14,6 +14,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { DragDropProvider } from "@dnd-kit/react";
 import axios from "axios";
+import { isSortable } from "@dnd-kit/react/sortable";
+import { useMutation } from "@tanstack/react-query";
 
 export default function Board({ columns, board }: any) {
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -25,31 +27,15 @@ export default function Board({ columns, board }: any) {
   } = useList(editedList?.id);
 
   const route = useRouter();
-  const [lists, setLists] = useState<List[]>([]);
 
-  useEffect(() => {
-    setLists(board.lists);
-  }, [board.lists]);
+  const { mutate: reorderLists, isPending } = useMutation({
+    mutationKey: ["lists"],
+    mutationFn: async (lists: any[]) => {
+      const { data } = await axios.patch("/api/list/reorder", { lists });
 
-  const handleListReorder = async (oldIndex: number, newIndex: number) => {
-    if (oldIndex === newIndex) return;
-
-    const newLists = [...lists];
-    const [movedList] = newLists.splice(oldIndex, 1);
-    newLists.splice(newIndex, 0, movedList);
-
-    setLists(newLists);
-    try {
-      await axios.patch(`/api/boards/${board.id}/reorder`, {
-        lists: newLists.map((list, index) => ({
-          id: list.id,
-          position: index,
-        })),
-      });
-    } catch (error) {
-      console.error("Nie udało się zapisać kolejności", error);
-    }
-  };
+      return data;
+    },
+  });
 
   return (
     <>
@@ -69,51 +55,48 @@ export default function Board({ columns, board }: any) {
       </header>
       <div className="min-h-0 flex-1 overflow-x-auto bg-muted/40 p-6">
         <div className="flex h-full min-w-max gap-4">
-          {/* <DragDropProvider
-            onDragOver={(event) => {
-              // if (event.canceled) return;
-              // const { source, target } = event.operation;
-              // if (!source || !target) return;
-            }}
-            onDragEnd={async (event) => {
+          <DragDropProvider
+            onDragEnd={(event) => {
               if (event.canceled) return;
 
-              const { source, target } = event.operation;
+              const { source } = event.operation;
 
-              const oldIndex = lists.findIndex(
-                (list) => list.id === source?.id,
-              );
-              const newIndex = lists.findIndex(
-                (list) => list.id === target?.id,
-              );
+              if (isSortable(source)) {
+                const { initialIndex, index } = source;
 
-              console.log(oldIndex, newIndex);
+                if (initialIndex !== index) {
+                  const newItems = [...board.lists];
 
-              console.table(
-                lists.map((list, index) => ({
-                  id: list.id,
-                  position: index,
-                  name: list.name,
-                })),
-              );
+                  const [removed] = newItems.splice(initialIndex, 1);
+                  newItems.splice(index, 0, removed);
+
+                  // Aktualizujemy position zgodnie z nową kolejnością
+                  const updatedLists = newItems.map((list, index) => ({
+                    ...list,
+                    position: index,
+                  }));
+                  console.table(updatedLists);
+                  reorderLists(updatedLists);
+                }
+              }
             }}
-          > */}
-          {lists?.map((column: any, index: number) => (
-            <SortableList
-              column={column}
-              id={column.id}
-              index={index}
-              onEdit={(list: any) => {
-                setOpenEdit(true);
-                setEditedList(list);
-              }}
-              onDelete={(list: any) => {
-                setDeleteList(true);
-                setEditedList(list);
-              }}
-            />
-          ))}
-          {/* </DragDropProvider> */}
+          >
+            {board.lists?.map((column: any, index: number) => (
+              <SortableList
+                column={column}
+                id={column.id}
+                index={index}
+                onEdit={(list: any) => {
+                  setOpenEdit(true);
+                  setEditedList(list);
+                }}
+                onDelete={(list: any) => {
+                  setDeleteList(true);
+                  setEditedList(list);
+                }}
+              />
+            ))}
+          </DragDropProvider>
           <Button
             variant="outline"
             className=" w-80 shrink-0 justify-start cursor-pointer"
