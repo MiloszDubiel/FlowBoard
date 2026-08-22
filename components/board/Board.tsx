@@ -138,7 +138,11 @@ export default function Board({ columns, board }: any) {
           setDeleteList(false);
         }}
       />
-      <BoardMembersModal open={showMembers} onOpenChange={setShowMembers} />
+      <BoardMembersModal
+        open={showMembers}
+        onOpenChange={setShowMembers}
+        boardId={board.id}
+      />
     </>
   );
 }

@@ -2,10 +2,8 @@ import { prisma } from "@/lib/prisma";
 import { withAuth } from "@/lib/withAuth";
 import { NextResponse } from "next/server";
 
-export const PATCH = withAuth(async (user, request, context) => {
-  const { boardId } = await context.params;
-
-  const { position, id } = await request.json();
+export const PUT = withAuth(async (user, request, context) => {
+  const { boardId, uid } = await context.params;
 
   const board = await prisma.board.findFirst({
     where: {
@@ -21,16 +19,14 @@ export const PATCH = withAuth(async (user, request, context) => {
     );
   }
 
-  await prisma.list.update({
-    where: {
-      id: id,
-    },
+  await prisma.boardInvite.create({
     data: {
-      position: position,
+      userId: Number(uid),
+      boardId: Number(boardId),
     },
   });
 
   return NextResponse.json({
-    message: "Zmieniono kolejność list",
+    message: "Wysłano zaproszenie",
   });
 });

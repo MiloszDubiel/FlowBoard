@@ -26,3 +26,12 @@ export const BoardRole = {
 } as const
 
 export type BoardRole = (typeof BoardRole)[keyof typeof BoardRole]
+
+
+export const InviteStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type InviteStatus = (typeof InviteStatus)[keyof typeof InviteStatus]

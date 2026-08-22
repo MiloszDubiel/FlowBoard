@@ -240,6 +240,7 @@ export type UserWhereInput = {
   comments?: Prisma.CommentListRelationFilter
   attachments?: Prisma.AttachmentListRelationFilter
   activities?: Prisma.ActivityListRelationFilter
+  boardInvites?: Prisma.BoardInviteListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -258,6 +259,7 @@ export type UserOrderByWithRelationInput = {
   comments?: Prisma.CommentOrderByRelationAggregateInput
   attachments?: Prisma.AttachmentOrderByRelationAggregateInput
   activities?: Prisma.ActivityOrderByRelationAggregateInput
+  boardInvites?: Prisma.BoardInviteOrderByRelationAggregateInput
   _relevance?: Prisma.UserOrderByRelevanceInput
 }
 
@@ -280,6 +282,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   comments?: Prisma.CommentListRelationFilter
   attachments?: Prisma.AttachmentListRelationFilter
   activities?: Prisma.ActivityListRelationFilter
+  boardInvites?: Prisma.BoardInviteListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -325,6 +328,7 @@ export type UserCreateInput = {
   comments?: Prisma.CommentCreateNestedManyWithoutUserInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUserInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  boardInvites?: Prisma.BoardInviteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -343,6 +347,7 @@ export type UserUncheckedCreateInput = {
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUserInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  boardInvites?: Prisma.BoardInviteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -360,6 +365,7 @@ export type UserUpdateInput = {
   comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUserNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  boardInvites?: Prisma.BoardInviteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -378,6 +384,7 @@ export type UserUncheckedUpdateInput = {
   comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUserNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  boardInvites?: Prisma.BoardInviteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -520,6 +527,20 @@ export type UserUpdateOneRequiredWithoutMembershipsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMembershipsInput, Prisma.UserUpdateWithoutMembershipsInput>, Prisma.UserUncheckedUpdateWithoutMembershipsInput>
 }
 
+export type UserCreateNestedOneWithoutBoardInvitesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBoardInvitesInput, Prisma.UserUncheckedCreateWithoutBoardInvitesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBoardInvitesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutBoardInvitesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBoardInvitesInput, Prisma.UserUncheckedCreateWithoutBoardInvitesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBoardInvitesInput
+  upsert?: Prisma.UserUpsertWithoutBoardInvitesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBoardInvitesInput, Prisma.UserUpdateWithoutBoardInvitesInput>, Prisma.UserUncheckedUpdateWithoutBoardInvitesInput>
+}
+
 export type UserCreateNestedOneWithoutCardsCreatedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutCardsCreatedInput, Prisma.UserUncheckedCreateWithoutCardsCreatedInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutCardsCreatedInput
@@ -604,6 +625,7 @@ export type UserCreateWithoutProjectsInput = {
   comments?: Prisma.CommentCreateNestedManyWithoutUserInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUserInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  boardInvites?: Prisma.BoardInviteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutProjectsInput = {
@@ -621,6 +643,7 @@ export type UserUncheckedCreateWithoutProjectsInput = {
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUserInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  boardInvites?: Prisma.BoardInviteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutProjectsInput = {
@@ -653,6 +676,7 @@ export type UserUpdateWithoutProjectsInput = {
   comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUserNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  boardInvites?: Prisma.BoardInviteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProjectsInput = {
@@ -670,6 +694,7 @@ export type UserUncheckedUpdateWithoutProjectsInput = {
   comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUserNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  boardInvites?: Prisma.BoardInviteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutBoardsInput = {
@@ -686,6 +711,7 @@ export type UserCreateWithoutBoardsInput = {
   comments?: Prisma.CommentCreateNestedManyWithoutUserInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUserInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  boardInvites?: Prisma.BoardInviteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBoardsInput = {
@@ -703,6 +729,7 @@ export type UserUncheckedCreateWithoutBoardsInput = {
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUserInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  boardInvites?: Prisma.BoardInviteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBoardsInput = {
@@ -735,6 +762,7 @@ export type UserUpdateWithoutBoardsInput = {
   comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUserNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  boardInvites?: Prisma.BoardInviteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBoardsInput = {
@@ -752,6 +780,7 @@ export type UserUncheckedUpdateWithoutBoardsInput = {
   comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUserNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  boardInvites?: Prisma.BoardInviteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutMembershipsInput = {
@@ -768,6 +797,7 @@ export type UserCreateWithoutMembershipsInput = {
   comments?: Prisma.CommentCreateNestedManyWithoutUserInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUserInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  boardInvites?: Prisma.BoardInviteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -785,6 +815,7 @@ export type UserUncheckedCreateWithoutMembershipsInput = {
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUserInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  boardInvites?: Prisma.BoardInviteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -817,6 +848,7 @@ export type UserUpdateWithoutMembershipsInput = {
   comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUserNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  boardInvites?: Prisma.BoardInviteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -829,6 +861,93 @@ export type UserUncheckedUpdateWithoutMembershipsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput
   boards?: Prisma.BoardUncheckedUpdateManyWithoutOwnerNestedInput
+  cardsCreated?: Prisma.CardUncheckedUpdateManyWithoutCreatedByNestedInput
+  cardMembers?: Prisma.CardMemberUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  boardInvites?: Prisma.BoardInviteUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutBoardInvitesInput = {
+  name?: string | null
+  email: string
+  passwordHash: string
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  projects?: Prisma.ProjectCreateNestedManyWithoutOwnerInput
+  boards?: Prisma.BoardCreateNestedManyWithoutOwnerInput
+  memberships?: Prisma.BoardMemberCreateNestedManyWithoutUserInput
+  cardsCreated?: Prisma.CardCreateNestedManyWithoutCreatedByInput
+  cardMembers?: Prisma.CardMemberCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutBoardInvitesInput = {
+  id?: number
+  name?: string | null
+  email: string
+  passwordHash: string
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOwnerInput
+  boards?: Prisma.BoardUncheckedCreateNestedManyWithoutOwnerInput
+  memberships?: Prisma.BoardMemberUncheckedCreateNestedManyWithoutUserInput
+  cardsCreated?: Prisma.CardUncheckedCreateNestedManyWithoutCreatedByInput
+  cardMembers?: Prisma.CardMemberUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutBoardInvitesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBoardInvitesInput, Prisma.UserUncheckedCreateWithoutBoardInvitesInput>
+}
+
+export type UserUpsertWithoutBoardInvitesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBoardInvitesInput, Prisma.UserUncheckedUpdateWithoutBoardInvitesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBoardInvitesInput, Prisma.UserUncheckedCreateWithoutBoardInvitesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutBoardInvitesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBoardInvitesInput, Prisma.UserUncheckedUpdateWithoutBoardInvitesInput>
+}
+
+export type UserUpdateWithoutBoardInvitesInput = {
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUpdateManyWithoutOwnerNestedInput
+  boards?: Prisma.BoardUpdateManyWithoutOwnerNestedInput
+  memberships?: Prisma.BoardMemberUpdateManyWithoutUserNestedInput
+  cardsCreated?: Prisma.CardUpdateManyWithoutCreatedByNestedInput
+  cardMembers?: Prisma.CardMemberUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutBoardInvitesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutOwnerNestedInput
+  boards?: Prisma.BoardUncheckedUpdateManyWithoutOwnerNestedInput
+  memberships?: Prisma.BoardMemberUncheckedUpdateManyWithoutUserNestedInput
   cardsCreated?: Prisma.CardUncheckedUpdateManyWithoutCreatedByNestedInput
   cardMembers?: Prisma.CardMemberUncheckedUpdateManyWithoutUserNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
@@ -850,6 +969,7 @@ export type UserCreateWithoutCardsCreatedInput = {
   comments?: Prisma.CommentCreateNestedManyWithoutUserInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUserInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  boardInvites?: Prisma.BoardInviteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCardsCreatedInput = {
@@ -867,6 +987,7 @@ export type UserUncheckedCreateWithoutCardsCreatedInput = {
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUserInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  boardInvites?: Prisma.BoardInviteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCardsCreatedInput = {
@@ -899,6 +1020,7 @@ export type UserUpdateWithoutCardsCreatedInput = {
   comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUserNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  boardInvites?: Prisma.BoardInviteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCardsCreatedInput = {
@@ -916,6 +1038,7 @@ export type UserUncheckedUpdateWithoutCardsCreatedInput = {
   comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUserNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  boardInvites?: Prisma.BoardInviteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCardMembersInput = {
@@ -932,6 +1055,7 @@ export type UserCreateWithoutCardMembersInput = {
   comments?: Prisma.CommentCreateNestedManyWithoutUserInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUserInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  boardInvites?: Prisma.BoardInviteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCardMembersInput = {
@@ -949,6 +1073,7 @@ export type UserUncheckedCreateWithoutCardMembersInput = {
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUserInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  boardInvites?: Prisma.BoardInviteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCardMembersInput = {
@@ -981,6 +1106,7 @@ export type UserUpdateWithoutCardMembersInput = {
   comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUserNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  boardInvites?: Prisma.BoardInviteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCardMembersInput = {
@@ -998,6 +1124,7 @@ export type UserUncheckedUpdateWithoutCardMembersInput = {
   comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUserNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  boardInvites?: Prisma.BoardInviteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommentsInput = {
@@ -1014,6 +1141,7 @@ export type UserCreateWithoutCommentsInput = {
   cardMembers?: Prisma.CardMemberCreateNestedManyWithoutUserInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUserInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  boardInvites?: Prisma.BoardInviteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommentsInput = {
@@ -1031,6 +1159,7 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   cardMembers?: Prisma.CardMemberUncheckedCreateNestedManyWithoutUserInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUserInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  boardInvites?: Prisma.BoardInviteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommentsInput = {
@@ -1063,6 +1192,7 @@ export type UserUpdateWithoutCommentsInput = {
   cardMembers?: Prisma.CardMemberUpdateManyWithoutUserNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUserNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  boardInvites?: Prisma.BoardInviteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -1080,6 +1210,7 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   cardMembers?: Prisma.CardMemberUncheckedUpdateManyWithoutUserNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUserNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  boardInvites?: Prisma.BoardInviteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAttachmentsInput = {
@@ -1096,6 +1227,7 @@ export type UserCreateWithoutAttachmentsInput = {
   cardMembers?: Prisma.CardMemberCreateNestedManyWithoutUserInput
   comments?: Prisma.CommentCreateNestedManyWithoutUserInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  boardInvites?: Prisma.BoardInviteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAttachmentsInput = {
@@ -1113,6 +1245,7 @@ export type UserUncheckedCreateWithoutAttachmentsInput = {
   cardMembers?: Prisma.CardMemberUncheckedCreateNestedManyWithoutUserInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  boardInvites?: Prisma.BoardInviteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAttachmentsInput = {
@@ -1145,6 +1278,7 @@ export type UserUpdateWithoutAttachmentsInput = {
   cardMembers?: Prisma.CardMemberUpdateManyWithoutUserNestedInput
   comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  boardInvites?: Prisma.BoardInviteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAttachmentsInput = {
@@ -1162,6 +1296,7 @@ export type UserUncheckedUpdateWithoutAttachmentsInput = {
   cardMembers?: Prisma.CardMemberUncheckedUpdateManyWithoutUserNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  boardInvites?: Prisma.BoardInviteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutActivitiesInput = {
@@ -1178,6 +1313,7 @@ export type UserCreateWithoutActivitiesInput = {
   cardMembers?: Prisma.CardMemberCreateNestedManyWithoutUserInput
   comments?: Prisma.CommentCreateNestedManyWithoutUserInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUserInput
+  boardInvites?: Prisma.BoardInviteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutActivitiesInput = {
@@ -1195,6 +1331,7 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
   cardMembers?: Prisma.CardMemberUncheckedCreateNestedManyWithoutUserInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUserInput
+  boardInvites?: Prisma.BoardInviteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutActivitiesInput = {
@@ -1227,6 +1364,7 @@ export type UserUpdateWithoutActivitiesInput = {
   cardMembers?: Prisma.CardMemberUpdateManyWithoutUserNestedInput
   comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUserNestedInput
+  boardInvites?: Prisma.BoardInviteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutActivitiesInput = {
@@ -1244,6 +1382,7 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
   cardMembers?: Prisma.CardMemberUncheckedUpdateManyWithoutUserNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUserNestedInput
+  boardInvites?: Prisma.BoardInviteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1260,6 +1399,7 @@ export type UserCountOutputType = {
   comments: number
   attachments: number
   activities: number
+  boardInvites: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1271,6 +1411,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   comments?: boolean | UserCountOutputTypeCountCommentsArgs
   attachments?: boolean | UserCountOutputTypeCountAttachmentsArgs
   activities?: boolean | UserCountOutputTypeCountActivitiesArgs
+  boardInvites?: boolean | UserCountOutputTypeCountBoardInvitesArgs
 }
 
 /**
@@ -1339,6 +1480,13 @@ export type UserCountOutputTypeCountActivitiesArgs<ExtArgs extends runtime.Types
   where?: Prisma.ActivityWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountBoardInvitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BoardInviteWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1356,6 +1504,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
   attachments?: boolean | Prisma.User$attachmentsArgs<ExtArgs>
   activities?: boolean | Prisma.User$activitiesArgs<ExtArgs>
+  boardInvites?: boolean | Prisma.User$boardInvitesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1381,6 +1530,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
   attachments?: boolean | Prisma.User$attachmentsArgs<ExtArgs>
   activities?: boolean | Prisma.User$activitiesArgs<ExtArgs>
+  boardInvites?: boolean | Prisma.User$boardInvitesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -1395,6 +1545,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     comments: Prisma.$CommentPayload<ExtArgs>[]
     attachments: Prisma.$AttachmentPayload<ExtArgs>[]
     activities: Prisma.$ActivityPayload<ExtArgs>[]
+    boardInvites: Prisma.$BoardInvitePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1752,6 +1903,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   comments<T extends Prisma.User$commentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   attachments<T extends Prisma.User$attachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   activities<T extends Prisma.User$activitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  boardInvites<T extends Prisma.User$boardInvitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$boardInvitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2325,6 +2477,30 @@ export type User$activitiesArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.ActivityScalarFieldEnum | Prisma.ActivityScalarFieldEnum[]
+}
+
+/**
+ * User.boardInvites
+ */
+export type User$boardInvitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BoardInvite
+   */
+  select?: Prisma.BoardInviteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BoardInvite
+   */
+  omit?: Prisma.BoardInviteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BoardInviteInclude<ExtArgs> | null
+  where?: Prisma.BoardInviteWhereInput
+  orderBy?: Prisma.BoardInviteOrderByWithRelationInput | Prisma.BoardInviteOrderByWithRelationInput[]
+  cursor?: Prisma.BoardInviteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BoardInviteScalarFieldEnum | Prisma.BoardInviteScalarFieldEnum[]
 }
 
 /**

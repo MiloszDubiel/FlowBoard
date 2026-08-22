@@ -55,6 +55,7 @@ export const ModelName = {
   Project: 'Project',
   Board: 'Board',
   BoardMember: 'BoardMember',
+  BoardInvite: 'BoardInvite',
   List: 'List',
   Card: 'Card',
   CardMember: 'CardMember',
@@ -129,6 +130,17 @@ export const BoardMemberScalarFieldEnum = {
 } as const
 
 export type BoardMemberScalarFieldEnum = (typeof BoardMemberScalarFieldEnum)[keyof typeof BoardMemberScalarFieldEnum]
+
+
+export const BoardInviteScalarFieldEnum = {
+  id: 'id',
+  boardId: 'boardId',
+  userId: 'userId',
+  status: 'status',
+  createdAt: 'createdAt'
+} as const
+
+export type BoardInviteScalarFieldEnum = (typeof BoardInviteScalarFieldEnum)[keyof typeof BoardInviteScalarFieldEnum]
 
 
 export const ListScalarFieldEnum = {

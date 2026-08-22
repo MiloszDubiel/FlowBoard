@@ -12,61 +12,60 @@ datasource db {
   provider = "mysql"
 }
 
-
 // =========================
 // USER
 // =========================
 
 model User {
-  id           Int      @id @default(autoincrement())
+  id           Int     @id @default(autoincrement())
   name         String?
-  email        String   @unique
+  email        String  @unique
   passwordHash String
   avatarUrl    String?
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   projects     Project[]
   boards       Board[]
   memberships  BoardMember[]
-  cardsCreated Card[] @relation("CardCreator")
+  cardsCreated Card[]        @relation("CardCreator")
   cardMembers  CardMember[]
   comments     Comment[]
   attachments  Attachment[]
   activities   Activity[]
+  boardInvites BoardInvite[]
 
   @@map("users")
 }
-
 
 // =========================
 // PROJECT
 // =========================
 
 model Project {
- id          Int      @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   name        String
   description String?
 
-  ownerId     Int
-  owner       User     @relation(fields: [ownerId], references: [id])
+  ownerId Int
+  owner   User @relation(fields: [ownerId], references: [id])
 
-  boards      Board[]
+  boards Board[]
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  color       Color    @default(ORANGE)
+  color Color @default(ORANGE)
 
   @@index([ownerId])
   @@map("projects")
 }
 
 enum Color {
-  GREEN @map("bg-green-500/10")
-  BLUE  @map("bg-blue-500/10")
-  RED   @map("bg-red-500/10")
+  GREEN  @map("bg-green-500/10")
+  BLUE   @map("bg-blue-500/10")
+  RED    @map("bg-red-500/10")
   ORANGE @map("bg-orange-500/10")
 }
 
@@ -75,42 +74,42 @@ enum Color {
 // =========================
 
 model Board {
-  id          Int      @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   projectId   Int
   ownerId     Int
   name        String
   description String?
 
-  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  owner       User     @relation(fields: [ownerId], references: [id])
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  owner   User    @relation(fields: [ownerId], references: [id])
 
-  members     BoardMember[]
-  lists       List[]
-  labels      Label[]
-  activities  Activity[]
+  members    BoardMember[]
+  lists      List[]
+  labels     Label[]
+  activities Activity[]
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  boardInvites BoardInvite[]
 
   @@index([projectId])
   @@index([ownerId])
   @@map("boards")
 }
 
-
 // =========================
 // BOARD MEMBERS
 // =========================
 
 model BoardMember {
-  id        Int      @id @default(autoincrement())
-  boardId   Int
-  userId    Int
-  role      BoardRole @default(MEMBER)
-  joinedAt  DateTime @default(now())
+  id       Int       @id @default(autoincrement())
+  boardId  Int
+  userId   Int
+  role     BoardRole @default(MEMBER)
+  joinedAt DateTime  @default(now())
 
-  board     Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
-  user      User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  board Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([boardId, userId])
   @@index([userId])
@@ -123,44 +122,61 @@ enum BoardRole {
   MEMBER
 }
 
+model BoardInvite {
+  id        Int          @id @default(autoincrement())
+  boardId   Int
+  userId    Int
+  status    InviteStatus @default(PENDING)
+  createdAt DateTime     @default(now())
+
+  board Board @relation(fields: [boardId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+
+  @@unique([boardId, userId])
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
 
 // =========================
 // LIST
 // =========================
 
 model List {
-  id        Int      @id @default(autoincrement())
-  boardId   Int
-  name      String
-  position  Int
+  id       Int    @id @default(autoincrement())
+  boardId  Int
+  name     String
+  position Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  board     Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
-  cards     Card[]
+  board Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  cards Card[]
 
   @@index([boardId])
   @@map("lists")
 }
-
 
 // =========================
 // CARD
 // =========================
 
 model Card {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   listId      Int
   title       String
-  description String?  @db.Text
+  description String?   @db.Text
   position    Int
   dueDate     DateTime?
 
   createdById Int
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   list        List         @relation(fields: [listId], references: [id], onDelete: Cascade)
   createdBy   User         @relation("CardCreator", fields: [createdById], references: [id])
@@ -175,7 +191,6 @@ model Card {
   @@map("cards")
 }
 
-
 // =========================
 // CARD MEMBERS
 // =========================
@@ -184,34 +199,32 @@ model CardMember {
   cardId Int
   userId Int
 
-  card   Card @relation(fields: [cardId], references: [id], onDelete: Cascade)
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  card Card @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([cardId, userId])
   @@index([userId])
   @@map("card_members")
 }
 
-
 // =========================
 // LABEL
 // =========================
 
 model Label {
-  id        Int      @id @default(autoincrement())
-  boardId   Int
-  name      String
-  color     String
+  id      Int    @id @default(autoincrement())
+  boardId Int
+  name    String
+  color   String
 
   createdAt DateTime @default(now())
 
-  board     Board      @relation(fields: [boardId], references: [id], onDelete: Cascade)
-  cards     CardLabel[]
+  board Board       @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  cards CardLabel[]
 
   @@index([boardId])
   @@map("labels")
 }
-
 
 // =========================
 // CARD LABEL
@@ -221,79 +234,76 @@ model CardLabel {
   cardId  Int
   labelId Int
 
-  card    Card  @relation(fields: [cardId], references: [id], onDelete: Cascade)
-  label   Label @relation(fields: [labelId], references: [id], onDelete: Cascade)
+  card  Card  @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  label Label @relation(fields: [labelId], references: [id], onDelete: Cascade)
 
   @@id([cardId, labelId])
   @@index([labelId])
   @@map("card_labels")
 }
 
-
 // =========================
 // COMMENT
 // =========================
 
 model Comment {
-  id        Int      @id @default(autoincrement())
-  cardId    Int
-  userId    Int
-  content   String   @db.Text
+  id      Int    @id @default(autoincrement())
+  cardId  Int
+  userId  Int
+  content String @db.Text
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  card      Card @relation(fields: [cardId], references: [id], onDelete: Cascade)
-  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  card Card @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([cardId])
   @@index([userId])
   @@map("comments")
 }
 
-
 // =========================
 // ATTACHMENT
 // =========================
 
 model Attachment {
-  id        Int      @id @default(autoincrement())
-  cardId    Int
-  userId    Int
+  id     Int @id @default(autoincrement())
+  cardId Int
+  userId Int
 
-  fileName  String
-  fileUrl   String
-  fileSize  Int?
+  fileName String
+  fileUrl  String
+  fileSize Int?
 
   createdAt DateTime @default(now())
 
-  card      Card @relation(fields: [cardId], references: [id], onDelete: Cascade)
-  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  card Card @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([cardId])
   @@index([userId])
   @@map("attachments")
 }
 
-
 // =========================
 // ACTIVITY
 // =========================
 
 model Activity {
-  id        Int      @id @default(autoincrement())
-  boardId   Int
-  cardId    Int?
-  userId    Int
+  id      Int  @id @default(autoincrement())
+  boardId Int
+  cardId  Int?
+  userId  Int
 
-  type      String
-  metadata  Json?
+  type     String
+  metadata Json?
 
   createdAt DateTime @default(now())
 
-  board     Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
-  card      Card? @relation(fields: [cardId], references: [id], onDelete: Cascade)
-  user      User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  board Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  card  Card? @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([boardId])
   @@index([cardId])

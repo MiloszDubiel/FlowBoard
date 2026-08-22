@@ -401,6 +401,7 @@ export const ModelName = {
   Project: 'Project',
   Board: 'Board',
   BoardMember: 'BoardMember',
+  BoardInvite: 'BoardInvite',
   List: 'List',
   Card: 'Card',
   CardMember: 'CardMember',
@@ -424,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "project" | "board" | "boardMember" | "list" | "card" | "cardMember" | "label" | "cardLabel" | "comment" | "attachment" | "activity"
+    modelProps: "user" | "project" | "board" | "boardMember" | "boardInvite" | "list" | "card" | "cardMember" | "label" | "cardLabel" | "comment" | "attachment" | "activity"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -689,6 +690,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.BoardMemberCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.BoardMemberCountAggregateOutputType> | number
+        }
+      }
+    }
+    BoardInvite: {
+      payload: Prisma.$BoardInvitePayload<ExtArgs>
+      fields: Prisma.BoardInviteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BoardInviteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardInvitePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BoardInviteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardInvitePayload>
+        }
+        findFirst: {
+          args: Prisma.BoardInviteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardInvitePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BoardInviteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardInvitePayload>
+        }
+        findMany: {
+          args: Prisma.BoardInviteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardInvitePayload>[]
+        }
+        create: {
+          args: Prisma.BoardInviteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardInvitePayload>
+        }
+        createMany: {
+          args: Prisma.BoardInviteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.BoardInviteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardInvitePayload>
+        }
+        update: {
+          args: Prisma.BoardInviteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardInvitePayload>
+        }
+        deleteMany: {
+          args: Prisma.BoardInviteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BoardInviteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.BoardInviteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardInvitePayload>
+        }
+        aggregate: {
+          args: Prisma.BoardInviteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBoardInvite>
+        }
+        groupBy: {
+          args: Prisma.BoardInviteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BoardInviteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BoardInviteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BoardInviteCountAggregateOutputType> | number
         }
       }
     }
@@ -1309,6 +1376,17 @@ export const BoardMemberScalarFieldEnum = {
 export type BoardMemberScalarFieldEnum = (typeof BoardMemberScalarFieldEnum)[keyof typeof BoardMemberScalarFieldEnum]
 
 
+export const BoardInviteScalarFieldEnum = {
+  id: 'id',
+  boardId: 'boardId',
+  userId: 'userId',
+  status: 'status',
+  createdAt: 'createdAt'
+} as const
+
+export type BoardInviteScalarFieldEnum = (typeof BoardInviteScalarFieldEnum)[keyof typeof BoardInviteScalarFieldEnum]
+
+
 export const ListScalarFieldEnum = {
   id: 'id',
   boardId: 'boardId',
@@ -1555,6 +1633,13 @@ export type EnumBoardRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 
 
 /**
+ * Reference to a field of type 'InviteStatus'
+ */
+export type EnumInviteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InviteStatus'>
+    
+
+
+/**
  * Reference to a field of type 'Json'
  */
 export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -1729,6 +1814,7 @@ export type GlobalOmitConfig = {
   project?: Prisma.ProjectOmit
   board?: Prisma.BoardOmit
   boardMember?: Prisma.BoardMemberOmit
+  boardInvite?: Prisma.BoardInviteOmit
   list?: Prisma.ListOmit
   card?: Prisma.CardOmit
   cardMember?: Prisma.CardMemberOmit

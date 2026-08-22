@@ -246,6 +246,7 @@ export type BoardWhereInput = {
   lists?: Prisma.ListListRelationFilter
   labels?: Prisma.LabelListRelationFilter
   activities?: Prisma.ActivityListRelationFilter
+  boardInvites?: Prisma.BoardInviteListRelationFilter
 }
 
 export type BoardOrderByWithRelationInput = {
@@ -262,6 +263,7 @@ export type BoardOrderByWithRelationInput = {
   lists?: Prisma.ListOrderByRelationAggregateInput
   labels?: Prisma.LabelOrderByRelationAggregateInput
   activities?: Prisma.ActivityOrderByRelationAggregateInput
+  boardInvites?: Prisma.BoardInviteOrderByRelationAggregateInput
   _relevance?: Prisma.BoardOrderByRelevanceInput
 }
 
@@ -282,6 +284,7 @@ export type BoardWhereUniqueInput = Prisma.AtLeast<{
   lists?: Prisma.ListListRelationFilter
   labels?: Prisma.LabelListRelationFilter
   activities?: Prisma.ActivityListRelationFilter
+  boardInvites?: Prisma.BoardInviteListRelationFilter
 }, "id">
 
 export type BoardOrderByWithAggregationInput = {
@@ -323,6 +326,7 @@ export type BoardCreateInput = {
   lists?: Prisma.ListCreateNestedManyWithoutBoardInput
   labels?: Prisma.LabelCreateNestedManyWithoutBoardInput
   activities?: Prisma.ActivityCreateNestedManyWithoutBoardInput
+  boardInvites?: Prisma.BoardInviteCreateNestedManyWithoutBoardInput
 }
 
 export type BoardUncheckedCreateInput = {
@@ -337,6 +341,7 @@ export type BoardUncheckedCreateInput = {
   lists?: Prisma.ListUncheckedCreateNestedManyWithoutBoardInput
   labels?: Prisma.LabelUncheckedCreateNestedManyWithoutBoardInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutBoardInput
+  boardInvites?: Prisma.BoardInviteUncheckedCreateNestedManyWithoutBoardInput
 }
 
 export type BoardUpdateInput = {
@@ -350,6 +355,7 @@ export type BoardUpdateInput = {
   lists?: Prisma.ListUpdateManyWithoutBoardNestedInput
   labels?: Prisma.LabelUpdateManyWithoutBoardNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutBoardNestedInput
+  boardInvites?: Prisma.BoardInviteUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardUncheckedUpdateInput = {
@@ -364,6 +370,7 @@ export type BoardUncheckedUpdateInput = {
   lists?: Prisma.ListUncheckedUpdateManyWithoutBoardNestedInput
   labels?: Prisma.LabelUncheckedUpdateManyWithoutBoardNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutBoardNestedInput
+  boardInvites?: Prisma.BoardInviteUncheckedUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardCreateManyInput = {
@@ -554,6 +561,20 @@ export type BoardUpdateOneRequiredWithoutMembersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BoardUpdateToOneWithWhereWithoutMembersInput, Prisma.BoardUpdateWithoutMembersInput>, Prisma.BoardUncheckedUpdateWithoutMembersInput>
 }
 
+export type BoardCreateNestedOneWithoutBoardInvitesInput = {
+  create?: Prisma.XOR<Prisma.BoardCreateWithoutBoardInvitesInput, Prisma.BoardUncheckedCreateWithoutBoardInvitesInput>
+  connectOrCreate?: Prisma.BoardCreateOrConnectWithoutBoardInvitesInput
+  connect?: Prisma.BoardWhereUniqueInput
+}
+
+export type BoardUpdateOneRequiredWithoutBoardInvitesNestedInput = {
+  create?: Prisma.XOR<Prisma.BoardCreateWithoutBoardInvitesInput, Prisma.BoardUncheckedCreateWithoutBoardInvitesInput>
+  connectOrCreate?: Prisma.BoardCreateOrConnectWithoutBoardInvitesInput
+  upsert?: Prisma.BoardUpsertWithoutBoardInvitesInput
+  connect?: Prisma.BoardWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BoardUpdateToOneWithWhereWithoutBoardInvitesInput, Prisma.BoardUpdateWithoutBoardInvitesInput>, Prisma.BoardUncheckedUpdateWithoutBoardInvitesInput>
+}
+
 export type BoardCreateNestedOneWithoutListsInput = {
   create?: Prisma.XOR<Prisma.BoardCreateWithoutListsInput, Prisma.BoardUncheckedCreateWithoutListsInput>
   connectOrCreate?: Prisma.BoardCreateOrConnectWithoutListsInput
@@ -606,6 +627,7 @@ export type BoardCreateWithoutOwnerInput = {
   lists?: Prisma.ListCreateNestedManyWithoutBoardInput
   labels?: Prisma.LabelCreateNestedManyWithoutBoardInput
   activities?: Prisma.ActivityCreateNestedManyWithoutBoardInput
+  boardInvites?: Prisma.BoardInviteCreateNestedManyWithoutBoardInput
 }
 
 export type BoardUncheckedCreateWithoutOwnerInput = {
@@ -619,6 +641,7 @@ export type BoardUncheckedCreateWithoutOwnerInput = {
   lists?: Prisma.ListUncheckedCreateNestedManyWithoutBoardInput
   labels?: Prisma.LabelUncheckedCreateNestedManyWithoutBoardInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutBoardInput
+  boardInvites?: Prisma.BoardInviteUncheckedCreateNestedManyWithoutBoardInput
 }
 
 export type BoardCreateOrConnectWithoutOwnerInput = {
@@ -670,6 +693,7 @@ export type BoardCreateWithoutProjectInput = {
   lists?: Prisma.ListCreateNestedManyWithoutBoardInput
   labels?: Prisma.LabelCreateNestedManyWithoutBoardInput
   activities?: Prisma.ActivityCreateNestedManyWithoutBoardInput
+  boardInvites?: Prisma.BoardInviteCreateNestedManyWithoutBoardInput
 }
 
 export type BoardUncheckedCreateWithoutProjectInput = {
@@ -683,6 +707,7 @@ export type BoardUncheckedCreateWithoutProjectInput = {
   lists?: Prisma.ListUncheckedCreateNestedManyWithoutBoardInput
   labels?: Prisma.LabelUncheckedCreateNestedManyWithoutBoardInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutBoardInput
+  boardInvites?: Prisma.BoardInviteUncheckedCreateNestedManyWithoutBoardInput
 }
 
 export type BoardCreateOrConnectWithoutProjectInput = {
@@ -721,6 +746,7 @@ export type BoardCreateWithoutMembersInput = {
   lists?: Prisma.ListCreateNestedManyWithoutBoardInput
   labels?: Prisma.LabelCreateNestedManyWithoutBoardInput
   activities?: Prisma.ActivityCreateNestedManyWithoutBoardInput
+  boardInvites?: Prisma.BoardInviteCreateNestedManyWithoutBoardInput
 }
 
 export type BoardUncheckedCreateWithoutMembersInput = {
@@ -734,6 +760,7 @@ export type BoardUncheckedCreateWithoutMembersInput = {
   lists?: Prisma.ListUncheckedCreateNestedManyWithoutBoardInput
   labels?: Prisma.LabelUncheckedCreateNestedManyWithoutBoardInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutBoardInput
+  boardInvites?: Prisma.BoardInviteUncheckedCreateNestedManyWithoutBoardInput
 }
 
 export type BoardCreateOrConnectWithoutMembersInput = {
@@ -762,6 +789,7 @@ export type BoardUpdateWithoutMembersInput = {
   lists?: Prisma.ListUpdateManyWithoutBoardNestedInput
   labels?: Prisma.LabelUpdateManyWithoutBoardNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutBoardNestedInput
+  boardInvites?: Prisma.BoardInviteUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardUncheckedUpdateWithoutMembersInput = {
@@ -772,6 +800,77 @@ export type BoardUncheckedUpdateWithoutMembersInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lists?: Prisma.ListUncheckedUpdateManyWithoutBoardNestedInput
+  labels?: Prisma.LabelUncheckedUpdateManyWithoutBoardNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutBoardNestedInput
+  boardInvites?: Prisma.BoardInviteUncheckedUpdateManyWithoutBoardNestedInput
+}
+
+export type BoardCreateWithoutBoardInvitesInput = {
+  name: string
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  project: Prisma.ProjectCreateNestedOneWithoutBoardsInput
+  owner: Prisma.UserCreateNestedOneWithoutBoardsInput
+  members?: Prisma.BoardMemberCreateNestedManyWithoutBoardInput
+  lists?: Prisma.ListCreateNestedManyWithoutBoardInput
+  labels?: Prisma.LabelCreateNestedManyWithoutBoardInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutBoardInput
+}
+
+export type BoardUncheckedCreateWithoutBoardInvitesInput = {
+  id?: number
+  projectId: number
+  ownerId: number
+  name: string
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.BoardMemberUncheckedCreateNestedManyWithoutBoardInput
+  lists?: Prisma.ListUncheckedCreateNestedManyWithoutBoardInput
+  labels?: Prisma.LabelUncheckedCreateNestedManyWithoutBoardInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutBoardInput
+}
+
+export type BoardCreateOrConnectWithoutBoardInvitesInput = {
+  where: Prisma.BoardWhereUniqueInput
+  create: Prisma.XOR<Prisma.BoardCreateWithoutBoardInvitesInput, Prisma.BoardUncheckedCreateWithoutBoardInvitesInput>
+}
+
+export type BoardUpsertWithoutBoardInvitesInput = {
+  update: Prisma.XOR<Prisma.BoardUpdateWithoutBoardInvitesInput, Prisma.BoardUncheckedUpdateWithoutBoardInvitesInput>
+  create: Prisma.XOR<Prisma.BoardCreateWithoutBoardInvitesInput, Prisma.BoardUncheckedCreateWithoutBoardInvitesInput>
+  where?: Prisma.BoardWhereInput
+}
+
+export type BoardUpdateToOneWithWhereWithoutBoardInvitesInput = {
+  where?: Prisma.BoardWhereInput
+  data: Prisma.XOR<Prisma.BoardUpdateWithoutBoardInvitesInput, Prisma.BoardUncheckedUpdateWithoutBoardInvitesInput>
+}
+
+export type BoardUpdateWithoutBoardInvitesInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  project?: Prisma.ProjectUpdateOneRequiredWithoutBoardsNestedInput
+  owner?: Prisma.UserUpdateOneRequiredWithoutBoardsNestedInput
+  members?: Prisma.BoardMemberUpdateManyWithoutBoardNestedInput
+  lists?: Prisma.ListUpdateManyWithoutBoardNestedInput
+  labels?: Prisma.LabelUpdateManyWithoutBoardNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutBoardNestedInput
+}
+
+export type BoardUncheckedUpdateWithoutBoardInvitesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  projectId?: Prisma.IntFieldUpdateOperationsInput | number
+  ownerId?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.BoardMemberUncheckedUpdateManyWithoutBoardNestedInput
   lists?: Prisma.ListUncheckedUpdateManyWithoutBoardNestedInput
   labels?: Prisma.LabelUncheckedUpdateManyWithoutBoardNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutBoardNestedInput
@@ -787,6 +886,7 @@ export type BoardCreateWithoutListsInput = {
   members?: Prisma.BoardMemberCreateNestedManyWithoutBoardInput
   labels?: Prisma.LabelCreateNestedManyWithoutBoardInput
   activities?: Prisma.ActivityCreateNestedManyWithoutBoardInput
+  boardInvites?: Prisma.BoardInviteCreateNestedManyWithoutBoardInput
 }
 
 export type BoardUncheckedCreateWithoutListsInput = {
@@ -800,6 +900,7 @@ export type BoardUncheckedCreateWithoutListsInput = {
   members?: Prisma.BoardMemberUncheckedCreateNestedManyWithoutBoardInput
   labels?: Prisma.LabelUncheckedCreateNestedManyWithoutBoardInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutBoardInput
+  boardInvites?: Prisma.BoardInviteUncheckedCreateNestedManyWithoutBoardInput
 }
 
 export type BoardCreateOrConnectWithoutListsInput = {
@@ -828,6 +929,7 @@ export type BoardUpdateWithoutListsInput = {
   members?: Prisma.BoardMemberUpdateManyWithoutBoardNestedInput
   labels?: Prisma.LabelUpdateManyWithoutBoardNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutBoardNestedInput
+  boardInvites?: Prisma.BoardInviteUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardUncheckedUpdateWithoutListsInput = {
@@ -841,6 +943,7 @@ export type BoardUncheckedUpdateWithoutListsInput = {
   members?: Prisma.BoardMemberUncheckedUpdateManyWithoutBoardNestedInput
   labels?: Prisma.LabelUncheckedUpdateManyWithoutBoardNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutBoardNestedInput
+  boardInvites?: Prisma.BoardInviteUncheckedUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardCreateWithoutLabelsInput = {
@@ -853,6 +956,7 @@ export type BoardCreateWithoutLabelsInput = {
   members?: Prisma.BoardMemberCreateNestedManyWithoutBoardInput
   lists?: Prisma.ListCreateNestedManyWithoutBoardInput
   activities?: Prisma.ActivityCreateNestedManyWithoutBoardInput
+  boardInvites?: Prisma.BoardInviteCreateNestedManyWithoutBoardInput
 }
 
 export type BoardUncheckedCreateWithoutLabelsInput = {
@@ -866,6 +970,7 @@ export type BoardUncheckedCreateWithoutLabelsInput = {
   members?: Prisma.BoardMemberUncheckedCreateNestedManyWithoutBoardInput
   lists?: Prisma.ListUncheckedCreateNestedManyWithoutBoardInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutBoardInput
+  boardInvites?: Prisma.BoardInviteUncheckedCreateNestedManyWithoutBoardInput
 }
 
 export type BoardCreateOrConnectWithoutLabelsInput = {
@@ -894,6 +999,7 @@ export type BoardUpdateWithoutLabelsInput = {
   members?: Prisma.BoardMemberUpdateManyWithoutBoardNestedInput
   lists?: Prisma.ListUpdateManyWithoutBoardNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutBoardNestedInput
+  boardInvites?: Prisma.BoardInviteUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardUncheckedUpdateWithoutLabelsInput = {
@@ -907,6 +1013,7 @@ export type BoardUncheckedUpdateWithoutLabelsInput = {
   members?: Prisma.BoardMemberUncheckedUpdateManyWithoutBoardNestedInput
   lists?: Prisma.ListUncheckedUpdateManyWithoutBoardNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutBoardNestedInput
+  boardInvites?: Prisma.BoardInviteUncheckedUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardCreateWithoutActivitiesInput = {
@@ -919,6 +1026,7 @@ export type BoardCreateWithoutActivitiesInput = {
   members?: Prisma.BoardMemberCreateNestedManyWithoutBoardInput
   lists?: Prisma.ListCreateNestedManyWithoutBoardInput
   labels?: Prisma.LabelCreateNestedManyWithoutBoardInput
+  boardInvites?: Prisma.BoardInviteCreateNestedManyWithoutBoardInput
 }
 
 export type BoardUncheckedCreateWithoutActivitiesInput = {
@@ -932,6 +1040,7 @@ export type BoardUncheckedCreateWithoutActivitiesInput = {
   members?: Prisma.BoardMemberUncheckedCreateNestedManyWithoutBoardInput
   lists?: Prisma.ListUncheckedCreateNestedManyWithoutBoardInput
   labels?: Prisma.LabelUncheckedCreateNestedManyWithoutBoardInput
+  boardInvites?: Prisma.BoardInviteUncheckedCreateNestedManyWithoutBoardInput
 }
 
 export type BoardCreateOrConnectWithoutActivitiesInput = {
@@ -960,6 +1069,7 @@ export type BoardUpdateWithoutActivitiesInput = {
   members?: Prisma.BoardMemberUpdateManyWithoutBoardNestedInput
   lists?: Prisma.ListUpdateManyWithoutBoardNestedInput
   labels?: Prisma.LabelUpdateManyWithoutBoardNestedInput
+  boardInvites?: Prisma.BoardInviteUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardUncheckedUpdateWithoutActivitiesInput = {
@@ -973,6 +1083,7 @@ export type BoardUncheckedUpdateWithoutActivitiesInput = {
   members?: Prisma.BoardMemberUncheckedUpdateManyWithoutBoardNestedInput
   lists?: Prisma.ListUncheckedUpdateManyWithoutBoardNestedInput
   labels?: Prisma.LabelUncheckedUpdateManyWithoutBoardNestedInput
+  boardInvites?: Prisma.BoardInviteUncheckedUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardCreateManyOwnerInput = {
@@ -994,6 +1105,7 @@ export type BoardUpdateWithoutOwnerInput = {
   lists?: Prisma.ListUpdateManyWithoutBoardNestedInput
   labels?: Prisma.LabelUpdateManyWithoutBoardNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutBoardNestedInput
+  boardInvites?: Prisma.BoardInviteUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardUncheckedUpdateWithoutOwnerInput = {
@@ -1007,6 +1119,7 @@ export type BoardUncheckedUpdateWithoutOwnerInput = {
   lists?: Prisma.ListUncheckedUpdateManyWithoutBoardNestedInput
   labels?: Prisma.LabelUncheckedUpdateManyWithoutBoardNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutBoardNestedInput
+  boardInvites?: Prisma.BoardInviteUncheckedUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardUncheckedUpdateManyWithoutOwnerInput = {
@@ -1037,6 +1150,7 @@ export type BoardUpdateWithoutProjectInput = {
   lists?: Prisma.ListUpdateManyWithoutBoardNestedInput
   labels?: Prisma.LabelUpdateManyWithoutBoardNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutBoardNestedInput
+  boardInvites?: Prisma.BoardInviteUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardUncheckedUpdateWithoutProjectInput = {
@@ -1050,6 +1164,7 @@ export type BoardUncheckedUpdateWithoutProjectInput = {
   lists?: Prisma.ListUncheckedUpdateManyWithoutBoardNestedInput
   labels?: Prisma.LabelUncheckedUpdateManyWithoutBoardNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutBoardNestedInput
+  boardInvites?: Prisma.BoardInviteUncheckedUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardUncheckedUpdateManyWithoutProjectInput = {
@@ -1071,6 +1186,7 @@ export type BoardCountOutputType = {
   lists: number
   labels: number
   activities: number
+  boardInvites: number
 }
 
 export type BoardCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1078,6 +1194,7 @@ export type BoardCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.
   lists?: boolean | BoardCountOutputTypeCountListsArgs
   labels?: boolean | BoardCountOutputTypeCountLabelsArgs
   activities?: boolean | BoardCountOutputTypeCountActivitiesArgs
+  boardInvites?: boolean | BoardCountOutputTypeCountBoardInvitesArgs
 }
 
 /**
@@ -1118,6 +1235,13 @@ export type BoardCountOutputTypeCountActivitiesArgs<ExtArgs extends runtime.Type
   where?: Prisma.ActivityWhereInput
 }
 
+/**
+ * BoardCountOutputType without action
+ */
+export type BoardCountOutputTypeCountBoardInvitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BoardInviteWhereInput
+}
+
 
 export type BoardSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1133,6 +1257,7 @@ export type BoardSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   lists?: boolean | Prisma.Board$listsArgs<ExtArgs>
   labels?: boolean | Prisma.Board$labelsArgs<ExtArgs>
   activities?: boolean | Prisma.Board$activitiesArgs<ExtArgs>
+  boardInvites?: boolean | Prisma.Board$boardInvitesArgs<ExtArgs>
   _count?: boolean | Prisma.BoardCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["board"]>
 
@@ -1156,6 +1281,7 @@ export type BoardInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   lists?: boolean | Prisma.Board$listsArgs<ExtArgs>
   labels?: boolean | Prisma.Board$labelsArgs<ExtArgs>
   activities?: boolean | Prisma.Board$activitiesArgs<ExtArgs>
+  boardInvites?: boolean | Prisma.Board$boardInvitesArgs<ExtArgs>
   _count?: boolean | Prisma.BoardCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -1168,6 +1294,7 @@ export type $BoardPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     lists: Prisma.$ListPayload<ExtArgs>[]
     labels: Prisma.$LabelPayload<ExtArgs>[]
     activities: Prisma.$ActivityPayload<ExtArgs>[]
+    boardInvites: Prisma.$BoardInvitePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1523,6 +1650,7 @@ export interface Prisma__BoardClient<T, Null = never, ExtArgs extends runtime.Ty
   lists<T extends Prisma.Board$listsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Board$listsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ListPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   labels<T extends Prisma.Board$labelsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Board$labelsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LabelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   activities<T extends Prisma.Board$activitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Board$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  boardInvites<T extends Prisma.Board$boardInvitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Board$boardInvitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2000,6 +2128,30 @@ export type Board$activitiesArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.ActivityScalarFieldEnum | Prisma.ActivityScalarFieldEnum[]
+}
+
+/**
+ * Board.boardInvites
+ */
+export type Board$boardInvitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BoardInvite
+   */
+  select?: Prisma.BoardInviteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BoardInvite
+   */
+  omit?: Prisma.BoardInviteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BoardInviteInclude<ExtArgs> | null
+  where?: Prisma.BoardInviteWhereInput
+  orderBy?: Prisma.BoardInviteOrderByWithRelationInput | Prisma.BoardInviteOrderByWithRelationInput[]
+  cursor?: Prisma.BoardInviteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BoardInviteScalarFieldEnum | Prisma.BoardInviteScalarFieldEnum[]
 }
 
 /**

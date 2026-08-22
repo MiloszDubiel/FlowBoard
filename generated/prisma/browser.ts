@@ -38,6 +38,11 @@ export type Board = Prisma.BoardModel
  */
 export type BoardMember = Prisma.BoardMemberModel
 /**
+ * Model BoardInvite
+ * 
+ */
+export type BoardInvite = Prisma.BoardInviteModel
+/**
  * Model List
  * 
  */
