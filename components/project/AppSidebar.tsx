@@ -30,27 +30,27 @@ import { useUser } from "@/hooks/useUser";
 const mainItems = [
   {
     title: "Projekty",
-    url: "/dashboard/projects",
+    url: "/projects",
     icon: FolderKanban,
   },
   {
     title: "Zadania",
-    url: "/dashboard/tasks",
+    url: "/projects/tasks",
     icon: CheckSquare,
   },
   {
     title: "Kalendarz",
-    url: "/dashboard/calendar",
+    url: "/projects/calendar",
     icon: Calendar,
   },
   {
     title: "Zespół",
-    url: "/dashboard/team",
+    url: "/projects/team",
     icon: Users,
   },
   {
     title: "Zaproszenia",
-    url: "/dashboard/team",
+    url: "/projects/invits",
     icon: UserPlus,
   },
 ];

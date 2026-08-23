@@ -44,7 +44,7 @@ export default function BoardMembersModal({
     () =>
       debounce(async (value: string) => {
         if (value.length === 0) return setUsers([]);
-        const users = await searchUsers(value);
+        const users = await searchUsers(value, boardId);
         setUsers(users);
       }, 300),
     [],
@@ -70,6 +70,23 @@ export default function BoardMembersModal({
     },
   });
 
+  const { mutate: deleteUser } = useMutation({
+    mutationFn: async (id: number) => {
+      const { data } = await axios.delete(`/api/board/${boardId}/member/${id}`);
+
+      return data;
+    },
+    onSuccess: (data) => {
+      toast.success(data.message);
+      setSelectedMember(null);
+      route.refresh();
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message ?? "Wystąpił błąd");
+      }
+    },
+  });
 
   return (
     <>
@@ -99,11 +116,6 @@ export default function BoardMembersModal({
                     }}
                   />
                 </div>
-
-                <Button>
-                  <UserPlus className="mr-2 h-4 w-4" />
-                  Dodaj
-                </Button>
               </div>
             </div>
 
@@ -111,52 +123,56 @@ export default function BoardMembersModal({
               <p className="text-sm font-medium">Wyniki wyszukiwania</p>
 
               <div className="rounded-md border p-2">
-                {users?.length > 0
-                  ? users?.map((el: any) => (
-                      <div
-                        className="flex items-center justify-between rounded-md p-2 hover:bg-muted"
-                        key={el.id}
-                      >
-                        <div className="flex items-center gap-3">
-                          <Avatar className="h-9 w-9">
-                            <AvatarFallback>
-                              {el.name
-                                .split(" ")
-                                .map((name: any) => name[0])
-                                .join("")
-                                .slice(0, 2)
-                                .toUpperCase()}
-                            </AvatarFallback>
-                          </Avatar>
+                {users?.length > 0 ? (
+                  users?.map((el: any) => (
+                    <div
+                      className="flex items-center justify-between rounded-md p-2 hover:bg-muted"
+                      key={el.id}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-9 w-9">
+                          <AvatarFallback>
+                            {el.name
+                              .split(" ")
+                              .map((name: any) => name[0])
+                              .join("")
+                              .slice(0, 2)
+                              .toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
 
-                          <div>
-                            <p className="text-sm font-medium">{el.name}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {el.email}
-                            </p>
-                          </div>
+                        <div>
+                          <p className="text-sm font-medium">{el.name}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {el.email}
+                          </p>
                         </div>
-
-                        {el.boardInvites?.[0]?.status == "PENDING" ? (
-                          <p className="text-sm">WYSŁANO</p>
-                        ) : (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => {
-                              setIsOpen(true);
-                              setMessage(
-                                `Czy na pewno chcesz dodać użytkownika ${el.name}? Email: ${el.email}`,
-                              );
-                              setIdUserToAdd(Number(el.id));
-                            }}
-                          >
-                            Dodaj
-                          </Button>
-                        )}
                       </div>
-                    ))
-                  : ""}
+
+                      {el.boardInvites?.[0]?.status == "PENDING" ? (
+                        <p className="text-sm">WYSŁANO</p>
+                      ) : (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            setIsOpen(true);
+                            setMessage(
+                              `Czy na pewno chcesz dodać użytkownika ${el.name}? Email: ${el.email}`,
+                            );
+                            setIdUserToAdd(Number(el.id));
+                          }}
+                        >
+                          Dodaj
+                        </Button>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <div className="flex items-center justify-between rounded-md p-2">
+                    Brak wyników
+                  </div>
+                )}
               </div>
             </div>
 
@@ -165,74 +181,80 @@ export default function BoardMembersModal({
                 <p className="text-sm font-medium">Członkowie</p>
 
                 <span className="text-xs text-muted-foreground">
-                  {members.length}
+                  {members?.length}
                 </span>
               </div>
               <div className="rounded-md border p-2">
-                {members.map((member) => (
-                  <div
-                    key={member.id}
-                    className="flex items-center justify-between rounded-md p-2 hover:bg-muted"
-                  >
-                    <div className="flex items-center gap-3">
-                      <Avatar className="h-9 w-9">
-                        <AvatarFallback>
-                          {member.user.name
-                            .split(" ")
-                            .map((name: string[]) => name[0])
-                            .join("")
-                            .slice(0, 2)
-                            .toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
+                {members.length > 0 ? (
+                  members.map((member) => (
+                    <div
+                      key={member.id}
+                      className="flex items-center justify-between rounded-md p-2 hover:bg-muted"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-9 w-9">
+                          <AvatarFallback>
+                            {member.user.name
+                              .split(" ")
+                              .map((name: string[]) => name[0])
+                              .join("")
+                              .slice(0, 2)
+                              .toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
 
-                      <div>
-                        <p className="text-sm font-medium">
-                          {member.user.name}
-                        </p>
+                        <div>
+                          <p className="text-sm font-medium">
+                            {member.user.name}
+                          </p>
 
-                        <p className="text-xs text-muted-foreground">
-                          {member.user.email}
-                        </p>
+                          <p className="text-xs text-muted-foreground">
+                            {member.user.email}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        {member.role === "OWNER" ? (
+                          <span className="text-xs font-medium text-muted-foreground">
+                            Właściciel
+                          </span>
+                        ) : (
+                          <>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                setSelectedMember(member);
+                                setRoleModalOpen(true);
+                              }}
+                            >
+                              {member.role === "MEMBER"
+                                ? "Nadaj Administratora"
+                                : "Zmień rolę"}
+                            </Button>
+
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              className="text-muted-foreground hover:text-destructive"
+                              onClick={() => {
+                                setSelectedMember(member);
+                                setRemoveModalOpen(true);
+                              }}
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </>
+                        )}
                       </div>
                     </div>
-
-                    <div className="flex items-center gap-2">
-                      {member.role === "OWNER" ? (
-                        <span className="text-xs font-medium text-muted-foreground">
-                          Właściciel
-                        </span>
-                      ) : (
-                        <>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => {
-                              setSelectedMember(member);
-                              setRoleModalOpen(true);
-                            }}
-                          >
-                            {member.role === "MEMBER"
-                              ? "Nadaj właściciela"
-                              : "Zmień rolę"}
-                          </Button>
-
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            className="text-muted-foreground hover:text-destructive"
-                            onClick={() => {
-                              setSelectedMember(member);
-                              setRemoveModalOpen(true);
-                            }}
-                          >
-                            <X className="h-4 w-4" />
-                          </Button>
-                        </>
-                      )}
-                    </div>
+                  ))
+                ) : (
+                  <div className="flex items-center justify-between rounded-md p-2">
+                    Brak członków
                   </div>
-                ))}
+                )}
               </div>
             </div>
           </div>
@@ -284,7 +306,7 @@ export default function BoardMembersModal({
         }}
         onSubmit={() => {
           setRemoveModalOpen(false);
-          setSelectedMember(null);
+          deleteUser(selectedMember.user.id);
         }}
       />
     </>
