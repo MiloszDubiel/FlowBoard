@@ -20,17 +20,10 @@ import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-type BoardMember = {
-  id: number;
-  name: string;
-  email: string;
-  role: "OWNER" | "MEMBER";
-};
-
 type BoardMembersModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  members?: BoardMember[];
+  members?: any[];
   boardId: number;
 };
 
@@ -44,6 +37,9 @@ export default function BoardMembersModal({
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState<string>("");
   const [userIdToAdd, setIdUserToAdd] = useState<number>();
+  const [selectedMember, setSelectedMember] = useState<any>(null);
+  const [roleModalOpen, setRoleModalOpen] = useState(false);
+  const [removeModalOpen, setRemoveModalOpen] = useState(false);
   const debouncedSearch = useMemo(
     () =>
       debounce(async (value: string) => {
@@ -67,8 +63,13 @@ export default function BoardMembersModal({
       toast.success(data.message);
       route.refresh();
     },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message ?? "Wystąpił błąd");
+      }
+    },
   });
-  console.log(users);
+
 
   return (
     <>
@@ -167,59 +168,71 @@ export default function BoardMembersModal({
                   {members.length}
                 </span>
               </div>
+              <div className="rounded-md border p-2">
+                {members.map((member) => (
+                  <div
+                    key={member.id}
+                    className="flex items-center justify-between rounded-md p-2 hover:bg-muted"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-9 w-9">
+                        <AvatarFallback>
+                          {member.user.name
+                            .split(" ")
+                            .map((name: string[]) => name[0])
+                            .join("")
+                            .slice(0, 2)
+                            .toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
 
-              <div className="max-h-70 overflow-y-auto rounded-md border">
-                {members.length === 0 ? (
-                  <div className="p-6 text-center">
-                    <p className="text-sm text-muted-foreground">
-                      Brak członków tablicy
-                    </p>
-                  </div>
-                ) : (
-                  <div className="divide-y">
-                    {members.map((member) => (
-                      <div
-                        key={member.id}
-                        className="flex items-center justify-between p-3"
-                      >
-                        <div className="flex items-center gap-3">
-                          <Avatar className="h-9 w-9">
-                            <AvatarFallback>
-                              {member.name
-                                .split(" ")
-                                .map((name) => name[0])
-                                .join("")
-                                .slice(0, 2)
-                                .toUpperCase()}
-                            </AvatarFallback>
-                          </Avatar>
+                      <div>
+                        <p className="text-sm font-medium">
+                          {member.user.name}
+                        </p>
 
-                          <div>
-                            <p className="text-sm font-medium">{member.name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {member.user.email}
+                        </p>
+                      </div>
+                    </div>
 
-                            <p className="text-xs text-muted-foreground">
-                              {member.email}
-                            </p>
-                          </div>
-                        </div>
+                    <div className="flex items-center gap-2">
+                      {member.role === "OWNER" ? (
+                        <span className="text-xs font-medium text-muted-foreground">
+                          Właściciel
+                        </span>
+                      ) : (
+                        <>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              setSelectedMember(member);
+                              setRoleModalOpen(true);
+                            }}
+                          >
+                            {member.role === "MEMBER"
+                              ? "Nadaj właściciela"
+                              : "Zmień rolę"}
+                          </Button>
 
-                        {member.role === "OWNER" ? (
-                          <span className="text-xs font-medium text-muted-foreground">
-                            Właściciel
-                          </span>
-                        ) : (
                           <Button
                             size="icon"
                             variant="ghost"
                             className="text-muted-foreground hover:text-destructive"
+                            onClick={() => {
+                              setSelectedMember(member);
+                              setRemoveModalOpen(true);
+                            }}
                           >
                             <X className="h-4 w-4" />
                           </Button>
-                        )}
-                      </div>
-                    ))}
+                        </>
+                      )}
+                    </div>
                   </div>
-                )}
+                ))}
               </div>
             </div>
           </div>
@@ -236,6 +249,42 @@ export default function BoardMembersModal({
         onSubmit={() => {
           sendInvit(userIdToAdd);
           setIsOpen(false);
+        }}
+      />
+      <ConfirmModal
+        open={roleModalOpen}
+        onOpenChange={setRoleModalOpen}
+        title="Zmienić rolę?"
+        message={
+          selectedMember
+            ? `Czy na pewno chcesz zmienić rolę użytkownika ${selectedMember?.user?.name}?`
+            : ""
+        }
+        onCancel={() => {
+          setRoleModalOpen(false);
+          setSelectedMember(null);
+        }}
+        onSubmit={() => {
+          setRoleModalOpen(false);
+          setSelectedMember(null);
+        }}
+      />
+      <ConfirmModal
+        open={removeModalOpen}
+        onOpenChange={setRemoveModalOpen}
+        title="Usunąć członka?"
+        message={
+          selectedMember
+            ? `Czy na pewno chcesz usunąć użytkownika ${selectedMember.user.name} z tej tablicy?`
+            : ""
+        }
+        onCancel={() => {
+          setRemoveModalOpen(false);
+          setSelectedMember(null);
+        }}
+        onSubmit={() => {
+          setRemoveModalOpen(false);
+          setSelectedMember(null);
         }}
       />
     </>

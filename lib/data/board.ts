@@ -27,3 +27,24 @@ export const getBoard = async (id: number, userID: number) => {
     },
   });
 };
+
+export const getBoardMembers = async (projectId: number) => {
+  const board = await prisma.board.findFirst({
+    where: {
+      projectId: projectId,
+    },
+  });
+
+  return await prisma.boardMember.findMany({
+    where: {
+      boardId: board?.id,
+    },
+    include: {
+      user: {
+        omit: {
+          passwordHash: true,
+        },
+      },
+    },
+  });
+};

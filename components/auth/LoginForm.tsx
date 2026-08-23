@@ -30,7 +30,7 @@ export default function LoginForm() {
     },
     onSuccess: (data) => {
       toast.success(data.message);
-      router.push("/dashboard");
+      router.push("/projects");
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {

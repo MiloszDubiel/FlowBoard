@@ -88,7 +88,6 @@ export default function EditProject({
   });
 
   const submit = (data: AddProjectType) => {
-    console.log(data);
     mutate(data);
   };
 

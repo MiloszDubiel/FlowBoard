@@ -5,7 +5,7 @@ import {
   CheckSquare,
   FolderKanban,
   HelpCircle,
-  LayoutDashboard,
+  UserPlus,
   Plus,
   Settings,
   Users,
@@ -23,16 +23,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import CreateProject from "../project/CreateProject";
+import CreateProject from "./CreateProject";
 import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
 
 const mainItems = [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-    icon: LayoutDashboard,
-  },
   {
     title: "Projekty",
     url: "/dashboard/projects",
@@ -53,6 +48,11 @@ const mainItems = [
     url: "/dashboard/team",
     icon: Users,
   },
+  {
+    title: "Zaproszenia",
+    url: "/dashboard/team",
+    icon: UserPlus,
+  },
 ];
 
 const secondaryItems = [
@@ -71,8 +71,6 @@ const secondaryItems = [
 export default function AppSidebar() {
   const { user } = useUser();
 
-
-  console.log(user)
   const [open, setOpen] = useState(false);
 
   return (

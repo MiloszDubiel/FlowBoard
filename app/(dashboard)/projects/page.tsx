@@ -1,4 +1,4 @@
-import Dashboard from "@/components/dashboard/Dashboard";
+import Dashboard from "@/components/project/Projects";
 
 import { getProjects } from "@/lib/data/projects";
 

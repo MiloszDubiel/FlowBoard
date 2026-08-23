@@ -19,9 +19,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import CreateProject from "../project/CreateProject";
+import CreateProject from "./CreateProject";
 import { Project } from "@/types/project.type";
-import EditProject from "../project/EditProject";
+import EditProject from "./EditProject";
 import ConfirmModal from "../modals/ConfirmModal";
 import { useDashboard } from "@/mutations/dashboard/useDashboard";
 
@@ -37,13 +37,12 @@ const boardColorClasses: Record<string, string> = {
   PURPLE: "bg-purple-500",
   PINK: "bg-pink-500",
 };
-const Dashboard = ({ projects }: any) => {
+const Projects = ({ projects }: any) => {
   const route = useRouter();
   const [openConfirm, setOpenConfirm] = useState(false);
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [editedProject, setEditedProject] = useState<Project | undefined>();
-
 
   const {
     deleteProject: { mutate },
@@ -288,4 +287,4 @@ const Dashboard = ({ projects }: any) => {
     </div>
   );
 };
-export default Dashboard;
+export default Projects;

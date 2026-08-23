@@ -19,6 +19,22 @@ export const PUT = withAuth(async (user, request, context) => {
     );
   }
 
+  const invitation = await prisma.boardInvite.findFirst({
+    where: {
+      userId: Number(uid),
+      boardId: Number(boardId),
+    },
+  });
+
+  if (invitation?.status === "PENDING") {
+    return NextResponse.json(
+      {
+        message: "Zaproszenie zostało już wysłane.",
+      },
+      { status: 409 },
+    );
+  }
+
   await prisma.boardInvite.create({
     data: {
       userId: Number(uid),
@@ -27,6 +43,6 @@ export const PUT = withAuth(async (user, request, context) => {
   });
 
   return NextResponse.json({
-    message: "Wysłano zaproszenie",
+    message: "Wysłano zaproszenie.",
   });
 });

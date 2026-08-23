@@ -1,13 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Users } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Users, X } from "lucide-react";
+import { useState } from "react";
 import { Plus } from "lucide-react";
 import { SortableList } from "./SortableList";
 import AddList from "./AddList";
 import EditList from "./EditList";
-import { List } from "@/generated/prisma/client";
+import { BoardMember, List } from "@/generated/prisma/client";
 import ConfirmModal from "../modals/ConfirmModal";
 import { useList } from "@/mutations/dashboard/useList";
 import { useRouter } from "next/navigation";
@@ -17,8 +17,9 @@ import axios from "axios";
 import { isSortable } from "@dnd-kit/react/sortable";
 import { useMutation } from "@tanstack/react-query";
 import BoardMembersModal from "./BoardMembers";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
-export default function Board({ columns, board }: any) {
+export default function Board({ columns, board, members }: any) {
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenEdit, setOpenEdit] = useState<boolean>(false);
   const [editedList, setEditedList] = useState<List>();
@@ -42,20 +43,48 @@ export default function Board({ columns, board }: any) {
   return (
     <>
       <header className="flex h-16 shrink-0 items-center justify-between border-b px-6">
-        <div>
-          <h1 className="text-lg font-semibold">{board?.name} </h1>
+        <div className="min-w-0">
+          <h1 className="truncate text-lg font-semibold">{board?.name}</h1>
 
           <p className="text-sm text-muted-foreground">Tablica projektu</p>
         </div>
 
         <div className="flex items-center gap-2">
+          {members.map((member: any) => (
+            <div key={member.id} className="group relative">
+              <Avatar className="h-9 w-9">
+                <AvatarFallback>
+                  {member.user.name
+                    .split(" ")
+                    .map((name: string) => name[0])
+                    .join("")
+                    .slice(0, 2)
+                    .toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+
+              <div className="pointer-events-none absolute right-0 top-11 z-50 hidden w-max rounded-md bg-popover px-3 py-2 text-sm shadow-md group-hover:block">
+                <p className="font-medium">{member.user.name}</p>
+
+                <p className="text-xs text-muted-foreground">
+                  {member.user.email}
+                </p>
+
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {member.role === "OWNER" ? "Właściciel" : "Członek"}
+                </p>
+              </div>
+            </div>
+          ))}
+
           <Button
             variant="outline"
-            className="cursor-pointer"
+            size="sm"
+            className="ml-2 cursor-pointer"
             onClick={() => setShowMembers(true)}
           >
             <Users className="mr-2 h-4 w-4" />
-            Członkowie
+            Zarządzaj zespołem
           </Button>
         </div>
       </header>
@@ -142,6 +171,7 @@ export default function Board({ columns, board }: any) {
         open={showMembers}
         onOpenChange={setShowMembers}
         boardId={board.id}
+        members={members}
       />
     </>
   );
