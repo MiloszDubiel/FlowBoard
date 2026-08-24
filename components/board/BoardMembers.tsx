@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useMemo, useState } from "react";
 import {
   Dialog,
@@ -19,6 +20,8 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import MembersList from "./MemberList";
+import MembersSkeleton from "../skeletons/MemberSkeleton";
 
 type BoardMembersModalProps = {
   open: boolean;
@@ -26,6 +29,12 @@ type BoardMembersModalProps = {
   members?: any[];
   boardId: number;
 };
+
+const roles = [
+  { label: "Wybierz rolę", value: null, disabled: true },
+  { label: "Członek", value: "MEMBER" },
+  { label: "Administrator", value: "ADMIN" },
+];
 
 export default function BoardMembersModal({
   open,
@@ -38,7 +47,6 @@ export default function BoardMembersModal({
   const [message, setMessage] = useState<string>("");
   const [userIdToAdd, setIdUserToAdd] = useState<number>();
   const [selectedMember, setSelectedMember] = useState<any>(null);
-  const [roleModalOpen, setRoleModalOpen] = useState(false);
   const [removeModalOpen, setRemoveModalOpen] = useState(false);
   const debouncedSearch = useMemo(
     () =>
@@ -55,7 +63,9 @@ export default function BoardMembersModal({
   const { mutate: sendInvit } = useMutation({
     mutationFn: async (uid: number | undefined) => {
       if (!uid) return;
-      const { data } = await axios.put(`/api/board/${boardId}/member/${uid}`);
+      const { data } = await axios.put(
+        `/api/board/${boardId}/member/${uid}/invite`,
+      );
 
       return data;
     },
@@ -72,7 +82,32 @@ export default function BoardMembersModal({
 
   const { mutate: deleteUser } = useMutation({
     mutationFn: async (id: number) => {
-      const { data } = await axios.delete(`/api/board/${boardId}/member/${id}`);
+      const { data } = await axios.delete(
+        `/api/board/${boardId}/member/${id}/delete`,
+      );
+
+      return data;
+    },
+    onSuccess: (data) => {
+      toast.success(data.message);
+      setSelectedMember(null);
+      route.refresh();
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message ?? "Wystąpił błąd");
+      }
+    },
+  });
+
+  const { mutate: changeRole } = useMutation({
+    mutationFn: async ({ id, role }: any) => {
+      const { data } = await axios.patch(
+        `/api/board/${boardId}/member/${id}/role`,
+        {
+          role,
+        },
+      );
 
       return data;
     },
@@ -184,78 +219,16 @@ export default function BoardMembersModal({
                   {members?.length}
                 </span>
               </div>
-              <div className="rounded-md border p-2">
-                {members.length > 0 ? (
-                  members.map((member) => (
-                    <div
-                      key={member.id}
-                      className="flex items-center justify-between rounded-md p-2 hover:bg-muted"
-                    >
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-9 w-9">
-                          <AvatarFallback>
-                            {member.user.name
-                              .split(" ")
-                              .map((name: string[]) => name[0])
-                              .join("")
-                              .slice(0, 2)
-                              .toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
 
-                        <div>
-                          <p className="text-sm font-medium">
-                            {member.user.name}
-                          </p>
-
-                          <p className="text-xs text-muted-foreground">
-                            {member.user.email}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        {member.role === "OWNER" ? (
-                          <span className="text-xs font-medium text-muted-foreground">
-                            Właściciel
-                          </span>
-                        ) : (
-                          <>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => {
-                                setSelectedMember(member);
-                                setRoleModalOpen(true);
-                              }}
-                            >
-                              {member.role === "MEMBER"
-                                ? "Nadaj Administratora"
-                                : "Zmień rolę"}
-                            </Button>
-
-                            <Button
-                              size="icon"
-                              variant="ghost"
-                              className="text-muted-foreground hover:text-destructive"
-                              onClick={() => {
-                                setSelectedMember(member);
-                                setRemoveModalOpen(true);
-                              }}
-                            >
-                              <X className="h-4 w-4" />
-                            </Button>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="flex items-center justify-between rounded-md p-2">
-                    Brak członków
-                  </div>
-                )}
-              </div>
+              <Suspense fallback={<MembersSkeleton />}>
+                <MembersList
+                  members={members}
+                  roles={roles}
+                  changeRole={changeRole}
+                  setRemoveModalOpen={setRemoveModalOpen}
+                  setSelectedMember={setSelectedMember}
+                />
+              </Suspense>
             </div>
           </div>
         </DialogContent>
@@ -271,24 +244,6 @@ export default function BoardMembersModal({
         onSubmit={() => {
           sendInvit(userIdToAdd);
           setIsOpen(false);
-        }}
-      />
-      <ConfirmModal
-        open={roleModalOpen}
-        onOpenChange={setRoleModalOpen}
-        title="Zmienić rolę?"
-        message={
-          selectedMember
-            ? `Czy na pewno chcesz zmienić rolę użytkownika ${selectedMember?.user?.name}?`
-            : ""
-        }
-        onCancel={() => {
-          setRoleModalOpen(false);
-          setSelectedMember(null);
-        }}
-        onSubmit={() => {
-          setRoleModalOpen(false);
-          setSelectedMember(null);
         }}
       />
       <ConfirmModal

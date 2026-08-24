@@ -3,6 +3,12 @@ import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Providers } from "./providers";
 import { Toaster } from "@/components/ui/sonner";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "FlowBoard",
+  description: "Strona do tworzenia i zarządzania planami.",
+};
 
 const geist = Geist({
   subsets: ["latin"],
