@@ -46,6 +46,10 @@ interface CreateCardModalProps {
   members: any[];
 }
 import { FieldError } from "@/components/ui/field";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function CreateCardModal({
   open,
@@ -70,24 +74,38 @@ export default function CreateCardModal({
     },
   });
 
+  const route = useRouter();
+
+  const { mutate: addCard } = useMutation({
+    mutationFn: async (body: any) => {
+      const { data } = await axios.post("/api/card/add", body);
+
+      return data;
+    },
+    onSuccess: (data) => {
+      toast.success(data.message);
+      route.refresh();
+    },
+  });
+
   const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
   const [files, setFiles] = useState<File[]>([]);
 
   const onSubmit = async (data: CreateCardForm) => {
-    console.log({ ...data, memberIds: selectedUsers });
+    addCard({ ...data, userIds: selectedUsers, listId });
 
-    try {
-      reset({
-        title: "",
-        description: "",
-        dueDate: "",
-        priority: "MEDIUM",
-        userIds: [],
-      });
-      onOpenChange(false);
-    } catch (error) {
-      console.error(error);
-    }
+    // try {
+    //   reset({
+    //     title: "",
+    //     description: "",
+    //     dueDate: "",
+    //     priority: "MEDIUM",
+    //     userIds: [],
+    //   });
+    //   onOpenChange(false);
+    // } catch (error) {
+    //   console.error(error);
+    // }
   };
 
   const handleOpenChange = (value: boolean) => {

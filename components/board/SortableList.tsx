@@ -39,7 +39,6 @@ export const SortableList = ({
     handle: handleRef,
   });
   const [createCardOpen, setCreateCardOpen] = useState(false);
-  const { user } = useUser();
 
   return (
     <>

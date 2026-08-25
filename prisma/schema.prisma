@@ -206,7 +206,7 @@ enum CardPriority {
 model CardMember {
   cardId Int
   userId Int
-
+ 
   card Card @relation(fields: [cardId], references: [id], onDelete: Cascade)
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -214,6 +214,7 @@ model CardMember {
   @@index([userId])
   @@map("card_members")
 }
+
 
 // =========================
 // LABEL

@@ -178,7 +178,7 @@ const Projects = ({ projects }: any) => {
 
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem>
-                        <Link href={`/board/${project.id}`}>
+                        <Link href={`/projects/board/${project.id}`}>
                           Otwórz projekt
                         </Link>
                       </DropdownMenuItem>

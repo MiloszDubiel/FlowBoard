@@ -93,7 +93,6 @@ export default function Board({ board, members }: any) {
           <DragDropProvider
             onDragEnd={(event) => {
               if (event.canceled) return;
-
               const { source } = event.operation;
 
               if (isSortable(source)) {

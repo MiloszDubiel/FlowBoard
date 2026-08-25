@@ -30,6 +30,13 @@ export const POST = withAuth(async (user, request) => {
         name: "Główny",
         projectId: project.id,
         ownerId: user.userID,
+
+        members: {
+          create: {
+            userId: creatorID,
+            role: "OWNER",
+          },
+        },
       },
     });
 
@@ -57,4 +64,3 @@ export const GET = withAuth(async (user, request) => {
     return NextResponse.json({ status: 404 });
   }
 });
-
