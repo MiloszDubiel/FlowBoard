@@ -19,7 +19,7 @@ import { useMutation } from "@tanstack/react-query";
 import BoardMembersModal from "./BoardMembers";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
-export default function Board({ columns, board, members }: any) {
+export default function Board({ board, members }: any) {
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenEdit, setOpenEdit] = useState<boolean>(false);
   const [editedList, setEditedList] = useState<List>();
@@ -117,6 +117,7 @@ export default function Board({ columns, board, members }: any) {
           >
             {board.lists?.map((column: any, index: number) => (
               <SortableList
+                memebrs={members}
                 column={column}
                 id={column.id}
                 key={column.id}

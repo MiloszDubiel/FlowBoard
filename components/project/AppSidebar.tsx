@@ -9,6 +9,7 @@ import {
   Plus,
   Settings,
   Users,
+  LogOut,
 } from "lucide-react";
 
 import {
@@ -26,6 +27,8 @@ import {
 import CreateProject from "./CreateProject";
 import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
+import { useLogout } from "@/mutations/dashboard/useLogout";
+import { getProjects } from "@/lib/data/projects";
 
 const mainItems = [
   {
@@ -68,8 +71,12 @@ const secondaryItems = [
   },
 ];
 
-export default function AppSidebar() {
+export default function AppSidebar({ projects = [] }: any) {
   const { user } = useUser();
+
+  const {
+    logout: { mutate: logout },
+  } = useLogout();
 
   const [open, setOpen] = useState(false);
 
@@ -122,7 +129,7 @@ export default function AppSidebar() {
 
           <SidebarGroupContent>
             <SidebarMenu>
-              {/* {projects.map((el: Project) => (
+              {projects.map((el: any) => (
                 <SidebarMenuItem key={el.id}>
                   <SidebarMenuButton>
                     <a href="/dashboard/projects/flowboard">
@@ -131,7 +138,7 @@ export default function AppSidebar() {
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              ))} */}
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -152,6 +159,17 @@ export default function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  className="flex  items-center gap-4"
+                  onClick={() => {
+                    logout();
+                  }}
+                >
+                  <LogOut />
+                  <span>Wyloguj</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

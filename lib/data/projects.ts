@@ -1,13 +1,18 @@
+"use server";
+
 import { prisma } from "../prisma";
 import { getCurrentUser } from "../auth/get-current-user";
-import { AnyARecord } from "node:dns";
 
 export const getProjects = async () => {
-  const user: any = await getCurrentUser();
+  const user = await getCurrentUser();
+
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
 
   return await prisma.project.findMany({
     where: {
-      ownerId: user.userID,
+      ownerId: (user as any).userID,
     },
   });
 };

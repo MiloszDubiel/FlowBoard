@@ -172,7 +172,8 @@ model Card {
   description String?   @db.Text
   position    Int
   dueDate     DateTime?
-
+ priority    CardPriority @default(MEDIUM)
+ 
   createdById Int
 
   createdAt DateTime @default(now())
@@ -189,6 +190,13 @@ model Card {
   @@index([listId])
   @@index([createdById])
   @@map("cards")
+}
+
+enum CardPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
 }
 
 // =========================

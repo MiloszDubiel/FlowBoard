@@ -7,7 +7,6 @@ export const useUser = () => {
   useEffect(() => {
     const getUser = async () => {
       const user = await getCurrentUserData();
-
       setUser(user);
     };
 
