@@ -1,15 +1,17 @@
 import { prisma } from "../prisma";
 import { getCurrentUser } from "../auth/get-current-user";
 
-export const getBoard = async (id: number, userID: number) => {
-  const user: any = await getCurrentUser();
+export const getBoard = async (projectId: number) => {
+  const user = await getCurrentUser();
 
-  if (user?.userID !== userID) return null;
+  if (!user) return null;
 
-  return await prisma.board.findFirst({
+  return prisma.board.findFirst({
     where: {
-      projectId: id,
-      ownerId: userID,
+      ownerId: Number(user.userID),
+      project: {
+        id: projectId,
+      },
     },
     include: {
       lists: {
@@ -28,16 +30,23 @@ export const getBoard = async (id: number, userID: number) => {
   });
 };
 
-export const getBoardMembers = async (projectId: number) => {
+export const getBoardMembers = async (boardId: number) => {
+  const user = await getCurrentUser();
+
+  if (!user) return [];
+
   const board = await prisma.board.findFirst({
     where: {
-      projectId: projectId,
+      id: boardId,
+      ownerId: Number(user.userID),
     },
   });
 
-  return await prisma.boardMember.findMany({
+  if (!board) return [];
+
+  return prisma.boardMember.findMany({
     where: {
-      boardId: board?.id,
+      boardId: board.id,
     },
     include: {
       user: {
@@ -45,6 +54,44 @@ export const getBoardMembers = async (projectId: number) => {
           passwordHash: true,
         },
       },
+    },
+  });
+};
+
+export const getBoardLists = async (boardId: number) => {
+  const user = await getCurrentUser();
+
+  if (!user) return [];
+
+  return prisma.list.findMany({
+    where: {
+      boardId,
+      board: {
+        ownerId: Number(user.userID),
+      },
+    },
+    orderBy: {
+      position: "asc",
+    },
+  });
+};
+
+export const getBoardCards = async (boardId: number) => {
+  const user = await getCurrentUser();
+
+  if (!user) return [];
+
+  return prisma.card.findMany({
+    where: {
+      list: {
+        board: {
+          id: boardId,
+          ownerId: Number(user.userID),
+        },
+      },
+    },
+    orderBy: {
+      position: "asc",
     },
   });
 };

@@ -13,7 +13,6 @@ export const POST = withAuth(async (user, request, context) => {
 
   const { title, description, priority, dueDate, userIds } = result.data;
 
-  // Sprawdzamy listę oraz board, do którego należy
   const list = await prisma.list.findUnique({
     where: {
       id: Number(listId),
@@ -48,13 +47,9 @@ export const POST = withAuth(async (user, request, context) => {
       { status: 403 },
     );
   }
-
-  // Sprawdzamy użytkowników przypisywanych do karty
   const boardMemberIds = new Set(
     list.board.members.map((member) => member.userId),
   );
-
-  // Owner również może być przypisany do karty
   boardMemberIds.add(list.board.ownerId);
 
   const invalidUsers = userIds.filter(
@@ -81,7 +76,7 @@ export const POST = withAuth(async (user, request, context) => {
     );
   }
 
-  await prisma.card.create({
+  const card = await prisma.card.create({
     data: {
       title,
       description,
@@ -104,15 +99,10 @@ export const POST = withAuth(async (user, request, context) => {
         })),
       },
     },
-
-    include: {
-      members: {
-        include: {
-          user: true,
-        },
-      },
-    },
   });
 
-  return NextResponse.json({ message: "Utworzono" }, { status: 201 });
+  return NextResponse.json(
+    { message: "Utworzono", cardId: card.id },
+    { status: 201 },
+  );
 });

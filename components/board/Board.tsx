@@ -4,25 +4,25 @@ import { Button } from "@/components/ui/button";
 import { Users, X } from "lucide-react";
 import { useState } from "react";
 import { Plus } from "lucide-react";
-import { SortableList } from "./SortableList";
+import { Column } from "./Column";
 import AddList from "./AddList";
 import EditList from "./EditList";
-import { BoardMember, List } from "@/generated/prisma/client";
 import ConfirmModal from "../modals/ConfirmModal";
 import { useList } from "@/mutations/dashboard/useList";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { DragDropProvider } from "@dnd-kit/react";
 import axios from "axios";
-import { isSortable } from "@dnd-kit/react/sortable";
 import { useMutation } from "@tanstack/react-query";
 import BoardMembersModal from "./BoardMembers";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { DragDropProvider } from "@dnd-kit/react";
+import { move } from "@dnd-kit/helpers";
+import { TaskCard } from "./TaskCard";
 
 export default function Board({ board, members }: any) {
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenEdit, setOpenEdit] = useState<boolean>(false);
-  const [editedList, setEditedList] = useState<List>();
+  const [editedList, setEditedList] = useState<any>();
   const [deletedList, setDeleteList] = useState<boolean>(false);
   const [showMembers, setShowMembers] = useState<boolean>(false);
   const {
@@ -30,6 +30,12 @@ export default function Board({ board, members }: any) {
   } = useList(editedList?.id);
 
   const route = useRouter();
+
+  const [lists, setLists] = useState<any>(() =>
+    Object.fromEntries(board.lists.map((list: any) => [list.id, list.cards])),
+  );
+
+  console.log(lists);
 
   const { mutate: reorderLists, isPending } = useMutation({
     mutationKey: ["lists"],
@@ -91,47 +97,26 @@ export default function Board({ board, members }: any) {
       <div className="min-h-0 flex-1 overflow-x-auto bg-muted/40 p-6">
         <div className="flex h-full min-w-max gap-4">
           <DragDropProvider
-            onDragEnd={(event) => {
-              if (event.canceled) return;
+            onDragOver={(event: any) => {
               const { source } = event.operation;
 
-              if (isSortable(source)) {
-                const { initialIndex, index } = source;
+              if (!source) return;
 
-                if (initialIndex !== index) {
-                  const newItems = [...board.lists];
-
-                  const [removed] = newItems.splice(initialIndex, 1);
-                  newItems.splice(index, 0, removed);
-
-                  const updatedLists = newItems.map((list, index) => ({
-                    ...list,
-                    position: index,
-                  }));
-
-                  reorderLists(updatedLists);
-                }
-              }
+              setLists((items: any) => move(items, event));
             }}
           >
-            {board.lists?.map((column: any, index: number) => (
-              <SortableList
-                memebrs={members}
-                column={column}
-                id={column.id}
-                key={column.id}
-                index={index}
-                onEdit={(list: any) => {
-                  setOpenEdit(true);
-                  setEditedList(list);
-                }}
-                onDelete={(list: any) => {
-                  setDeleteList(true);
-                  setEditedList(list);
-                }}
-              />
-            ))}
+            <div className="flex gap-4">
+              {board.lists.map((list: any) => (
+                <Column
+                  column={list}
+                  key={list.id}
+                  id={list.id}
+                  cards={lists[list.id]}
+                />
+              ))}
+            </div>
           </DragDropProvider>
+
           <Button
             variant="outline"
             className=" w-80 shrink-0 justify-start cursor-pointer"

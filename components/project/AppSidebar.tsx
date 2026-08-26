@@ -27,7 +27,7 @@ import {
 import CreateProject from "./CreateProject";
 import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
-import { useLogout } from "@/mutations/dashboard/useLogout";
+import { useLogout } from "@/mutations/useLogout";
 import { getProjects } from "@/lib/data/projects";
 
 const mainItems = [
