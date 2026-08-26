@@ -11,11 +11,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { TaskCard } from "./TaskCard";
+import { useSortable } from "@dnd-kit/react/sortable";
 
 export const Column = ({ id, cards, column }: any) => {
-  const { ref } = useDroppable({
+  const { ref } = useSortable({
     id,
     type: "column",
+    index: id,
   });
 
   return (

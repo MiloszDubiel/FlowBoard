@@ -3,18 +3,21 @@ import { prisma } from "@/lib/prisma";
 
 export async function PATCH(request: Request) {
   try {
-    const { columns } = await request.json();
+    const { lists } = await request.json();
 
-    const operations = columns.map((column: any, index: number) => {
-      return prisma.list.update({
-        where: {
-          id: column,
-        },
-        data: {
-          position: index,
-        },
-      });
-    });
+    const operations = Object.entries(lists).flatMap(([column, cards]) =>
+      (cards as any[]).map((card, index) =>
+        prisma.card.update({
+          where: {
+            id: card.id,
+          },
+          data: {
+            listId: Number(column),
+            position: index,
+          },
+        }),
+      ),
+    );
 
     await prisma.$transaction(operations);
 

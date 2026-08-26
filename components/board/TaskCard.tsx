@@ -13,7 +13,7 @@ type CardItemProps = {
 };
 
 export const TaskCard = ({ card, index, column }: CardItemProps) => {
-  const { ref } = useSortable({
+  const { ref, handleRef } = useSortable({
     id: card.id,
     index,
     type: "card",
@@ -31,6 +31,7 @@ export const TaskCard = ({ card, index, column }: CardItemProps) => {
         size="icon"
         className="absolute right-2 top-2 z-10 h-7 w-7 cursor-grab text-muted-foreground opacity-0 transition-all hover:bg-muted hover:text-foreground active:cursor-grabbing group-hover:opacity-100"
         title="Przenieś kartę"
+        ref={handleRef}
       >
         <GripVertical className="h-4 w-4" />
       </Button>

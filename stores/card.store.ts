@@ -1,38 +1,27 @@
 import { create } from "zustand";
+import { move } from "@dnd-kit/helpers";
 
-import type { Card as CardType, List } from "@/generated/prisma/client";
+type Card = {
+  id: number;
+  title: string;
+  position: number;
+  listId: number;
+};
 
 type CardStore = {
-  cards: CardType[];
+  lists: Record<number, Card[]>;
 
-  setCards: (cards: CardType[]) => void;
-  addCard: (card: CardType) => void;
-  removeCard: (cardId: number) => void;
-  updateCard: (cardId: number, data: Partial<CardType>) => void;
+  setLists: (lists: Record<number, Card[]>) => void;
+  moveCards: (event: any) => void;
 };
 
 export const useCardStore = create<CardStore>((set) => ({
-  cards: [],
+  lists: {},
 
-  setCards: (cards) =>
-    set({
-      cards,
-    }),
+  setLists: (lists) => set({ lists }),
 
-  addCard: (card) =>
+  moveCards: (event) =>
     set((state) => ({
-      cards: [...state.cards, card],
-    })),
-
-  removeCard: (cardId) =>
-    set((state) => ({
-      cards: state.cards.filter((card) => card.id !== cardId),
-    })),
-
-  updateCard: (cardId, data) =>
-    set((state) => ({
-      cards: state.cards.map((card) =>
-        card.id === cardId ? { ...card, ...data } : card,
-      ),
+      lists: move(state.lists, event),
     })),
 }));

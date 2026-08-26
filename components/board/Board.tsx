@@ -2,14 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { Users, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import { Column } from "./Column";
 import AddList from "./AddList";
 import EditList from "./EditList";
 import ConfirmModal from "../modals/ConfirmModal";
 import { useList } from "@/mutations/dashboard/useList";
-import { useRouter } from "next/navigation";
+import { useCardStore } from "@/stores/card.store";
 import { toast } from "sonner";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
@@ -17,7 +17,6 @@ import BoardMembersModal from "./BoardMembers";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DragDropProvider } from "@dnd-kit/react";
 import { move } from "@dnd-kit/helpers";
-import { TaskCard } from "./TaskCard";
 
 export default function Board({ board, members }: any) {
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -29,18 +28,33 @@ export default function Board({ board, members }: any) {
     deleteList: { mutate },
   } = useList(editedList?.id);
 
-  const route = useRouter();
+  const [listOrder, setListOrder] = useState<number[]>(() =>
+    board.lists
+      .sort((a: any, b: any) => a.position - b.position)
+      .map((list: any) => list.id),
+  );
 
-  const [lists, setLists] = useState<any>(() =>
+  const [initialLists, _] = useState<Record<number, any[]>>(() =>
     Object.fromEntries(board.lists.map((list: any) => [list.id, list.cards])),
   );
 
-  console.log(lists);
+  const [lists, setLists] = useState<Record<number, any[]>>(() =>
+    Object.fromEntries(board.lists.map((list: any) => [list.id, list.cards])),
+  );
 
-  const { mutate: reorderLists, isPending } = useMutation({
+  const { mutate: switchColumns, isPending } = useMutation({
     mutationKey: ["lists"],
-    mutationFn: async (lists: any[]) => {
-      const { data } = await axios.patch("/api/list/reorder", { lists });
+    mutationFn: async (lists: any) => {
+      const { data } = await axios.patch("/api/card/switch", { lists });
+
+      return data;
+    },
+  });
+
+  const { mutate: reorderLists } = useMutation({
+    mutationKey: ["columns"],
+    mutationFn: async (columns: any) => {
+      const { data } = await axios.patch("/api/list/reorder", { columns });
 
       return data;
     },
@@ -98,11 +112,27 @@ export default function Board({ board, members }: any) {
         <div className="flex h-full min-w-max gap-4">
           <DragDropProvider
             onDragOver={(event: any) => {
-              const { source } = event.operation;
+              const { source, target } = event.operation;
 
               if (!source) return;
+              if (source.type === "column") {
+                setListOrder((items) => move(items, event));
+                return;
+              }
+              if (
+                source?.type === target?.type &&
+                target?.type === "column" &&
+                source?.type === "column"
+              )
+                return;
 
-              setLists((items: any) => move(items, event));
+              setLists((items) => move(items, event));
+            }}
+            onDragEnd={() => {
+              if (JSON.stringify(initialLists) !== JSON.stringify(lists)) {
+                switchColumns(lists);
+              }
+              reorderLists(listOrder);
             }}
           >
             <div className="flex gap-4">
@@ -111,7 +141,7 @@ export default function Board({ board, members }: any) {
                   column={list}
                   key={list.id}
                   id={list.id}
-                  cards={lists[list.id]}
+                  cards={lists[list.id] ?? []}
                 />
               ))}
             </div>
