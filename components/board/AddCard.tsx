@@ -24,7 +24,7 @@ import {
   SelectGroup,
 } from "../ui/select";
 import { DragDrop } from "../DragDropFile";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Popover,
   PopoverContent,
@@ -46,6 +46,8 @@ interface CreateCardModalProps {
   members: any[];
 }
 import { FieldError } from "@/components/ui/field";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useCard } from "@/mutations/dashboard/useCard";
@@ -61,7 +63,6 @@ export default function CreateCardModal({
     register,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors, isSubmitting },
   } = useForm<CreateCardForm>({
     resolver: zodResolver(createCardSchema),
@@ -91,13 +92,14 @@ export default function CreateCardModal({
           const formData = new FormData();
           formData.append("file", files);
           formData.append("cardId", data.cardId);
-          0;
+0
           addFile(formData);
           toast.success(data.message);
+          route.refresh();
         },
       },
     );
-    route.refresh();
+
     try {
       reset({
         title: "",
@@ -106,18 +108,19 @@ export default function CreateCardModal({
         priority: "MEDIUM",
         userIds: [],
       });
-      setSelectedUsers([]);
       onOpenChange(false);
     } catch (error) {
       console.error(error);
     }
   };
 
-  useEffect(() => {
-    setValue("userIds", selectedUsers, {
-      shouldValidate: true,
-    });
-  }, [selectedUsers]);
+  const handleOpenChange = (value: boolean) => {
+    if (!value) {
+      reset();
+    }
+
+    onOpenChange(value);
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -213,20 +216,19 @@ export default function CreateCardModal({
                         <CommandGroup heading="Użytkownicy">
                           {members.map((member) => {
                             const isSelected = selectedUsers.includes(
-                              member.userId,
+                              member.id,
                             );
-
                             return (
                               <CommandItem
-                                key={member.userId}
+                                key={member.id}
                                 value={member.name}
                                 onSelect={() => {
                                   setSelectedUsers((current) =>
                                     isSelected
                                       ? current.filter(
-                                          (id) => id !== member.userId,
+                                          (id) => id !== member.user.id,
                                         )
-                                      : [...current, member.userId],
+                                      : [...current, member.user.id],
                                   );
                                 }}
                               >
@@ -236,9 +238,8 @@ export default function CreateCardModal({
                                   ${isSelected && "bg-primary text-primary-foreground"},
                                 `}
                                 ></div>
+
                                 {member.user.name}
-                                {" - "}
-                                {member.user.email}
                               </CommandItem>
                             );
                           })}
@@ -247,8 +248,6 @@ export default function CreateCardModal({
                     </Command>
                   </PopoverContent>
                 </Popover>
-
-                <FieldError errors={[errors.userIds]} />
               </div>
             </div>
 

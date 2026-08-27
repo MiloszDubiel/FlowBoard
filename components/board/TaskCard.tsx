@@ -5,40 +5,32 @@ import { Button } from "@/components/ui/button";
 import { GripVertical, CalendarDays, Paperclip } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSortable } from "@dnd-kit/react/sortable";
-import { useRouter } from "next/navigation";
 
 type CardItemProps = {
   card: any;
   index: number;
   column: number;
-  projectId: number;
 };
 
-export const TaskCard = ({ card, index, projectId }: CardItemProps) => {
-  const { ref, handleRef } = useSortable({
+export const TaskCard = ({ card, index, column }: CardItemProps) => {
+  const { ref } = useSortable({
     id: card.id,
     index,
     type: "card",
     group: "cards",
   });
 
-  const route = useRouter();
-
   return (
     <Card
       ref={ref}
       key={card.id}
-      className="group relative cursor-pointer overflow-hidden border-border/60 bg-card transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-md min-h-fit"
-      onClick={() =>
-        route.replace(`/projects/board/${projectId}/card/${card.id}`)
-      }
+      className="group relative cursor-pointer overflow-hidden border-border/60 bg-card transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-md"
     >
       <Button
         variant="ghost"
         size="icon"
         className="absolute right-2 top-2 z-10 h-7 w-7 cursor-grab text-muted-foreground opacity-0 transition-all hover:bg-muted hover:text-foreground active:cursor-grabbing group-hover:opacity-100"
         title="Przenieś kartę"
-        ref={handleRef}
       >
         <GripVertical className="h-4 w-4" />
       </Button>

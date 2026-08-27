@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE `cards` ADD COLUMN `priority` ENUM('LOW', 'MEDIUM', 'HIGH', 'URGENT') NOT NULL DEFAULT 'MEDIUM';

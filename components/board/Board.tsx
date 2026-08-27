@@ -2,14 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { Users, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Column } from "./Column";
 import AddList from "./AddList";
 import EditList from "./EditList";
 import ConfirmModal from "../modals/ConfirmModal";
 import { useList } from "@/mutations/dashboard/useList";
-import { useCardStore } from "@/stores/card.store";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
@@ -17,35 +17,34 @@ import BoardMembersModal from "./BoardMembers";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DragDropProvider } from "@dnd-kit/react";
 import { move } from "@dnd-kit/helpers";
-import { useDashboard } from "@/mutations/dashboard/useDashboard";
-import { useRouter } from "next/navigation";
+import { TaskCard } from "./TaskCard";
 
 export default function Board({ board, members }: any) {
-  const [isOpenAdd, setOpenAdd] = useState<boolean>(false);
+  const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenEdit, setOpenEdit] = useState<boolean>(false);
-  const [list, setList] = useState<any>();
-  const [isOpenDelete, setOpenDelete] = useState<boolean>(false);
+  const [editedList, setEditedList] = useState<any>();
+  const [deletedList, setDeleteList] = useState<boolean>(false);
   const [showMembers, setShowMembers] = useState<boolean>(false);
   const {
     deleteList: { mutate },
-  } = useList();
-
-  const [listOrder, setListOrder] = useState<number[]>(() =>
-    board.lists
-      .sort((a: any, b: any) => a.position - b.position)
-      .map((list: any) => list.id),
-  );
-
-  const [initialLists, _] = useState<Record<number, any[]>>(() =>
-    Object.fromEntries(board.lists.map((list: any) => [list.id, list.cards])),
-  );
-  const [lists, setLists] = useState<Record<number, any[]>>(() =>
-    Object.fromEntries(board.lists.map((list: any) => [list.id, list.cards])),
-  );
-
-  const { switchColumns, reorderLists } = useDashboard();
+  } = useList(editedList?.id);
 
   const route = useRouter();
+
+  const [lists, setLists] = useState<any>(() =>
+    Object.fromEntries(board.lists.map((list: any) => [list.id, list.cards])),
+  );
+
+  console.log(lists);
+
+  const { mutate: reorderLists, isPending } = useMutation({
+    mutationKey: ["lists"],
+    mutationFn: async (lists: any[]) => {
+      const { data } = await axios.patch("/api/list/reorder", { lists });
+
+      return data;
+    },
+  });
 
   return (
     <>
@@ -99,27 +98,11 @@ export default function Board({ board, members }: any) {
         <div className="flex h-full min-w-max gap-4">
           <DragDropProvider
             onDragOver={(event: any) => {
-              const { source, target } = event.operation;
+              const { source } = event.operation;
 
               if (!source) return;
-              if (source.type === "column") {
-                setListOrder((items) => move(items, event));
-                return;
-              }
-              if (
-                source?.type === target?.type &&
-                target?.type === "column" &&
-                source?.type === "column"
-              )
-                return;
 
-              setLists((items) => move(items, event));
-            }}
-            onDragEnd={() => {
-              if (JSON.stringify(initialLists) !== JSON.stringify(lists)) {
-                switchColumns(lists);
-              }
-              reorderLists(listOrder);
+              setLists((items: any) => move(items, event));
             }}
           >
             <div className="flex gap-4">
@@ -128,17 +111,7 @@ export default function Board({ board, members }: any) {
                   column={list}
                   key={list.id}
                   id={list.id}
-                  projectId={board.projectId}
-                  cards={lists[list.id] ?? []}
-                  onDelete={(list: any) => {
-                    setOpenDelete(true);
-                    setList(list);
-                  }}
-                  members={members}
-                  onEdit={() => {
-                    setOpenEdit(true);
-                    setList(list);
-                  }}
+                  cards={lists[list.id]}
                 />
               ))}
             </div>
@@ -147,37 +120,36 @@ export default function Board({ board, members }: any) {
           <Button
             variant="outline"
             className=" w-80 shrink-0 justify-start cursor-pointer"
-            onClick={() => setOpenAdd(true)}
+            onClick={() => setOpen(true)}
           >
             <Plus className="mr-2 h-4 w-4" />
             Dodaj listę
           </Button>
         </div>
       </div>
-      <AddList open={isOpenAdd} onOpenChange={setOpenAdd} boardID={board.id} />
+      <AddList open={isOpen} onOpenChange={setOpen} boardID={board.id} />
       <EditList
         open={isOpenEdit}
         onOpenChange={setOpenEdit}
         boardID={board.id}
-        list={list}
+        list={editedList}
       />
       <ConfirmModal
-        open={isOpenDelete}
-        onOpenChange={setOpenDelete}
+        open={deletedList}
+        onOpenChange={setDeleteList}
         title="Usunąć"
-        message={`Czy na pewno chcesz usunąć listę o nazwie: ${list?.name} ?`}
+        message={`Czy na pewno chcesz usunąć listę o nazwie: ${editedList?.name} ?`}
         onSubmit={() => {
-          mutate(list?.id, {
+          mutate(undefined, {
             onSuccess: (data) => {
               route.refresh();
-              toast.success(data?.message);
+              toast.success(data.message);
             },
-            onError: (err) => console.log(err),
           });
-          setOpenDelete(false);
+          setDeleteList(false);
         }}
         onCancel={() => {
-          setOpenDelete(false);
+          setDeleteList(false);
         }}
       />
       <BoardMembersModal

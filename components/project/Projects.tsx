@@ -46,7 +46,7 @@ const Projects = ({ projects }: any) => {
 
   const {
     deleteProject: { mutate },
-  } = useDashboard();
+  } = useDashboard(editedProject?.id);
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-8">
@@ -271,7 +271,7 @@ const Projects = ({ projects }: any) => {
           message={`Czy na pewno checsz usunąć projekt: ${editedProject?.name}?`}
           onOpenChange={setOpen}
           onSubmit={() => {
-            mutate(editedProject?.id, {
+            mutate(undefined, {
               onSuccess: (data) => {
                 route.refresh();
                 toast.success(data.message);

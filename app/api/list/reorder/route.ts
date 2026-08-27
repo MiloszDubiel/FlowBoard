@@ -3,20 +3,27 @@ import { prisma } from "@/lib/prisma";
 
 export async function PATCH(request: Request) {
   try {
-    const { columns } = await request.json();
+    const { lists } = await request.json();
 
-    const operations = columns.map((column: any, index: number) => {
-      return prisma.list.update({
-        where: {
-          id: column,
-        },
-        data: {
-          position: index,
-        },
-      });
-    });
+    if (!Array.isArray(lists)) {
+      return NextResponse.json(
+        { error: "List musi być tablicaą" },
+        { status: 400 },
+      );
+    }
 
-    await prisma.$transaction(operations);
+    await prisma.$transaction(
+      lists.map((list) =>
+        prisma.list.update({
+          where: {
+            id: list.id,
+          },
+          data: {
+            position: list.position,
+          },
+        }),
+      ),
+    );
 
     return NextResponse.json({
       success: true,
