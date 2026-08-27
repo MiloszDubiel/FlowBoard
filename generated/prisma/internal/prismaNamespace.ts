@@ -1406,6 +1406,7 @@ export const CardScalarFieldEnum = {
   description: 'description',
   position: 'position',
   dueDate: 'dueDate',
+  priority: 'priority',
   createdById: 'createdById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1636,6 +1637,13 @@ export type EnumBoardRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
  * Reference to a field of type 'InviteStatus'
  */
 export type EnumInviteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InviteStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'CardPriority'
+ */
+export type EnumCardPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CardPriority'>
     
 
 

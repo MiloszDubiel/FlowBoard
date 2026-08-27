@@ -16,3 +16,18 @@ export const getProjects = async () => {
     },
   });
 };
+
+export const getProject = async (projectId: number) => {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  return await prisma.project.findFirst({
+    where: {
+      ownerId: (user as any).userID,
+      id: projectId,
+    },
+  });
+};

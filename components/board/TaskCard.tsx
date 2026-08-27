@@ -5,14 +5,16 @@ import { Button } from "@/components/ui/button";
 import { GripVertical, CalendarDays, Paperclip } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSortable } from "@dnd-kit/react/sortable";
+import { useRouter } from "next/navigation";
 
 type CardItemProps = {
   card: any;
   index: number;
   column: number;
+  projectId: number;
 };
 
-export const TaskCard = ({ card, index, column }: CardItemProps) => {
+export const TaskCard = ({ card, index, projectId }: CardItemProps) => {
   const { ref, handleRef } = useSortable({
     id: card.id,
     index,
@@ -20,11 +22,16 @@ export const TaskCard = ({ card, index, column }: CardItemProps) => {
     group: "cards",
   });
 
+  const route = useRouter();
+
   return (
     <Card
       ref={ref}
       key={card.id}
-      className="group relative cursor-pointer overflow-hidden border-border/60 bg-card transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-md"
+      className="group relative cursor-pointer overflow-hidden border-border/60 bg-card transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-md min-h-fit"
+      onClick={() =>
+        route.replace(`/projects/board/${projectId}/card/${card.id}`)
+      }
     >
       <Button
         variant="ghost"

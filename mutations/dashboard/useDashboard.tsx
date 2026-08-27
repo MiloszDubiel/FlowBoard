@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
-export const useDashboard = (id: number | undefined) => {
+export const useDashboard = () => {
   const deleteProject = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (id: number | undefined) => {
       if (!id) return;
       const response = await axios.delete(`/api/projects/${id}`, {
         withCredentials: true,
@@ -11,8 +11,23 @@ export const useDashboard = (id: number | undefined) => {
       return response.data;
     },
   });
+  const { mutate: switchColumns } = useMutation({
+    mutationKey: ["lists"],
+    mutationFn: async (lists: any) => {
+      const { data } = await axios.patch("/api/card/switch", { lists });
 
-  return {
-    deleteProject,
-  };
+      return data;
+    },
+  });
+
+  const { mutate: reorderLists } = useMutation({
+    mutationKey: ["columns"],
+    mutationFn: async (columns: any) => {
+      const { data } = await axios.patch("/api/list/reorder", { columns });
+
+      return data;
+    },
+  });
+
+  return { switchColumns, deleteProject, reorderLists };
 };

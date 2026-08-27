@@ -17,16 +17,18 @@ import BoardMembersModal from "./BoardMembers";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DragDropProvider } from "@dnd-kit/react";
 import { move } from "@dnd-kit/helpers";
+import { useDashboard } from "@/mutations/dashboard/useDashboard";
+import { useRouter } from "next/navigation";
 
 export default function Board({ board, members }: any) {
-  const [isOpen, setOpen] = useState<boolean>(false);
+  const [isOpenAdd, setOpenAdd] = useState<boolean>(false);
   const [isOpenEdit, setOpenEdit] = useState<boolean>(false);
-  const [editedList, setEditedList] = useState<any>();
-  const [deletedList, setDeleteList] = useState<boolean>(false);
+  const [list, setList] = useState<any>();
+  const [isOpenDelete, setOpenDelete] = useState<boolean>(false);
   const [showMembers, setShowMembers] = useState<boolean>(false);
   const {
     deleteList: { mutate },
-  } = useList(editedList?.id);
+  } = useList();
 
   const [listOrder, setListOrder] = useState<number[]>(() =>
     board.lists
@@ -37,28 +39,13 @@ export default function Board({ board, members }: any) {
   const [initialLists, _] = useState<Record<number, any[]>>(() =>
     Object.fromEntries(board.lists.map((list: any) => [list.id, list.cards])),
   );
-
   const [lists, setLists] = useState<Record<number, any[]>>(() =>
     Object.fromEntries(board.lists.map((list: any) => [list.id, list.cards])),
   );
 
-  const { mutate: switchColumns, isPending } = useMutation({
-    mutationKey: ["lists"],
-    mutationFn: async (lists: any) => {
-      const { data } = await axios.patch("/api/card/switch", { lists });
+  const { switchColumns, reorderLists } = useDashboard();
 
-      return data;
-    },
-  });
-
-  const { mutate: reorderLists } = useMutation({
-    mutationKey: ["columns"],
-    mutationFn: async (columns: any) => {
-      const { data } = await axios.patch("/api/list/reorder", { columns });
-
-      return data;
-    },
-  });
+  const route = useRouter();
 
   return (
     <>
@@ -141,7 +128,17 @@ export default function Board({ board, members }: any) {
                   column={list}
                   key={list.id}
                   id={list.id}
+                  projectId={board.projectId}
                   cards={lists[list.id] ?? []}
+                  onDelete={(list: any) => {
+                    setOpenDelete(true);
+                    setList(list);
+                  }}
+                  members={members}
+                  onEdit={() => {
+                    setOpenEdit(true);
+                    setList(list);
+                  }}
                 />
               ))}
             </div>
@@ -150,36 +147,37 @@ export default function Board({ board, members }: any) {
           <Button
             variant="outline"
             className=" w-80 shrink-0 justify-start cursor-pointer"
-            onClick={() => setOpen(true)}
+            onClick={() => setOpenAdd(true)}
           >
             <Plus className="mr-2 h-4 w-4" />
             Dodaj listę
           </Button>
         </div>
       </div>
-      <AddList open={isOpen} onOpenChange={setOpen} boardID={board.id} />
+      <AddList open={isOpenAdd} onOpenChange={setOpenAdd} boardID={board.id} />
       <EditList
         open={isOpenEdit}
         onOpenChange={setOpenEdit}
         boardID={board.id}
-        list={editedList}
+        list={list}
       />
       <ConfirmModal
-        open={deletedList}
-        onOpenChange={setDeleteList}
+        open={isOpenDelete}
+        onOpenChange={setOpenDelete}
         title="Usunąć"
-        message={`Czy na pewno chcesz usunąć listę o nazwie: ${editedList?.name} ?`}
+        message={`Czy na pewno chcesz usunąć listę o nazwie: ${list?.name} ?`}
         onSubmit={() => {
-          mutate(undefined, {
+          mutate(list?.id, {
             onSuccess: (data) => {
               route.refresh();
-              toast.success(data.message);
+              toast.success(data?.message);
             },
+            onError: (err) => console.log(err),
           });
-          setDeleteList(false);
+          setOpenDelete(false);
         }}
         onCancel={() => {
-          setDeleteList(false);
+          setOpenDelete(false);
         }}
       />
       <BoardMembersModal

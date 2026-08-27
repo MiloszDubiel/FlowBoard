@@ -13,6 +13,8 @@ export const POST = withAuth(async (user, request, context) => {
 
   const { title, description, priority, dueDate, userIds } = result.data;
 
+  console.log(title, description, priority, dueDate, userIds);
+
   const list = await prisma.list.findUnique({
     where: {
       id: Number(listId),
@@ -83,6 +85,7 @@ export const POST = withAuth(async (user, request, context) => {
       dueDate: dueDate ? new Date(dueDate) : null,
       createdById: user.id,
       position: position,
+      priority: priority,
       list: {
         connect: {
           id: Number(listId),

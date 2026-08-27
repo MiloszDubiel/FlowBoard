@@ -53,6 +53,8 @@ export const DELETE = withAuth(async (user, request, context) => {
   const { listId } = await context.params;
 
   const listIdNumber = Number(listId);
+  console.log(listId);
+
 
   const listById = await prisma.list.findFirst({
     where: {
