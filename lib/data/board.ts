@@ -95,3 +95,29 @@ export const getBoardCards = async (boardId: number) => {
     },
   });
 };
+
+export const getCard = async (cardId: number, boardId: number) => {
+  const user = await getCurrentUser();
+
+  if (!user) return [];
+
+  return prisma.card.findFirst({
+    where: {
+      list: {
+        board: {
+          id: boardId,
+          ownerId: Number(user.userID),
+        },
+      },
+      id: cardId,
+    },
+    include: {
+      members: {
+        include: {
+          user: true,
+        },
+      },
+      attachments: true,
+    },
+  });
+};

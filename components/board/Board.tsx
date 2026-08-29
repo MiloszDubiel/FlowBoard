@@ -31,15 +31,25 @@ export default function Board({ board, members }: any) {
 
   const route = useRouter();
 
-  const [items, setItems] = useState<any>(() =>
-    Object.fromEntries(board.lists.map((list: any) => [list.id, list.cards])),
+  const lists = [...board.lists].sort(
+    (a: any, b: any) => a.position - b.position,
   );
-  const [columnOrder, setColumnOrder] = useState(() => Object.keys(items));
 
+  const [items, setItems] = useState<any>(() =>
+    Object.fromEntries(lists.map((list: any) => [String(list.id), list.cards])),
+  );
+
+  const [columnOrder, setColumnOrder] = useState<string[]>(() =>
+    lists.map((list: any) => String(list.id)),
+  );
+
+  //TODO: Zapisywanie i ogarnięcie kolejnosci kolumn i zapis do bazy
   const { mutate: reorderLists, isPending } = useMutation({
-    mutationKey: ["lists"],
-    mutationFn: async (lists: any[]) => {
-      const { data } = await axios.patch("/api/list/reorder", { lists });
+    mutationKey: ["lists", "reorder"],
+    mutationFn: async (columnOrder: string[]) => {
+      const { data } = await axios.patch("/api/list/reorder", {
+        columnOrder,
+      });
 
       return data;
     },
@@ -97,14 +107,14 @@ export default function Board({ board, members }: any) {
         <div className="flex min-w-max items-start gap-4">
           <DragDropProvider
             onDragOver={(event) => {
-              const { source, target } = event.operation;
+              const { source } = event.operation;
 
               if (source?.type === "column") return;
 
               setItems((items: any) => move(items, event));
             }}
             onDragEnd={(event) => {
-              const { source, target } = event.operation;
+              const { source } = event.operation;
 
               if (event.canceled || source?.type !== "column") return;
 
@@ -113,7 +123,7 @@ export default function Board({ board, members }: any) {
           >
             <div className="flex items-start gap-4">
               {columnOrder.map((column, columnIndex) => {
-                const currentList = board.lists.find(
+                const currentList = lists.find(
                   (list: any) => String(list.id) === column,
                 );
                 return (

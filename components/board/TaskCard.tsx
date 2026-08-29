@@ -6,7 +6,8 @@ import { GripVertical, CalendarDays, Paperclip } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSortable } from "@dnd-kit/react/sortable";
 import { CollisionPriority } from "@dnd-kit/abstract";
-
+import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 type CardItemProps = {
   card: any;
   index: number;
@@ -14,24 +15,29 @@ type CardItemProps = {
 };
 
 export function TaskCard({ id, index, column, card }: any) {
-  const { ref, isDragging } = useSortable({
+  const { ref, isDragging, handleRef } = useSortable({
     id,
     index,
     type: "item",
     accept: ["item"],
     collisionPriority: CollisionPriority.High,
   });
+  const path = usePathname();
+  const route = useRouter();
+
   return (
     <Card
       ref={ref}
       className="group relative cursor-pointer overflow-hidden border-border/60 bg-card transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-md"
       data-dragging={isDragging}
+      onClick={() => route.replace(path + `/card/${card.id}`)}
     >
       <Button
         variant="ghost"
         size="icon"
         className="absolute right-2 top-2 z-10 h-7 w-7 cursor-grab text-muted-foreground opacity-0 transition-all hover:bg-muted hover:text-foreground active:cursor-grabbing group-hover:opacity-100"
         title="Przenieś kartę"
+        ref={handleRef}
       >
         <GripVertical className="h-4 w-4" />
       </Button>

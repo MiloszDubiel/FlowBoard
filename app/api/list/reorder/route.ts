@@ -3,37 +3,41 @@ import { prisma } from "@/lib/prisma";
 
 export async function PATCH(request: Request) {
   try {
-    const { lists } = await request.json();
+    const { columnOrder } = await request.json();
 
-    if (!Array.isArray(lists)) {
+    if (!Array.isArray(columnOrder)) {
       return NextResponse.json(
-        { error: "List musi być tablicaą" },
+        { error: "columnOrder musi być tablicą" },
         { status: 400 },
       );
     }
 
+    console.log(columnOrder.map((id, index) => console.log(id, index)));
+
     await prisma.$transaction(
-      lists.map((list) =>
+      columnOrder.map((id, index) =>
         prisma.list.update({
           where: {
-            id: list.id,
+            id: Number(id),
           },
           data: {
-            position: list.position,
+            position: index,
           },
         }),
       ),
     );
 
+   
+
     return NextResponse.json({
       success: true,
     });
   } catch (error) {
-    console.error("Reorder cards error:", error);
+    console.error("Reorder lists error:", error);
 
     return NextResponse.json(
       {
-        error: "Failed to update cards",
+        error: "Failed to update lists",
       },
       {
         status: 500,

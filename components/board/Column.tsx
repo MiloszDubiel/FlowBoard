@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { CollisionPriority } from "@dnd-kit/abstract";
 
 export const Column = ({ children, id, column, index }: any) => {
-  const { ref, isDropTarget } = useSortable({
+  const { ref, isDropTarget, handleRef } = useSortable({
     id,
     index,
     type: "column",
@@ -26,21 +26,6 @@ export const Column = ({ children, id, column, index }: any) => {
     <>
       <Card ref={ref} className="flex w-80 shrink-0 flex-col bg-muted">
         <CardHeader className="group flex flex-row items-center justify-between space-y-0 ">
-          <div className="flex min-w-0 items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7 shrink-0 cursor-grab text-muted-foreground opacity-0 transition-opacity hover:bg-background hover:text-foreground active:cursor-grabbing group-hover:opacity-100"
-              title="Przenieś listę"
-            >
-              <GripVertical className="h-4 w-4" />
-            </Button>
-
-            <h3 className="truncate font-semibold text-foreground">
-              {column?.name}
-            </h3>
-          </div>
-
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
@@ -70,6 +55,22 @@ export const Column = ({ children, id, column, index }: any) => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          <h3 className="truncate font-semibold text-foreground">
+            {column?.name}
+          </h3>
+
+          
+          <div className="flex min-w-0 items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 shrink-0 cursor-grab text-muted-foreground opacity-0 transition-opacity hover:bg-background hover:text-foreground active:cursor-grabbing group-hover:opacity-100"
+              title="Przenieś listę"
+              ref={handleRef}
+            >
+              <GripVertical className="h-4 w-4" />
+            </Button>
+          </div>
         </CardHeader>
 
         <CardContent ref={ref}>
