@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { GripVertical, CalendarDays, Paperclip } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSortable } from "@dnd-kit/react/sortable";
+import { CollisionPriority } from "@dnd-kit/abstract";
 
 type CardItemProps = {
   card: any;
@@ -12,19 +13,19 @@ type CardItemProps = {
   column: number;
 };
 
-export const TaskCard = ({ card, index, column }: CardItemProps) => {
-  const { ref } = useSortable({
-    id: card.id,
+export function TaskCard({ id, index, column, card }: any) {
+  const { ref, isDragging } = useSortable({
+    id,
     index,
-    type: "card",
-    group: "cards",
+    type: "item",
+    accept: ["item"],
+    collisionPriority: CollisionPriority.High,
   });
-
   return (
     <Card
       ref={ref}
-      key={card.id}
       className="group relative cursor-pointer overflow-hidden border-border/60 bg-card transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-md"
+      data-dragging={isDragging}
     >
       <Button
         variant="ghost"
@@ -37,7 +38,7 @@ export const TaskCard = ({ card, index, column }: CardItemProps) => {
       <CardContent className="p-3">
         <div className="pr-7">
           <p className="text-sm font-medium leading-5 text-card-foreground">
-            {card.title}
+            {card?.title}
           </p>
         </div>
 
@@ -45,8 +46,8 @@ export const TaskCard = ({ card, index, column }: CardItemProps) => {
           <div className="flex items-center gap-2">
             <Avatar className="h-6 w-6">
               <AvatarImage
-                src={card.createdBy?.avatarUrl ?? undefined}
-                alt={card.createdBy?.name ?? ""}
+                src={card?.createdBy?.avatarUrl ?? undefined}
+                alt={card?.createdBy?.name ?? ""}
               />
               <AvatarFallback className="text-[10px]">
                 {card.createdBy?.name?.slice(0, 2).toUpperCase() ?? "U"}
@@ -54,17 +55,17 @@ export const TaskCard = ({ card, index, column }: CardItemProps) => {
             </Avatar>
 
             <span className="text-xs text-muted-foreground">
-              {card.createdBy?.name}
+              {card?.createdBy?.name}
             </span>
           </div>
 
           <span className="text-[11px] text-muted-foreground/60">
-            #{card.id}
+            #{card?.id}
           </span>
         </div>
 
         <div className="mt-3 flex items-center gap-3 border-t border-border/50 pt-2.5">
-          {card.dueDate && (
+          {card?.dueDate && (
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <CalendarDays className="h-3.5 w-3.5" />
 
@@ -75,7 +76,7 @@ export const TaskCard = ({ card, index, column }: CardItemProps) => {
           {card.attachments?.length > 0 && (
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Paperclip className="h-3.5 w-3.5" />
-              <span>{card.attachments.length}</span>
+              <span>{card?.attachments.length}</span>
             </div>
           )}
 
@@ -108,4 +109,4 @@ export const TaskCard = ({ card, index, column }: CardItemProps) => {
       </CardContent>
     </Card>
   );
-};
+}

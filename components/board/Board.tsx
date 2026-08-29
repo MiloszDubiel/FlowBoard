@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Users, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import { Column } from "./Column";
 import AddList from "./AddList";
@@ -31,11 +31,10 @@ export default function Board({ board, members }: any) {
 
   const route = useRouter();
 
-  const [lists, setLists] = useState<any>(() =>
+  const [items, setItems] = useState<any>(() =>
     Object.fromEntries(board.lists.map((list: any) => [list.id, list.cards])),
   );
-
-  console.log(lists);
+  const [columnOrder, setColumnOrder] = useState(() => Object.keys(items));
 
   const { mutate: reorderLists, isPending } = useMutation({
     mutationKey: ["lists"],
@@ -95,31 +94,53 @@ export default function Board({ board, members }: any) {
         </div>
       </header>
       <div className="min-h-0 flex-1 overflow-x-auto bg-muted/40 p-6">
-        <div className="flex h-full min-w-max gap-4">
+        <div className="flex min-w-max items-start gap-4">
           <DragDropProvider
-            onDragOver={(event: any) => {
-              const { source } = event.operation;
+            onDragOver={(event) => {
+              const { source, target } = event.operation;
 
-              if (!source) return;
+              if (source?.type === "column") return;
 
-              setLists((items: any) => move(items, event));
+              setItems((items: any) => move(items, event));
+            }}
+            onDragEnd={(event) => {
+              const { source, target } = event.operation;
+
+              if (event.canceled || source?.type !== "column") return;
+
+              setColumnOrder((columns) => move(columns, event));
             }}
           >
-            <div className="flex gap-4">
-              {board.lists.map((list: any) => (
-                <Column
-                  column={list}
-                  key={list.id}
-                  id={list.id}
-                  cards={lists[list.id]}
-                />
-              ))}
+            <div className="flex items-start gap-4">
+              {columnOrder.map((column, columnIndex) => {
+                const currentList = board.lists.find(
+                  (list: any) => String(list.id) === column,
+                );
+                return (
+                  <Column
+                    key={column}
+                    id={column}
+                    column={currentList}
+                    index={columnIndex}
+                  >
+                    {items[column].map((card: any, index: number) => (
+                      <TaskCard
+                        key={card.id}
+                        id={card.id}
+                        index={index}
+                        column={column}
+                        card={card}
+                      />
+                    ))}
+                  </Column>
+                );
+              })}
             </div>
           </DragDropProvider>
 
           <Button
             variant="outline"
-            className=" w-80 shrink-0 justify-start cursor-pointer"
+            className="w-80 shrink-0 cursor-pointer justify-start"
             onClick={() => setOpen(true)}
           >
             <Plus className="mr-2 h-4 w-4" />

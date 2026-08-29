@@ -1,6 +1,7 @@
 "use client";
 
-import { useDroppable } from "@dnd-kit/react";
+// import { useDroppable } from "@dnd-kit/react";
+import { useSortable } from "@dnd-kit/react/sortable";
 import { MoreHorizontal, Plus, GripVertical } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
@@ -10,25 +11,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { TaskCard } from "./TaskCard";
+import { CollisionPriority } from "@dnd-kit/abstract";
 
-export const Column = ({ id, cards, column }: any) => {
-  const { ref } = useDroppable({
+export const Column = ({ children, id, column, index }: any) => {
+  const { ref, isDropTarget } = useSortable({
     id,
+    index,
     type: "column",
+    collisionPriority: CollisionPriority.Low,
+    accept: ["item", "column"],
   });
 
   return (
     <>
-      <Card
-        key={column.id}
-        className="flex w-80 shrink-0 flex-col bg-muted"
-        ref={ref}
-      >
-        <CardHeader className="group flex flex-row items-center justify-between space-y-0">
+      <Card ref={ref} className="flex w-80 shrink-0 flex-col bg-muted">
+        <CardHeader className="group flex flex-row items-center justify-between space-y-0 ">
           <div className="flex min-w-0 items-center gap-2">
             <Button
-              // ref={handleRef}
               variant="ghost"
               size="icon"
               className="h-7 w-7 shrink-0 cursor-grab text-muted-foreground opacity-0 transition-opacity hover:bg-background hover:text-foreground active:cursor-grabbing group-hover:opacity-100"
@@ -38,7 +37,7 @@ export const Column = ({ id, cards, column }: any) => {
             </Button>
 
             <h3 className="truncate font-semibold text-foreground">
-              {column.name}
+              {column?.name}
             </h3>
           </div>
 
@@ -73,15 +72,12 @@ export const Column = ({ id, cards, column }: any) => {
           </DropdownMenu>
         </CardHeader>
 
-        <CardContent className="flex flex-col gap-2 p-2 pt-0">
-          {cards.map((card: any, index: number) => (
-            <TaskCard key={card.id} card={card} index={index} column={id} />
-          ))}
+        <CardContent ref={ref}>
+          <div className="min-h-32 space-y-2 rounded-md">{children}</div>
 
           <Button
             variant="ghost"
-            className="cursor-pointer justify-start text-muted-foreground hover:text-accent-foreground"
-            // onClick={() => setCreateCardOpen(true)}
+            className="mt-2 w-full cursor-pointer justify-start text-muted-foreground"
           >
             <Plus className="mr-2 h-4 w-4" />
             Dodaj kartę
