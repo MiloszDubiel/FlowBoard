@@ -1,6 +1,5 @@
 "use client";
 
-// import { useDroppable } from "@dnd-kit/react";
 import { useSortable } from "@dnd-kit/react/sortable";
 import { MoreHorizontal, Plus, GripVertical } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -12,15 +11,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { CollisionPriority } from "@dnd-kit/abstract";
-
-export const Column = ({ children, id, column, index }: any) => {
-  const { ref, isDropTarget, handleRef } = useSortable({
+import { useState } from "react";
+import CreateCardModal from "./AddCard";
+export const Column = ({ children, id, column, index, members }: any) => {
+  const { ref, handleRef, isDropTarget } = useSortable({
     id,
     index,
     type: "column",
     collisionPriority: CollisionPriority.Low,
     accept: ["item", "column"],
   });
+
+  const [createCardOpen, setCreateCardOpen] = useState(false);
 
   return (
     <>
@@ -59,7 +61,6 @@ export const Column = ({ children, id, column, index }: any) => {
             {column?.name}
           </h3>
 
-          
           <div className="flex min-w-0 items-center gap-2">
             <Button
               variant="ghost"
@@ -79,18 +80,19 @@ export const Column = ({ children, id, column, index }: any) => {
           <Button
             variant="ghost"
             className="mt-2 w-full cursor-pointer justify-start text-muted-foreground"
+            onClick={() => setCreateCardOpen(true)}
           >
             <Plus className="mr-2 h-4 w-4" />
             Dodaj kartę
           </Button>
         </CardContent>
       </Card>
-      {/* <CreateCardModal
+      <CreateCardModal
         open={createCardOpen}
         onOpenChange={setCreateCardOpen}
         listId={column.id}
-        members={memebrs}
-      /> */}
+        members={members}
+      />
     </>
   );
 };

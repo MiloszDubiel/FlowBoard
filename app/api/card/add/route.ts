@@ -82,6 +82,7 @@ export const POST = withAuth(async (user, request, context) => {
       description,
       dueDate: dueDate ? new Date(dueDate) : null,
       createdById: user.id,
+      priority: priority,
       position: position,
       list: {
         connect: {

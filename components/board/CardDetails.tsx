@@ -15,8 +15,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 
 export default function CardDetails({ card, boardId }: any) {
-  console.log(card);
-
   return (
     <main className="min-h-screen bg-background">
       <div className="mx-auto max-w-6xl px-6 py-8">
@@ -28,7 +26,7 @@ export default function CardDetails({ card, boardId }: any) {
           </Button>
 
           <div>
-            <p className="text-sm text-muted-foreground">{card.list.name}</p>
+            <p className="text-sm text-muted-foreground">{card.list?.name}</p>
 
             <h1 className="text-2xl font-semibold">{card.title}</h1>
           </div>
@@ -56,6 +54,36 @@ export default function CardDetails({ card, boardId }: any) {
 
             <section>
               <div className="mb-4 flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+
+                <h2 className="text-lg font-semibold">Opis</h2>
+              </div>
+
+              <div className="rounded-xl border bg-card p-5">
+                {card.attachments?.length > 0 && (
+                  <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                    {card.attachments.map((attachment: any) => (
+                      <a
+                        key={attachment.fileName}
+                        href={attachment.fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group overflow-hidden rounded-lg border"
+                      >
+                        <img
+                          src={attachment.fileUrl}
+                          alt={attachment.fileName ?? "Załącznik"}
+                          className="h-40 w-full object-cover transition-transform group-hover:scale-105"
+                        />
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </section>
+
+            <section>
+              <div className="mb-4 flex items-center gap-2">
                 <MessageSquare className="h-5 w-5" />
 
                 <h2 className="text-lg font-semibold">Komentarze</h2>
@@ -73,8 +101,8 @@ export default function CardDetails({ card, boardId }: any) {
               </div>
 
               <div className="mt-6 space-y-5">
-                {card.comments.length > 0 ? (
-                  card.comments.map((comment) => (
+                {card.comments?.length > 0 ? (
+                  card.comments?.map((comment: any) => (
                     <div key={comment.id} className="flex gap-3">
                       <Avatar className="h-9 w-9">
                         <AvatarImage
@@ -123,13 +151,13 @@ export default function CardDetails({ card, boardId }: any) {
               </div>
 
               <div className="space-y-3">
-                {card.members.map((member) => (
+                {card.members?.map((member: any) => (
                   <div key={member.id} className="flex items-center gap-3">
                     <Avatar className="h-8 w-8">
                       <AvatarImage src={member.avatarUrl ?? undefined} />
 
                       <AvatarFallback>
-                        {member.name.slice(0, 2).toUpperCase()}
+                        {member.user.name?.slice(0, 2).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
 
@@ -149,8 +177,8 @@ export default function CardDetails({ card, boardId }: any) {
               </div>
 
               <div className="flex flex-wrap gap-2">
-                {card.labels.length > 0 ? (
-                  card.labels.map((label) => (
+                {card.labels?.length > 0 ? (
+                  card.labels.map((label: any) => (
                     <Badge
                       key={label.id}
                       style={{

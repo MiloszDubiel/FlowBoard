@@ -162,6 +162,7 @@ export const CardScalarFieldEnum = {
   description: 'description',
   position: 'position',
   dueDate: 'dueDate',
+  priority: 'priority',
   createdById: 'createdById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

@@ -1,28 +1,32 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { object } from "zod";
 
 export async function PATCH(request: Request) {
   try {
-    const { columnOrder } = await request.json();
+    const { cards } = await request.json();
 
-    if (!Array.isArray(columnOrder)) {
+    const cardsArray = Object.entries(cards);
+
+    if (!Array.isArray(cardsArray)) {
       return NextResponse.json(
-        { error: "columnOrder musi być tablicą" },
+        { error: "cardsArray musi być tablicą" },
         { status: 400 },
       );
     }
 
-
     await prisma.$transaction(
-      columnOrder.map((id, index) =>
-        prisma.list.update({
-          where: {
-            id: Number(id),
-          },
-          data: {
-            position: index,
-          },
-        }),
+      cardsArray.flatMap(([listId, items]: any) =>
+        items.map((el: any) =>
+          prisma.card.update({
+            where: {
+              id: Number(el.id),
+            },
+            data: {
+              listId: Number(listId),
+            },
+          }),
+        ),
       ),
     );
 

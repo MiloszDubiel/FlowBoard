@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Users, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import { Plus } from "lucide-react";
 import { Column } from "./Column";
 import AddList from "./AddList";
@@ -42,13 +42,25 @@ export default function Board({ board, members }: any) {
   const [columnOrder, setColumnOrder] = useState<string[]>(() =>
     lists.map((list: any) => String(list.id)),
   );
+  const columnOrderRef = useRef(columnOrder);
 
   //TODO: Zapisywanie i ogarnięcie kolejnosci kolumn i zapis do bazy
-  const { mutate: reorderLists, isPending } = useMutation({
+  const { mutate: reorderLists } = useMutation({
     mutationKey: ["lists", "reorder"],
     mutationFn: async (columnOrder: string[]) => {
       const { data } = await axios.patch("/api/list/reorder", {
         columnOrder,
+      });
+
+      return data;
+    },
+  });
+
+  const { mutate: switchList } = useMutation({
+    mutationKey: ["card", "switch"],
+    mutationFn: async (cards: string[]) => {
+      const { data } = await axios.patch("/api/card/switch", {
+        cards,
       });
 
       return data;
@@ -109,16 +121,28 @@ export default function Board({ board, members }: any) {
             onDragOver={(event) => {
               const { source } = event.operation;
 
-              if (source?.type === "column") return;
+              if (source?.type === "column") {
+                setColumnOrder((columns) => {
+                  const newOrder = move(columns, event);
+                  columnOrderRef.current = newOrder;
+                  return newOrder;
+                });
+                return;
+              }
 
               setItems((items: any) => move(items, event));
             }}
             onDragEnd={(event) => {
               const { source } = event.operation;
 
+              console.log(source?.type);
+
+              if (event.canceled || source?.type == "item") {
+                switchList(items);
+              }
               if (event.canceled || source?.type !== "column") return;
 
-              setColumnOrder((columns) => move(columns, event));
+              reorderLists(columnOrderRef.current);
             }}
           >
             <div className="flex items-start gap-4">
@@ -132,6 +156,7 @@ export default function Board({ board, members }: any) {
                     id={column}
                     column={currentList}
                     index={columnIndex}
+                    members={members}
                   >
                     {items[column].map((card: any, index: number) => (
                       <TaskCard

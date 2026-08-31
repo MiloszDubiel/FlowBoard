@@ -35,3 +35,13 @@ export const InviteStatus = {
 } as const
 
 export type InviteStatus = (typeof InviteStatus)[keyof typeof InviteStatus]
+
+
+export const CardPriority = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  URGENT: 'URGENT'
+} as const
+
+export type CardPriority = (typeof CardPriority)[keyof typeof CardPriority]

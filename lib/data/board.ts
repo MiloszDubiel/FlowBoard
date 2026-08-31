@@ -23,6 +23,11 @@ export const getBoard = async (projectId: number) => {
             orderBy: {
               position: "asc",
             },
+
+            include: {
+              attachments: true,
+              createdBy: true,
+            },
           },
         },
       },

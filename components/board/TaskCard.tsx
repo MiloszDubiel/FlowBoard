@@ -8,10 +8,38 @@ import { useSortable } from "@dnd-kit/react/sortable";
 import { CollisionPriority } from "@dnd-kit/abstract";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
-type CardItemProps = {
-  card: any;
-  index: number;
-  column: number;
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+
+const priorityRecord: Record<string, string> = {
+  LOW: "Niski",
+  MEDIUM: "Średni",
+  HIGHT: "Wysoki",
+  URGENT: "Nagły",
+};
+
+const setStyle = (priority: string) => {
+  switch (priority) {
+    case "LOW":
+      return "bg-green-500/10 text-green-600 dark:text-green-400";
+
+    case "MEDIUM":
+      return "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400";
+
+    case "HIGH":
+      return "bg-orange-500/10 text-orange-600 dark:text-orange-400";
+
+    case "URGENT":
+      return "bg-red-500/10 text-red-600 dark:text-red-400";
+
+    default:
+      return "bg-muted text-muted-foreground";
+  }
 };
 
 export function TaskCard({ id, index, column, card }: any) {
@@ -46,8 +74,13 @@ export function TaskCard({ id, index, column, card }: any) {
           <p className="text-sm font-medium leading-5 text-card-foreground">
             {card?.title}
           </p>
-        </div>
 
+          {card?.description && (
+            <p className="mt-1.5 line-clamp-2 text-xs leading-5 text-muted-foreground">
+              {card.description}
+            </p>
+          )}
+        </div>
         <div className="mt-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Avatar className="h-6 w-6">
@@ -68,6 +101,44 @@ export function TaskCard({ id, index, column, card }: any) {
           <span className="text-[11px] text-muted-foreground/60">
             #{card?.id}
           </span>
+        </div>
+        <div className="mt-3 flex items-center">
+          <span
+            className={`rounded-full px-2.5 py-1 text-[10px] font-semibold ${setStyle(
+              card?.priority,
+            )}`}
+          >
+            {priorityRecord[card?.priority] ?? card?.priority}
+          </span>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="mt-5 w-full">
+            <Carousel className=" w-full">
+              <CarouselContent>
+                {card.attachments.map((attachment: any) => (
+                  <CarouselItem key={`atachment-${attachment.id}`}>
+                    <a
+                      key={attachment.fileName}
+                      href={attachment.fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group overflow-hidden "
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <img
+                        src={attachment.fileUrl}
+                        alt={attachment.fileName ?? "Załącznik"}
+                        className="h-40 w-full object-cover transition-transform group-hover:scale-102 rounded"
+                      />
+                    </a>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </div>
         </div>
 
         <div className="mt-3 flex items-center gap-3 border-t border-border/50 pt-2.5">
