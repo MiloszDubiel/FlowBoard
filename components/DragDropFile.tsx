@@ -11,9 +11,10 @@ type PreviewFile = File & {
 export const DragDrop = ({
   onFileChange,
 }: {
-  onFileChange: (file: File) => void;
+  onFileChange: (file: File[]) => void;
 }) => {
   const [files, setFiles] = useState<PreviewFile[]>([]);
+  const [filesToSend, setFiilesToSend] = useState<File[]>([]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
@@ -22,7 +23,7 @@ export const DragDrop = ({
 
     onDrop: (acceptedFiles) => {
       const newFiles = acceptedFiles.map((file: File) => {
-        onFileChange(file);
+        setFiilesToSend((prev) => [...prev, file]);
 
         return Object.assign(file, {
           preview: URL.createObjectURL(file),
@@ -33,6 +34,12 @@ export const DragDrop = ({
     },
     maxFiles: 3,
   });
+
+  useEffect(() => {
+    if (!filesToSend.length) return;
+
+    onFileChange(filesToSend);
+  }, [filesToSend]);
 
   const removeFile = (fileToRemove: PreviewFile) => {
     setFiles((files) => {

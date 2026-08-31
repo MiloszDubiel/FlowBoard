@@ -75,22 +75,26 @@ export default function CreateCardModal({
 
   const route = useRouter();
   const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
-  const [files, setFiles] = useState<File>(new File([""], "Cos"));
+  const [files, setFiles] = useState<File[]>([new File([""], "Cos")]);
 
   const {
     addFile: { mutate: addFile },
     addCard: { mutate: addCard },
-  } = useCard(files);
+  } = useCard();
 
   const onSubmit = async (data: CreateCardForm) => {
+    console.log(files);
+
     addCard(
       { ...data, userIds: selectedUsers, listId },
       {
         onSuccess: (data) => {
           const formData = new FormData();
-          formData.append("file", files);
+          files.forEach((file) => {
+            formData.append("files", file);
+          });
           formData.append("cardId", data.cardId);
-0
+          0;
           addFile(formData);
           toast.success(data.message);
           route.refresh();
@@ -106,7 +110,7 @@ export default function CreateCardModal({
         priority: "MEDIUM",
         userIds: [],
       });
-      onOpenChange(false);
+      // onOpenChange(false);
     } catch (error) {
       console.error(error);
     }
@@ -182,7 +186,7 @@ export default function CreateCardModal({
             </div>
             <div className="space-y-2">
               <Label>Zdjecia</Label>
-              <DragDrop onFileChange={(file: File) => setFiles(file)} />
+              <DragDrop onFileChange={(file: File[]) => setFiles(file)} />
             </div>
 
             <div className="space-y-2">

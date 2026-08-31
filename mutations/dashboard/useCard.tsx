@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-export const useCard = (files?: File) => {
+export const useCard = () => {
   const addFile = useMutation({
     mutationFn: async (body: any) => {
       const { data } = await axios.post("/api/card/file", body, {
