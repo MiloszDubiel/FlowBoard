@@ -22,9 +22,6 @@ export const POST = withAuth(async (user, request, context) => {
     );
   }
 
-
-console.log(files);
-
   if (files.some((file) => !(file instanceof File))) {
     return NextResponse.json(
       { message: "Nieprawidłowy plik" },

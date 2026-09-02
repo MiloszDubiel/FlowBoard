@@ -13,7 +13,7 @@ export const PATCH = withAuth(async (user, request, context) => {
   const board = await prisma.board.findFirst({
     where: {
       id: Number(boardId),
-      ownerId: user.userID,
+      ownerId: user.userID, //Na razie owner może zmieniać role, później będzie można dodać możliwość zmiany roli przez admina
     },
   });
 
@@ -30,6 +30,22 @@ export const PATCH = withAuth(async (user, request, context) => {
       boardId: Number(boardId),
     },
   });
+
+  const isOwner = await prisma.board.findFirst({
+    where: {
+      id: Number(boardId),
+      ownerId: Number(uid),
+    },
+  });
+
+  if (isOwner) {
+    return NextResponse.json(
+      {
+        message: "Nie możesz zmienić roli właściciela tablicy.",
+      },
+      { status: 400 },
+    );
+  }
 
   if (!include) {
     return NextResponse.json(

@@ -44,7 +44,6 @@ export default function Board({ board, members }: any) {
   );
   const columnOrderRef = useRef(columnOrder);
 
-  //TODO: Zapisywanie i ogarnięcie kolejnosci kolumn i zapis do bazy
   const { mutate: reorderLists } = useMutation({
     mutationKey: ["lists", "reorder"],
     mutationFn: async (columnOrder: string[]) => {

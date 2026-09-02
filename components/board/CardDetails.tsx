@@ -1,3 +1,4 @@
+"use client";
 import {
   ArrowLeft,
   CalendarDays,
@@ -8,15 +9,59 @@ import {
   Tag,
   Users,
 } from "lucide-react";
-
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FieldError } from "@/components/ui/field";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { commentSchema, type CommentType } from "@/schema/addComment.schema";
 
 export default function CardDetails({ card, boardId }: any) {
+  const { mutate } = useMutation({
+    mutationFn: async (newComment: CommentType) => {
+      const { data } = await axios.post(
+        `/api/card/${card.id}/comment`,
+        newComment,
+      );
+
+      return data;
+    },
+  });
+
+  console.log(card);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<CommentType>({
+    defaultValues: {
+      comment: "",
+    },
+    resolver: zodResolver(commentSchema),
+  });
+
+  const router = useRouter();
+
+  const handleAddComment = (comment: CommentType) => {
+    mutate(comment, {
+      onSuccess: (data) => {
+        toast.success(data.message);
+        router.refresh();
+        reset();
+      },
+    });
+  };
+
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background overflow-auto">
       <div className="mx-auto max-w-6xl px-6 py-8">
         <div className="mb-8 flex items-center gap-4">
           <Button variant="ghost" size="icon">
@@ -93,11 +138,19 @@ export default function CardDetails({ card, boardId }: any) {
                 <textarea
                   placeholder="Napisz komentarz..."
                   className="min-h-28 w-full resize-none bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                  {...register("comment")}
                 />
 
                 <div className="mt-4 flex justify-end">
-                  <Button>Dodaj komentarz</Button>
+                  <Button
+                    onClick={handleSubmit(handleAddComment, (err) =>
+                      console.log(err),
+                    )}
+                  >
+                    Dodaj komentarz
+                  </Button>
                 </div>
+                <FieldError errors={[errors.comment]} />
               </div>
 
               <div className="mt-6 space-y-5">

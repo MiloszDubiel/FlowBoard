@@ -73,6 +73,8 @@ export default function CreateCardModal({
     },
   });
 
+
+  
   const route = useRouter();
   const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
   const [files, setFiles] = useState<File[]>([new File([""], "Cos")]);
@@ -110,19 +112,12 @@ export default function CreateCardModal({
         priority: "MEDIUM",
         userIds: [],
       });
-      // onOpenChange(false);
+      onOpenChange(false);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleOpenChange = (value: boolean) => {
-    if (!value) {
-      reset();
-    }
-
-    onOpenChange(value);
-  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

@@ -26,7 +26,10 @@ export const Column = ({ children, id, column, index, members }: any) => {
 
   return (
     <>
-      <Card ref={ref} className="flex w-80 shrink-0 flex-col bg-muted">
+      <Card
+        ref={ref}
+        className="flex w-80 shrink-0  bg-muted  max-h-full flex-col"
+      >
         <CardHeader className="group flex flex-row items-center justify-between space-y-0 ">
           <DropdownMenu>
             <DropdownMenuTrigger
@@ -74,7 +77,7 @@ export const Column = ({ children, id, column, index, members }: any) => {
           </div>
         </CardHeader>
 
-        <CardContent ref={ref}>
+        <CardContent ref={ref} className="min-h-0 flex-1 overflow-y-auto">
           <div className="min-h-32 space-y-2 rounded-md">{children}</div>
 
           <Button

@@ -123,6 +123,11 @@ export const getCard = async (cardId: number, boardId: number) => {
         },
       },
       attachments: true,
+      comments: {
+        include: {
+          user: true,
+        },
+      },
     },
   });
 };
