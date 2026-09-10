@@ -172,7 +172,10 @@ model Card {
   description String?   @db.Text
   position    Int
   dueDate     DateTime?
- priority    CardPriority @default(MEDIUM)
+  priority    CardPriority @default(MEDIUM)
+  tasks       Json?
+
+
  
   createdById Int
 
@@ -260,6 +263,8 @@ model Comment {
   cardId  Int
   userId  Int
   content String @db.Text
+  fileName String?
+  fileUrl String? 
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

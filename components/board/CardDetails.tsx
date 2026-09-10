@@ -1,11 +1,13 @@
 "use client";
 import {
-  ArrowLeft,
-  CalendarDays,
-  Clock,
+  CheckSquare,
+  Trash2,
+  X,
+  Paperclip,
   FileText,
   MessageSquare,
-  Paperclip,
+  Clock,
+  CalendarDays,
   Tag,
   Users,
 } from "lucide-react";
@@ -20,7 +22,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldError } from "@/components/ui/field";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import { commentSchema, type CommentType } from "@/schema/addComment.schema";
+import { useEffect, useState } from "react";
+import { ChecklistType } from "@/schema/addChecklist.schema";
+
+const safeParseTasks = (tasks: any): any[] => {
+  const parsedTasks = JSON.parse(tasks);
+
+  if (!Array.isArray(parsedTasks)) {
+    return [];
+  }
+
+  return parsedTasks;
+};
 
 export default function CardDetails({ card, boardId }: any) {
   const { mutate } = useMutation({
@@ -34,7 +50,23 @@ export default function CardDetails({ card, boardId }: any) {
     },
   });
 
-  console.log(card);
+  const { mutate: changeChecklist } = useMutation({
+    mutationFn: async (newList: ChecklistType) => {
+      const { data } = await axios.patch(
+        `/api/card/${card.id}/checklist`,
+        newList,
+      );
+
+      return data;
+    },
+  });
+
+  const [parsedTasks, setParsedTasks] = useState<any[]>([]);
+
+  useEffect(() => {
+    const tasks = safeParseTasks(card.tasks);
+    setParsedTasks(tasks);
+  }, [card.tasks]);
 
   const {
     register,
@@ -61,32 +93,20 @@ export default function CardDetails({ card, boardId }: any) {
   };
 
   return (
-    <main className="min-h-screen bg-background overflow-auto">
-      <div className="mx-auto max-w-6xl px-6 py-8">
-        <div className="mb-8 flex items-center gap-4">
-          <Button variant="ghost" size="icon">
-            <a href={`/dashboard/board/${boardId}`}>
-              <ArrowLeft className="h-5 w-5" />
-            </a>
-          </Button>
+    <main className="min-h-screen overflow-auto bg-background">
+      <div className="mx-auto max-w-7xl px-6 py-10">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
+          <div className="min-w-0 space-y-10">
+            <section className="space-y-4">
+              <div className="flex items-center gap-2">
+                <FileText className="h-5 w-5 text-muted-foreground" />
 
-          <div>
-            <p className="text-sm text-muted-foreground">{card.list?.name}</p>
-
-            <h1 className="text-2xl font-semibold">{card.title}</h1>
-          </div>
-        </div>
-
-        <div className="grid gap-8 lg:grid-cols-[1fr_280px]">
-          <div className="space-y-8">
-            <section>
-              <div className="mb-4 flex items-center gap-2">
-                <FileText className="h-5 w-5" />
-
-                <h2 className="text-lg font-semibold">Opis</h2>
+                <h2 className="text-sm font-semibold uppercase tracking-wide">
+                  Opis
+                </h2>
               </div>
 
-              <div className="rounded-xl border bg-card p-5">
+              <div className="rounded-xl border bg-card p-5 shadow-sm">
                 {card.description ? (
                   <p className="whitespace-pre-wrap text-sm leading-7">
                     {card.description}
@@ -97,52 +117,151 @@ export default function CardDetails({ card, boardId }: any) {
               </div>
             </section>
 
-            <section>
-              <div className="mb-4 flex items-center gap-2">
-                <FileText className="h-5 w-5" />
+            <section className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <CheckSquare className="h-5 w-5 text-muted-foreground" />
 
-                <h2 className="text-lg font-semibold">Opis</h2>
+                  <h2 className="text-sm font-semibold uppercase tracking-wide">
+                    Checklista
+                  </h2>
+                </div>
+
+                <span className="text-xs text-muted-foreground">
+                  {parsedTasks.filter((t) => t.isCompleted).length} /{" "}
+                  {parsedTasks.length}
+                </span>
               </div>
 
-              <div className="rounded-xl border bg-card p-5">
-                {card.attachments?.length > 0 && (
-                  <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
+              <div className="rounded-xl border bg-card p-4 shadow-sm">
+                <div className="space-y-1">
+                  {parsedTasks.length > 0 ? (
+                    parsedTasks.map((task: any, index: number) => (
+                      <div key={index} className="flex items-center gap-2">
+                        <Checkbox
+                          id={`task-${index}`}
+                          checked={task.isCompleted}
+
+                          onCheckedChange={(e) =>
+                            setParsedTasks((tasks) => {
+                              const filtered = tasks.filter(
+                                (t) => t.name !== task.name,
+                              );
+
+                              const newTasks = [
+                                ...filtered,
+                                { ...task, isCompleted: e === true },
+                              ];
+                              return newTasks;
+                            })
+                          }
+                        />
+
+                        <label
+                          htmlFor={`task-${index}`}
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          {task.name}
+                        </label>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      Brak elementów checklisty.
+                    </p>
+                  )}
+                </div>
+                <Separator className="my-2" />
+                <div className="mt-4 flex items-center justify-end gap-2">
+                  <Button
+                    size="sm"
+                    onClick={() => changeChecklist({ tasks: parsedTasks })}
+                  >
+                    Zapisz
+                  </Button>
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-4">
+              <div className="flex items-center gap-2">
+                <Paperclip className="h-5 w-5 text-muted-foreground" />
+
+                <h2 className="text-sm font-semibold uppercase tracking-wide">
+                  Załączniki
+                </h2>
+              </div>
+
+              <div className="rounded-xl border bg-card p-5 shadow-sm">
+                {card.attachments?.length > 0 ? (
+                  <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
                     {card.attachments.map((attachment: any) => (
                       <a
                         key={attachment.fileName}
                         href={attachment.fileUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group overflow-hidden rounded-lg border"
+                        className="group overflow-hidden rounded-xl border bg-background transition-all hover:-translate-y-0.5 hover:shadow-md"
                       >
                         <img
                           src={attachment.fileUrl}
                           alt={attachment.fileName ?? "Załącznik"}
-                          className="h-40 w-full object-cover transition-transform group-hover:scale-105"
+                          className="h-36 w-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
+
+                        <div className="flex items-center gap-2 p-3">
+                          <Paperclip className="h-4 w-4 shrink-0 text-muted-foreground" />
+
+                          <span className="truncate text-xs font-medium">
+                            {attachment.fileName}
+                          </span>
+                        </div>
                       </a>
                     ))}
                   </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    Brak załączników.
+                  </p>
                 )}
               </div>
             </section>
 
-            <section>
-              <div className="mb-4 flex items-center gap-2">
-                <MessageSquare className="h-5 w-5" />
+            <section className="space-y-5">
+              <div className="flex items-center gap-2">
+                <MessageSquare className="h-5 w-5 text-muted-foreground" />
 
-                <h2 className="text-lg font-semibold">Komentarze</h2>
+                <h2 className="text-sm font-semibold uppercase tracking-wide">
+                  Komentarze
+                </h2>
+
+                {card.comments?.length > 0 && (
+                  <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+                    {card.comments.length}
+                  </span>
+                )}
               </div>
 
-              <div className="rounded-xl border bg-card p-5">
+              <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
                 <textarea
                   placeholder="Napisz komentarz..."
-                  className="min-h-28 w-full resize-none bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                  className="min-h-32 w-full resize-none bg-transparent p-4 text-sm outline-none placeholder:text-muted-foreground"
                   {...register("comment")}
                 />
 
-                <div className="mt-4 flex justify-end">
+                <div className="flex items-center justify-between border-t px-4 py-3">
                   <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="text-muted-foreground"
+                  >
+                    <Paperclip className="mr-2 h-4 w-4" />
+                    Dodaj plik
+                  </Button>
+
+                  <Button
+                    size="sm"
                     onClick={handleSubmit(handleAddComment, (err) =>
                       console.log(err),
                     )}
@@ -150,14 +269,15 @@ export default function CardDetails({ card, boardId }: any) {
                     Dodaj komentarz
                   </Button>
                 </div>
+
                 <FieldError errors={[errors.comment]} />
               </div>
 
-              <div className="mt-6 space-y-5">
+              <div className="space-y-6">
                 {card.comments?.length > 0 ? (
-                  card.comments?.map((comment: any) => (
+                  card.comments.map((comment: any) => (
                     <div key={comment.id} className="flex gap-3">
-                      <Avatar className="h-9 w-9">
+                      <Avatar className="h-9 w-9 shrink-0">
                         <AvatarImage
                           src={comment.user.avatarUrl ?? undefined}
                         />
@@ -167,9 +287,9 @@ export default function CardDetails({ card, boardId }: any) {
                         </AvatarFallback>
                       </Avatar>
 
-                      <div className="flex-1">
-                        <div className="mb-1 flex items-center gap-2">
-                          <span className="text-sm font-medium">
+                      <div className="min-w-0 flex-1">
+                        <div className="mb-1.5 flex items-center gap-2">
+                          <span className="text-sm font-semibold">
                             {comment.user.name}
                           </span>
 
@@ -180,114 +300,197 @@ export default function CardDetails({ card, boardId }: any) {
                           </span>
                         </div>
 
-                        <div className="rounded-xl border bg-card p-4 text-sm">
-                          {comment.content}
+                        <div className="rounded-xl border bg-card px-4 py-3.5 shadow-sm">
+                          <p className="whitespace-pre-wrap text-sm leading-6">
+                            {comment.content}
+                          </p>
                         </div>
+
+                        {comment.attachments?.length > 0 && (
+                          <div className="mt-2 space-y-2">
+                            {comment.attachments.map((attachment: any) => (
+                              <a
+                                key={attachment.id}
+                                href={attachment.fileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-3 rounded-lg border bg-card px-3 py-2.5 text-sm hover:bg-muted"
+                              >
+                                <Paperclip className="h-4 w-4" />
+
+                                <span className="truncate">
+                                  {attachment.fileName}
+                                </span>
+                              </a>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))
                 ) : (
-                  <p className="text-sm text-muted-foreground">
-                    Brak komentarzy.
-                  </p>
+                  <div className="rounded-xl border border-dashed py-10 text-center">
+                    <MessageSquare className="mx-auto mb-3 h-6 w-6 text-muted-foreground" />
+
+                    <p className="text-sm font-medium">Brak komentarzy</p>
+
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Bądź pierwszą osobą, która doda komentarz.
+                    </p>
+                  </div>
                 )}
               </div>
             </section>
           </div>
 
-          <aside className="h-fit space-y-6 rounded-xl border bg-card p-5">
-            <section>
-              <div className="mb-4 flex items-center gap-2">
-                <Users className="h-4 w-4" />
+          <aside className="h-fit lg:sticky lg:top-6">
+            <div className="rounded-xl border bg-card shadow-sm">
+              <section className="p-5">
+                <div className="mb-4 flex items-center gap-2">
+                  <Users className="h-4 w-4 text-muted-foreground" />
 
-                <h3 className="text-sm font-semibold">Członkowie</h3>
-              </div>
+                  <h3 className="text-sm font-semibold">Członkowie</h3>
+                </div>
 
-              <div className="space-y-3">
-                {card.members?.map((member: any) => (
-                  <div key={member.id} className="flex items-center gap-3">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={member.avatarUrl ?? undefined} />
+                <div className="space-y-3">
+                  {card.members?.length > 0 ? (
+                    card.members.map((member: any) => (
+                      <div
+                        key={`member-${member.id}`}
+                        className="flex items-center gap-3"
+                      >
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={member.avatarUrl ?? undefined} />
 
-                      <AvatarFallback>
-                        {member.user.name?.slice(0, 2).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
+                          <AvatarFallback>
+                            {member.user?.name?.slice(0, 2).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
 
-                    <span className="text-sm">{member.name}</span>
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-medium">
+                            {member.user?.name}
+                          </p>
+
+                          <p className="text-xs text-muted-foreground">
+                            Członek
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      Brak członków
+                    </p>
+                  )}
+                </div>
+              </section>
+
+              <Separator />
+
+              <section className="p-5">
+                <div className="mb-4 flex items-center gap-2">
+                  <Tag className="h-4 w-4 text-muted-foreground" />
+
+                  <h3 className="text-sm font-semibold">Etykiety</h3>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {card.labels?.length > 0 ? (
+                    card.labels.map((label: any) => (
+                      <Badge
+                        key={label.id}
+                        style={{
+                          backgroundColor: label.color,
+                        }}
+                        className="border-0 text-white"
+                      >
+                        {label.name}
+                      </Badge>
+                    ))
+                  ) : (
+                    <span className="text-sm text-muted-foreground">
+                      Brak etykiet
+                    </span>
+                  )}
+                </div>
+              </section>
+
+              <Separator />
+
+              <section className="p-5">
+                <div className="mb-4 flex items-center gap-2">
+                  <CalendarDays className="h-4 w-4 text-muted-foreground" />
+
+                  <h3 className="text-sm font-semibold">Termin</h3>
+                </div>
+
+                {card.dueDate ? (
+                  <div className="flex items-center gap-3 rounded-lg border bg-background p-3">
+                    <Clock className="h-4 w-4 text-muted-foreground" />
+
+                    <span className="text-sm">
+                      {new Date(card.dueDate).toLocaleString("pl-PL")}
+                    </span>
                   </div>
-                ))}
-              </div>
-            </section>
-
-            <Separator />
-
-            <section>
-              <div className="mb-4 flex items-center gap-2">
-                <Tag className="h-4 w-4" />
-
-                <h3 className="text-sm font-semibold">Etykiety</h3>
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                {card.labels?.length > 0 ? (
-                  card.labels.map((label: any) => (
-                    <Badge
-                      key={label.id}
-                      style={{
-                        backgroundColor: label.color,
-                      }}
-                      className="text-white"
-                    >
-                      {label.name}
-                    </Badge>
-                  ))
                 ) : (
                   <span className="text-sm text-muted-foreground">
-                    Brak etykiet
+                    Brak terminu
                   </span>
                 )}
-              </div>
-            </section>
+              </section>
 
-            <Separator />
+              <Separator />
 
-            <section>
-              <div className="mb-4 flex items-center gap-2">
-                <CalendarDays className="h-4 w-4" />
+              <section className="p-5">
+                <div className="mb-4 flex items-center gap-2">
+                  <Paperclip className="h-4 w-4 text-muted-foreground" />
 
-                <h3 className="text-sm font-semibold">Termin</h3>
-              </div>
-
-              {card.dueDate ? (
-                <div className="flex items-center gap-3 rounded-lg border p-3">
-                  <Clock className="h-4 w-4 text-muted-foreground" />
-
-                  <span className="text-sm">
-                    {new Date(card.dueDate).toLocaleString("pl-PL")}
-                  </span>
+                  <h3 className="text-sm font-semibold">Załączniki</h3>
                 </div>
-              ) : (
-                <span className="text-sm text-muted-foreground">
-                  Brak terminu
-                </span>
-              )}
-            </section>
 
-            <Separator />
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">
+                    {card.attachments?.length ?? 0} plików
+                  </span>
 
-            <section>
-              <div className="mb-4 flex items-center gap-2">
-                <Paperclip className="h-4 w-4" />
+                  <Button variant="outline" size="sm">
+                    <Paperclip className="mr-2 h-4 w-4" />
+                    Dodaj
+                  </Button>
+                </div>
+              </section>
 
-                <h3 className="text-sm font-semibold">Załączniki</h3>
-              </div>
+              <Separator />
 
-              <Button variant="outline" className="w-full">
-                <Paperclip className="mr-2 h-4 w-4" />
-                Dodaj załącznik
-              </Button>
-            </section>
+              <section className="p-5">
+                <h3 className="mb-4 text-sm font-semibold">Informacje</h3>
+
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between gap-4">
+                    <span className="text-muted-foreground">Utworzono</span>
+
+                    <span>
+                      {card.createdAt
+                        ? new Date(card.createdAt).toLocaleDateString("pl-PL")
+                        : "-"}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between gap-4">
+                    <span className="text-muted-foreground">
+                      Zaktualizowano
+                    </span>
+
+                    <span>
+                      {card.updatedAt
+                        ? new Date(card.updatedAt).toLocaleDateString("pl-PL")
+                        : "-"}
+                    </span>
+                  </div>
+                </div>
+              </section>
+            </div>
           </aside>
         </div>
       </div>

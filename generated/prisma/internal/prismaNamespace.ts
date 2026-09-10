@@ -1407,6 +1407,7 @@ export const CardScalarFieldEnum = {
   position: 'position',
   dueDate: 'dueDate',
   priority: 'priority',
+  tasks: 'tasks',
   createdById: 'createdById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1447,6 +1448,8 @@ export const CommentScalarFieldEnum = {
   cardId: 'cardId',
   userId: 'userId',
   content: 'content',
+  fileName: 'fileName',
+  fileUrl: 'fileUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1537,6 +1540,23 @@ export const ListOrderByRelevanceFieldEnum = {
 export type ListOrderByRelevanceFieldEnum = (typeof ListOrderByRelevanceFieldEnum)[keyof typeof ListOrderByRelevanceFieldEnum]
 
 
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+export const QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+} as const
+
+export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
 export const CardOrderByRelevanceFieldEnum = {
   title: 'title',
   description: 'description'
@@ -1554,7 +1574,9 @@ export type LabelOrderByRelevanceFieldEnum = (typeof LabelOrderByRelevanceFieldE
 
 
 export const CommentOrderByRelevanceFieldEnum = {
-  content: 'content'
+  content: 'content',
+  fileName: 'fileName',
+  fileUrl: 'fileUrl'
 } as const
 
 export type CommentOrderByRelevanceFieldEnum = (typeof CommentOrderByRelevanceFieldEnum)[keyof typeof CommentOrderByRelevanceFieldEnum]
@@ -1566,23 +1588,6 @@ export const AttachmentOrderByRelevanceFieldEnum = {
 } as const
 
 export type AttachmentOrderByRelevanceFieldEnum = (typeof AttachmentOrderByRelevanceFieldEnum)[keyof typeof AttachmentOrderByRelevanceFieldEnum]
-
-
-export const JsonNullValueFilter = {
-  DbNull: DbNull,
-  JsonNull: JsonNull,
-  AnyNull: AnyNull
-} as const
-
-export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
-
-
-export const QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
-} as const
-
-export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
 export const ActivityOrderByRelevanceFieldEnum = {

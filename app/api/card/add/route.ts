@@ -3,7 +3,7 @@ import { withAuth } from "@/lib/withAuth";
 import { createCardSchema } from "@/schema/addcard.schema";
 import { NextResponse } from "next/server";
 export const POST = withAuth(async (user, request, context) => {
-  const { listId, ...body } = await request.json();
+  const { listId, tasks, ...body } = await request.json();
 
   const result = createCardSchema.safeParse(body);
 
@@ -33,24 +33,29 @@ export const POST = withAuth(async (user, request, context) => {
     );
   }
 
-  const isBoardMemberWithPermition = list.board.members.some(
+  const isHasPermission = list.board.members.find(
     (member) =>
       member.userId === user.userID && ["ADMIN", "OWNER"].includes(member.role),
   );
 
-  const findOwner = list.board.members.find((member) => member.role == "OWNER");
-  const isOwner = list.board.ownerId === user.userID;
+  const findOwnersOrAdmins = list.board.members.filter(
+    (member) => member.role == "OWNER" || member.role == "ADMIN",
+  );
 
-  if (!isBoardMemberWithPermition) {
+  if (!isHasPermission) {
     return NextResponse.json(
       { message: "Nie masz dostępu do tego edycji boardu" },
       { status: 403 },
     );
   }
+  const cardMembers = [
+    ...userIds,
+    ...findOwnersOrAdmins.map((member) => member.userId),
+  ];
+
   const boardMemberIds = new Set(
     list.board.members.map((member) => member.userId),
   );
-  boardMemberIds.add(list.board.ownerId);
 
   const invalidUsers = userIds.filter(
     (userId: number) => !boardMemberIds.has(userId),
@@ -89,13 +94,19 @@ export const POST = withAuth(async (user, request, context) => {
           id: Number(listId),
         },
       },
+      tasks: JSON.stringify(
+        tasks.map((task: { name: string; isCompleted: boolean }) => ({
+          name: task.name,
+          isCompleted: task.isCompleted,
+        })),
+      ),
       createdBy: {
         connect: {
           id: Number(user.userID),
         },
       },
       members: {
-        create: userIds.map((userId: number) => ({
+        create: cardMembers.map((userId: number) => ({
           userId,
         })),
       },

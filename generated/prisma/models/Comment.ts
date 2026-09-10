@@ -43,6 +43,8 @@ export type CommentMinAggregateOutputType = {
   cardId: number | null
   userId: number | null
   content: string | null
+  fileName: string | null
+  fileUrl: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -52,6 +54,8 @@ export type CommentMaxAggregateOutputType = {
   cardId: number | null
   userId: number | null
   content: string | null
+  fileName: string | null
+  fileUrl: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -61,6 +65,8 @@ export type CommentCountAggregateOutputType = {
   cardId: number
   userId: number
   content: number
+  fileName: number
+  fileUrl: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -84,6 +90,8 @@ export type CommentMinAggregateInputType = {
   cardId?: true
   userId?: true
   content?: true
+  fileName?: true
+  fileUrl?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -93,6 +101,8 @@ export type CommentMaxAggregateInputType = {
   cardId?: true
   userId?: true
   content?: true
+  fileName?: true
+  fileUrl?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -102,6 +112,8 @@ export type CommentCountAggregateInputType = {
   cardId?: true
   userId?: true
   content?: true
+  fileName?: true
+  fileUrl?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -198,6 +210,8 @@ export type CommentGroupByOutputType = {
   cardId: number
   userId: number
   content: string
+  fileName: string | null
+  fileUrl: string | null
   createdAt: Date
   updatedAt: Date
   _count: CommentCountAggregateOutputType | null
@@ -230,6 +244,8 @@ export type CommentWhereInput = {
   cardId?: Prisma.IntFilter<"Comment"> | number
   userId?: Prisma.IntFilter<"Comment"> | number
   content?: Prisma.StringFilter<"Comment"> | string
+  fileName?: Prisma.StringNullableFilter<"Comment"> | string | null
+  fileUrl?: Prisma.StringNullableFilter<"Comment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Comment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Comment"> | Date | string
   card?: Prisma.XOR<Prisma.CardScalarRelationFilter, Prisma.CardWhereInput>
@@ -241,6 +257,8 @@ export type CommentOrderByWithRelationInput = {
   cardId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  fileName?: Prisma.SortOrderInput | Prisma.SortOrder
+  fileUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   card?: Prisma.CardOrderByWithRelationInput
@@ -256,6 +274,8 @@ export type CommentWhereUniqueInput = Prisma.AtLeast<{
   cardId?: Prisma.IntFilter<"Comment"> | number
   userId?: Prisma.IntFilter<"Comment"> | number
   content?: Prisma.StringFilter<"Comment"> | string
+  fileName?: Prisma.StringNullableFilter<"Comment"> | string | null
+  fileUrl?: Prisma.StringNullableFilter<"Comment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Comment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Comment"> | Date | string
   card?: Prisma.XOR<Prisma.CardScalarRelationFilter, Prisma.CardWhereInput>
@@ -267,6 +287,8 @@ export type CommentOrderByWithAggregationInput = {
   cardId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  fileName?: Prisma.SortOrderInput | Prisma.SortOrder
+  fileUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CommentCountOrderByAggregateInput
@@ -284,12 +306,16 @@ export type CommentScalarWhereWithAggregatesInput = {
   cardId?: Prisma.IntWithAggregatesFilter<"Comment"> | number
   userId?: Prisma.IntWithAggregatesFilter<"Comment"> | number
   content?: Prisma.StringWithAggregatesFilter<"Comment"> | string
+  fileName?: Prisma.StringNullableWithAggregatesFilter<"Comment"> | string | null
+  fileUrl?: Prisma.StringNullableWithAggregatesFilter<"Comment"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Comment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Comment"> | Date | string
 }
 
 export type CommentCreateInput = {
   content: string
+  fileName?: string | null
+  fileUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   card: Prisma.CardCreateNestedOneWithoutCommentsInput
@@ -301,12 +327,16 @@ export type CommentUncheckedCreateInput = {
   cardId: number
   userId: number
   content: string
+  fileName?: string | null
+  fileUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type CommentUpdateInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   card?: Prisma.CardUpdateOneRequiredWithoutCommentsNestedInput
@@ -318,6 +348,8 @@ export type CommentUncheckedUpdateInput = {
   cardId?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -327,12 +359,16 @@ export type CommentCreateManyInput = {
   cardId: number
   userId: number
   content: string
+  fileName?: string | null
+  fileUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type CommentUpdateManyMutationInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -342,6 +378,8 @@ export type CommentUncheckedUpdateManyInput = {
   cardId?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -367,6 +405,8 @@ export type CommentCountOrderByAggregateInput = {
   cardId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  fileName?: Prisma.SortOrder
+  fileUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -382,6 +422,8 @@ export type CommentMaxOrderByAggregateInput = {
   cardId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  fileName?: Prisma.SortOrder
+  fileUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -391,6 +433,8 @@ export type CommentMinOrderByAggregateInput = {
   cardId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  fileName?: Prisma.SortOrder
+  fileUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -487,6 +531,8 @@ export type CommentUncheckedUpdateManyWithoutCardNestedInput = {
 
 export type CommentCreateWithoutUserInput = {
   content: string
+  fileName?: string | null
+  fileUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   card: Prisma.CardCreateNestedOneWithoutCommentsInput
@@ -496,6 +542,8 @@ export type CommentUncheckedCreateWithoutUserInput = {
   id?: number
   cardId: number
   content: string
+  fileName?: string | null
+  fileUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -534,12 +582,16 @@ export type CommentScalarWhereInput = {
   cardId?: Prisma.IntFilter<"Comment"> | number
   userId?: Prisma.IntFilter<"Comment"> | number
   content?: Prisma.StringFilter<"Comment"> | string
+  fileName?: Prisma.StringNullableFilter<"Comment"> | string | null
+  fileUrl?: Prisma.StringNullableFilter<"Comment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Comment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Comment"> | Date | string
 }
 
 export type CommentCreateWithoutCardInput = {
   content: string
+  fileName?: string | null
+  fileUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutCommentsInput
@@ -549,6 +601,8 @@ export type CommentUncheckedCreateWithoutCardInput = {
   id?: number
   userId: number
   content: string
+  fileName?: string | null
+  fileUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -583,12 +637,16 @@ export type CommentCreateManyUserInput = {
   id?: number
   cardId: number
   content: string
+  fileName?: string | null
+  fileUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type CommentUpdateWithoutUserInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   card?: Prisma.CardUpdateOneRequiredWithoutCommentsNestedInput
@@ -598,6 +656,8 @@ export type CommentUncheckedUpdateWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   cardId?: Prisma.IntFieldUpdateOperationsInput | number
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -606,6 +666,8 @@ export type CommentUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   cardId?: Prisma.IntFieldUpdateOperationsInput | number
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -614,12 +676,16 @@ export type CommentCreateManyCardInput = {
   id?: number
   userId: number
   content: string
+  fileName?: string | null
+  fileUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type CommentUpdateWithoutCardInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutCommentsNestedInput
@@ -629,6 +695,8 @@ export type CommentUncheckedUpdateWithoutCardInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -637,6 +705,8 @@ export type CommentUncheckedUpdateManyWithoutCardInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -648,6 +718,8 @@ export type CommentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   cardId?: boolean
   userId?: boolean
   content?: boolean
+  fileName?: boolean
+  fileUrl?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
@@ -661,11 +733,13 @@ export type CommentSelectScalar = {
   cardId?: boolean
   userId?: boolean
   content?: boolean
+  fileName?: boolean
+  fileUrl?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CommentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "cardId" | "userId" | "content" | "createdAt" | "updatedAt", ExtArgs["result"]["comment"]>
+export type CommentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "cardId" | "userId" | "content" | "fileName" | "fileUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["comment"]>
 export type CommentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -682,6 +756,8 @@ export type $CommentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     cardId: number
     userId: number
     content: string
+    fileName: string | null
+    fileUrl: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["comment"]>
@@ -1059,6 +1135,8 @@ export interface CommentFieldRefs {
   readonly cardId: Prisma.FieldRef<"Comment", 'Int'>
   readonly userId: Prisma.FieldRef<"Comment", 'Int'>
   readonly content: Prisma.FieldRef<"Comment", 'String'>
+  readonly fileName: Prisma.FieldRef<"Comment", 'String'>
+  readonly fileUrl: Prisma.FieldRef<"Comment", 'String'>
   readonly createdAt: Prisma.FieldRef<"Comment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Comment", 'DateTime'>
 }

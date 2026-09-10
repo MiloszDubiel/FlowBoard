@@ -5,6 +5,7 @@ export const createCardSchema = z.object({
   description: z.string().max(2000).optional(),
   dueDate: z.string().optional(),
   priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]),
+
   userIds: z.array(z.number()),
 });
 

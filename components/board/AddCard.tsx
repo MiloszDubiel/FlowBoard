@@ -45,6 +45,10 @@ interface CreateCardModalProps {
   listId: number;
   members: any[];
 }
+type Task = {
+  name: string;
+  isCompleted: boolean;
+};
 import { FieldError } from "@/components/ui/field";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -61,6 +65,8 @@ export default function CreateCardModal({
     register,
     handleSubmit,
     reset,
+    getValues,
+    setValues,
     formState: { errors, isSubmitting },
   } = useForm<CreateCardForm>({
     resolver: zodResolver(createCardSchema),
@@ -73,26 +79,39 @@ export default function CreateCardModal({
     },
   });
 
-
-  
   const route = useRouter();
   const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
-  const [files, setFiles] = useState<File[]>([new File([""], "Cos")]);
+  const [files, setFiles] = useState<File[] | null>(null);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [currentTasks, setCurrentTasks] = useState<string>("");
 
   const {
     addFile: { mutate: addFile },
     addCard: { mutate: addCard },
   } = useCard();
 
-  const onSubmit = async (data: CreateCardForm) => {
-    console.log(files);
+  const addTask = () => {
+    setTasks((prevTasks) => {
+      const findTask = prevTasks.find(
+        (task) => task.name.toUpperCase() === currentTasks.toUpperCase(),
+      );
 
+      if (findTask) {
+        toast.error("Zadanie już istnieje");
+        return prevTasks;
+      }
+
+      return [...prevTasks, { name: currentTasks, isCompleted: false }];
+    });
+  };
+
+  const onSubmit = async (data: CreateCardForm) => {
     addCard(
-      { ...data, userIds: selectedUsers, listId },
+      { ...data, userIds: selectedUsers, listId, tasks },
       {
         onSuccess: (data) => {
           const formData = new FormData();
-          files.forEach((file) => {
+          files?.forEach((file) => {
             formData.append("files", file);
           });
           formData.append("cardId", data.cardId);
@@ -117,7 +136,6 @@ export default function CreateCardModal({
       console.error(error);
     }
   };
-
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -179,8 +197,52 @@ export default function CreateCardModal({
               />
               <FieldError errors={[errors.priority]} />
             </div>
+            <div className="space-y-3">
+              <Label>Zadania</Label>
+
+              <div className="flex gap-2">
+                <Input
+                  id="task"
+                  placeholder="Nazwa zadania..."
+                  value={currentTasks}
+                  onChange={(e) => setCurrentTasks(e.target.value)}
+                />
+
+                <Button type="button" onClick={() => addTask()}>
+                  Dodaj
+                </Button>
+              </div>
+
+              <div className="space-y-2">
+                {tasks.length > 0 ? (
+                  tasks.map((task, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-3 rounded-lg border bg-muted/30 px-4 py-3 transition-colors hover:bg-muted/60"
+                    >
+                      <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded border bg-background">
+                        <div className="h-2 w-2 rounded-full bg-muted-foreground/40" />
+                      </div>
+
+                      <span className="flex-1 text-sm font-medium">
+                        {task.name}
+                      </span>
+
+                      <span className="text-xs text-muted-foreground">
+                        #{index + 1}
+                      </span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="rounded-lg border border-dashed py-6 text-center text-sm text-muted-foreground">
+                    Brak zadań
+                  </div>
+                )}
+              </div>
+            </div>
             <div className="space-y-2">
-              <Label>Zdjecia</Label>
+              <Label>Zdjęcia</Label>
+
               <DragDrop onFileChange={(file: File[]) => setFiles(file)} />
             </div>
 
