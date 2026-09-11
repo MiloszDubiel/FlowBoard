@@ -292,6 +292,13 @@ export type IntNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedIntNullableFilter<$PrismaModel> | number | null
 }
 
+export type EnumFileTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.FileType | Prisma.EnumFileTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.FileType[] | null
+  notIn?: $Enums.FileType[] | null
+  not?: Prisma.NestedEnumFileTypeNullableFilter<$PrismaModel> | $Enums.FileType | null
+}
+
 export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
   in?: number[] | null
@@ -306,6 +313,16 @@ export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
+}
+
+export type EnumFileTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FileType | Prisma.EnumFileTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.FileType[] | null
+  notIn?: $Enums.FileType[] | null
+  not?: Prisma.NestedEnumFileTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.FileType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFileTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFileTypeNullableFilter<$PrismaModel>
 }
 
 export type NestedIntFilter<$PrismaModel = never> = {
@@ -565,6 +582,13 @@ export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
   not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
 }
 
+export type NestedEnumFileTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.FileType | Prisma.EnumFileTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.FileType[] | null
+  notIn?: $Enums.FileType[] | null
+  not?: Prisma.NestedEnumFileTypeNullableFilter<$PrismaModel> | $Enums.FileType | null
+}
+
 export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
   in?: number[] | null
@@ -590,6 +614,16 @@ export type NestedFloatNullableFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
+}
+
+export type NestedEnumFileTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FileType | Prisma.EnumFileTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.FileType[] | null
+  notIn?: $Enums.FileType[] | null
+  not?: Prisma.NestedEnumFileTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.FileType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFileTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFileTypeNullableFilter<$PrismaModel>
 }
 
 

@@ -45,3 +45,11 @@ export const CardPriority = {
 } as const
 
 export type CardPriority = (typeof CardPriority)[keyof typeof CardPriority]
+
+
+export const FileType = {
+  IMG: 'IMG',
+  TEXTFILE: 'TEXTFILE'
+} as const
+
+export type FileType = (typeof FileType)[keyof typeof FileType]

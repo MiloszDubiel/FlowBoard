@@ -220,6 +220,7 @@ export const AttachmentScalarFieldEnum = {
   fileName: 'fileName',
   fileUrl: 'fileUrl',
   fileSize: 'fileSize',
+  fileType: 'fileType',
   createdAt: 'createdAt'
 } as const
 

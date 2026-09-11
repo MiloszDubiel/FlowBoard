@@ -1,8 +1,7 @@
 "use client";
+
 import {
   CheckSquare,
-  Trash2,
-  X,
   Paperclip,
   FileText,
   MessageSquare,
@@ -10,6 +9,9 @@ import {
   CalendarDays,
   Tag,
   Users,
+  Image as ImageIcon,
+  File,
+  Download,
 } from "lucide-react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
@@ -23,22 +25,29 @@ import { FieldError } from "@/components/ui/field";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
 import { commentSchema, type CommentType } from "@/schema/addComment.schema";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChecklistType } from "@/schema/addChecklist.schema";
 
 const safeParseTasks = (tasks: any): any[] => {
-  const parsedTasks = JSON.parse(tasks);
+  if (!tasks) return [];
 
-  if (!Array.isArray(parsedTasks)) {
+  try {
+    const parsedTasks = JSON.parse(tasks);
+
+    if (!Array.isArray(parsedTasks)) {
+      return [];
+    }
+
+    return parsedTasks;
+  } catch {
     return [];
   }
-
-  return parsedTasks;
 };
 
 export default function CardDetails({ card, boardId }: any) {
+  const router = useRouter();
+
   const { mutate } = useMutation({
     mutationFn: async (newComment: CommentType) => {
       const { data } = await axios.post(
@@ -63,8 +72,24 @@ export default function CardDetails({ card, boardId }: any) {
 
   const [parsedTasks, setParsedTasks] = useState<any[]>([]);
 
+  const attachments = card.attachments ?? [];
+
+  const imagesFiles = useMemo(
+    () =>
+      attachments.filter((attachment: any) => attachment.fileType === "IMG"),
+    [attachments],
+  );
+
+  const textFiles = useMemo(
+    () =>
+      attachments.filter(
+        (attachment: any) => attachment.fileType === "TEXTFILE",
+      ),
+    [attachments],
+  );
+
   useEffect(() => {
-    const tasks = safeParseTasks(card.tasks || null);
+    const tasks = safeParseTasks(card.tasks);
     setParsedTasks(tasks);
   }, [card.tasks]);
 
@@ -79,8 +104,6 @@ export default function CardDetails({ card, boardId }: any) {
     },
     resolver: zodResolver(commentSchema),
   });
-
-  const router = useRouter();
 
   const handleAddComment = (comment: CommentType) => {
     mutate(comment, {
@@ -97,6 +120,13 @@ export default function CardDetails({ card, boardId }: any) {
       <div className="mx-auto max-w-7xl px-6 py-10">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
           <div className="min-w-0 space-y-10">
+            <Button
+              onClick={() => {
+                router.replace(`/projects/board/${boardId}`);
+              }}
+            >
+              Powrót do boardu
+            </Button>
             <section className="space-y-4">
               <div className="flex items-center gap-2">
                 <FileText className="h-5 w-5 text-muted-foreground" />
@@ -117,6 +147,7 @@ export default function CardDetails({ card, boardId }: any) {
               </div>
             </section>
 
+            {/* CHECKLISTA */}
             <section className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -128,7 +159,7 @@ export default function CardDetails({ card, boardId }: any) {
                 </div>
 
                 <span className="text-xs text-muted-foreground">
-                  {parsedTasks.filter((t) => t.isCompleted).length} /{" "}
+                  {parsedTasks.filter((task) => task.isCompleted).length} /{" "}
                   {parsedTasks.length}
                 </span>
               </div>
@@ -137,29 +168,34 @@ export default function CardDetails({ card, boardId }: any) {
                 <div className="space-y-1">
                   {parsedTasks.length > 0 ? (
                     parsedTasks.map((task: any, index: number) => (
-                      <div key={index} className="flex items-center gap-2">
+                      <div
+                        key={index}
+                        className="flex items-center gap-2 rounded-md px-2 py-2 hover:bg-muted/50"
+                      >
                         <Checkbox
                           id={`task-${index}`}
                           checked={task.isCompleted}
-
-                          onCheckedChange={(e) =>
-                            setParsedTasks((tasks) => {
-                              const filtered = tasks.filter(
-                                (t) => t.name !== task.name,
-                              );
-
-                              const newTasks = [
-                                ...filtered,
-                                { ...task, isCompleted: e === true },
-                              ];
-                              return newTasks;
-                            })
+                          onCheckedChange={(checked) =>
+                            setParsedTasks((tasks) =>
+                              tasks.map((currentTask) =>
+                                currentTask.name === task.name
+                                  ? {
+                                      ...currentTask,
+                                      isCompleted: checked === true,
+                                    }
+                                  : currentTask,
+                              ),
+                            )
                           }
                         />
 
                         <label
                           htmlFor={`task-${index}`}
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          className={`text-sm font-medium ${
+                            task.isCompleted
+                              ? "text-muted-foreground line-through"
+                              : ""
+                          }`}
                         >
                           {task.name}
                         </label>
@@ -171,8 +207,10 @@ export default function CardDetails({ card, boardId }: any) {
                     </p>
                   )}
                 </div>
-                <Separator className="my-2" />
-                <div className="mt-4 flex items-center justify-end gap-2">
+
+                <Separator className="my-3" />
+
+                <div className="flex justify-end">
                   <Button
                     size="sm"
                     onClick={() => changeChecklist({ tasks: parsedTasks })}
@@ -183,50 +221,139 @@ export default function CardDetails({ card, boardId }: any) {
               </div>
             </section>
 
-            <section className="space-y-4">
+            {/* ZAŁĄCZNIKI */}
+            <section className="space-y-5">
               <div className="flex items-center gap-2">
                 <Paperclip className="h-5 w-5 text-muted-foreground" />
 
                 <h2 className="text-sm font-semibold uppercase tracking-wide">
                   Załączniki
                 </h2>
+
+                {attachments.length > 0 && (
+                  <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+                    {attachments.length}
+                  </span>
+                )}
               </div>
 
-              <div className="rounded-xl border bg-card p-5 shadow-sm">
-                {card.attachments?.length > 0 ? (
-                  <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-                    {card.attachments.map((attachment: any) => (
-                      <a
-                        key={attachment.fileName}
-                        href={attachment.fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group overflow-hidden rounded-xl border bg-background transition-all hover:-translate-y-0.5 hover:shadow-md"
-                      >
-                        <img
-                          src={attachment.fileUrl}
-                          alt={attachment.fileName ?? "Załącznik"}
-                          className="h-36 w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
+              <div className="space-y-6">
+                {/* ZDJĘCIA */}
+                {imagesFiles.length > 0 && (
+                  <div className="rounded-xl border bg-card p-5 shadow-sm">
+                    <div className="mb-4 flex items-center gap-2">
+                      <ImageIcon className="h-4 w-4 text-muted-foreground" />
 
-                        <div className="flex items-center gap-2 p-3">
-                          <Paperclip className="h-4 w-4 shrink-0 text-muted-foreground" />
+                      <h3 className="text-sm font-semibold">Zdjęcia</h3>
 
-                          <span className="truncate text-xs font-medium">
-                            {attachment.fileName}
-                          </span>
-                        </div>
-                      </a>
-                    ))}
+                      <span className="text-xs text-muted-foreground">
+                        ({imagesFiles.length})
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+                      {imagesFiles.map((attachment: any) => (
+                        <a
+                          key={attachment.id ?? attachment.fileName}
+                          href={attachment.fileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group overflow-hidden rounded-xl border bg-background transition-all hover:-translate-y-0.5 hover:shadow-md"
+                        >
+                          <div className="relative aspect-square overflow-hidden bg-muted">
+                            <img
+                              src={attachment.fileUrl}
+                              alt={attachment.fileName ?? "Zdjęcie"}
+                              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            />
+
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover:bg-black/30">
+                              <ImageIcon className="h-8 w-8 text-white opacity-0 transition-opacity group-hover:opacity-100" />
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2 p-3">
+                            <ImageIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
+
+                            <span className="truncate text-xs font-medium">
+                              {attachment.fileName}
+                            </span>
+                          </div>
+                        </a>
+                      ))}
+                    </div>
                   </div>
-                ) : (
-                  <p className="text-sm text-muted-foreground">
-                    Brak załączników.
-                  </p>
+                )}
+
+                {/* PLIKI */}
+                {textFiles.length > 0 && (
+                  <div className="rounded-xl border bg-card p-5 shadow-sm">
+                    <div className="mb-4 flex items-center gap-2">
+                      <File className="h-4 w-4 text-muted-foreground" />
+
+                      <h3 className="text-sm font-semibold">Pliki</h3>
+
+                      <span className="text-xs text-muted-foreground">
+                        ({textFiles.length})
+                      </span>
+                    </div>
+
+                    <div className="space-y-2">
+                      {textFiles.map((attachment: any) => (
+                        <div
+                          key={attachment.id ?? attachment.fileName}
+                          className="flex items-center gap-3 rounded-lg border bg-background p-3 transition-colors hover:bg-muted/50"
+                        >
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted">
+                            <FileText className="h-5 w-5 text-muted-foreground" />
+                          </div>
+
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-medium">
+                              {attachment.fileName}
+                            </p>
+
+                            <p className="text-xs text-muted-foreground">
+                              Plik
+                            </p>
+                          </div>
+
+                          <a
+                            href={attachment.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              title="Otwórz plik"
+                            >
+                              <Download className="h-4 w-4" />
+                            </Button>
+                          </a>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* BRAK ZAŁĄCZNIKÓW */}
+                {attachments.length === 0 && (
+                  <div className="rounded-xl border border-dashed bg-card py-12 text-center">
+                    <Paperclip className="mx-auto mb-3 h-7 w-7 text-muted-foreground" />
+
+                    <p className="text-sm font-medium">Brak załączników</p>
+
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Do tej karty nie dodano jeszcze żadnych zdjęć ani plików.
+                    </p>
+                  </div>
                 )}
               </div>
             </section>
 
+            {/* KOMENTARZE */}
             <section className="space-y-5">
               <div className="flex items-center gap-2">
                 <MessageSquare className="h-5 w-5 text-muted-foreground" />
@@ -343,8 +470,10 @@ export default function CardDetails({ card, boardId }: any) {
             </section>
           </div>
 
+          {/* SIDEBAR */}
           <aside className="h-fit lg:sticky lg:top-6">
             <div className="rounded-xl border bg-card shadow-sm">
+              {/* CZŁONKOWIE */}
               <section className="p-5">
                 <div className="mb-4 flex items-center gap-2">
                   <Users className="h-4 w-4 text-muted-foreground" />
@@ -388,6 +517,7 @@ export default function CardDetails({ card, boardId }: any) {
 
               <Separator />
 
+              {/* ETYKIETY */}
               <section className="p-5">
                 <div className="mb-4 flex items-center gap-2">
                   <Tag className="h-4 w-4 text-muted-foreground" />
@@ -418,6 +548,7 @@ export default function CardDetails({ card, boardId }: any) {
 
               <Separator />
 
+              {/* TERMIN */}
               <section className="p-5">
                 <div className="mb-4 flex items-center gap-2">
                   <CalendarDays className="h-4 w-4 text-muted-foreground" />
@@ -442,6 +573,7 @@ export default function CardDetails({ card, boardId }: any) {
 
               <Separator />
 
+              {/* ZAŁĄCZNIKI SIDEBAR */}
               <section className="p-5">
                 <div className="mb-4 flex items-center gap-2">
                   <Paperclip className="h-4 w-4 text-muted-foreground" />
@@ -449,20 +581,50 @@ export default function CardDetails({ card, boardId }: any) {
                   <h3 className="text-sm font-semibold">Załączniki</h3>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">
-                    {card.attachments?.length ?? 0} plików
-                  </span>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <ImageIcon className="h-4 w-4 text-muted-foreground" />
 
-                  <Button variant="outline" size="sm">
-                    <Paperclip className="mr-2 h-4 w-4" />
-                    Dodaj
-                  </Button>
+                      <span className="text-sm text-muted-foreground">
+                        Zdjęcia
+                      </span>
+                    </div>
+
+                    <span className="text-sm font-medium">
+                      {imagesFiles.length}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <FileText className="h-4 w-4 text-muted-foreground" />
+
+                      <span className="text-sm text-muted-foreground">
+                        Pliki
+                      </span>
+                    </div>
+
+                    <span className="text-sm font-medium">
+                      {textFiles.length}
+                    </span>
+                  </div>
+
+                  <Separator />
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">Razem</span>
+
+                    <span className="text-sm font-semibold">
+                      {attachments.length}
+                    </span>
+                  </div>
                 </div>
               </section>
 
               <Separator />
 
+              {/* INFORMACJE */}
               <section className="p-5">
                 <h3 className="mb-4 text-sm font-semibold">Informacje</h3>
 

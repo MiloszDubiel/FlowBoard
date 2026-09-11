@@ -33,5 +33,7 @@ export default async function AddCardPage({
 
   const members = await getBoardMembers(board.id);
 
-  return <AddCard listId={Number(listId)} members={members} />;
+  return (
+    <AddCard listId={Number(listId)} members={members} boardId={board.id} />
+  );
 }

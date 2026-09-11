@@ -34,5 +34,5 @@ export default async function CardPage({
 
   const card = await getCard(Number(cardId), boardId);
 
-  return <CardDetails card={card} />;
+  return <CardDetails card={card} boardId={boardId} />;
 }

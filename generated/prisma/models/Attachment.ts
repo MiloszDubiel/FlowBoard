@@ -47,6 +47,7 @@ export type AttachmentMinAggregateOutputType = {
   fileName: string | null
   fileUrl: string | null
   fileSize: number | null
+  fileType: $Enums.FileType | null
   createdAt: Date | null
 }
 
@@ -57,6 +58,7 @@ export type AttachmentMaxAggregateOutputType = {
   fileName: string | null
   fileUrl: string | null
   fileSize: number | null
+  fileType: $Enums.FileType | null
   createdAt: Date | null
 }
 
@@ -67,6 +69,7 @@ export type AttachmentCountAggregateOutputType = {
   fileName: number
   fileUrl: number
   fileSize: number
+  fileType: number
   createdAt: number
   _all: number
 }
@@ -93,6 +96,7 @@ export type AttachmentMinAggregateInputType = {
   fileName?: true
   fileUrl?: true
   fileSize?: true
+  fileType?: true
   createdAt?: true
 }
 
@@ -103,6 +107,7 @@ export type AttachmentMaxAggregateInputType = {
   fileName?: true
   fileUrl?: true
   fileSize?: true
+  fileType?: true
   createdAt?: true
 }
 
@@ -113,6 +118,7 @@ export type AttachmentCountAggregateInputType = {
   fileName?: true
   fileUrl?: true
   fileSize?: true
+  fileType?: true
   createdAt?: true
   _all?: true
 }
@@ -210,6 +216,7 @@ export type AttachmentGroupByOutputType = {
   fileName: string
   fileUrl: string
   fileSize: number | null
+  fileType: $Enums.FileType | null
   createdAt: Date
   _count: AttachmentCountAggregateOutputType | null
   _avg: AttachmentAvgAggregateOutputType | null
@@ -243,6 +250,7 @@ export type AttachmentWhereInput = {
   fileName?: Prisma.StringFilter<"Attachment"> | string
   fileUrl?: Prisma.StringFilter<"Attachment"> | string
   fileSize?: Prisma.IntNullableFilter<"Attachment"> | number | null
+  fileType?: Prisma.EnumFileTypeNullableFilter<"Attachment"> | $Enums.FileType | null
   createdAt?: Prisma.DateTimeFilter<"Attachment"> | Date | string
   card?: Prisma.XOR<Prisma.CardScalarRelationFilter, Prisma.CardWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -255,6 +263,7 @@ export type AttachmentOrderByWithRelationInput = {
   fileName?: Prisma.SortOrder
   fileUrl?: Prisma.SortOrder
   fileSize?: Prisma.SortOrderInput | Prisma.SortOrder
+  fileType?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   card?: Prisma.CardOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
@@ -271,6 +280,7 @@ export type AttachmentWhereUniqueInput = Prisma.AtLeast<{
   fileName?: Prisma.StringFilter<"Attachment"> | string
   fileUrl?: Prisma.StringFilter<"Attachment"> | string
   fileSize?: Prisma.IntNullableFilter<"Attachment"> | number | null
+  fileType?: Prisma.EnumFileTypeNullableFilter<"Attachment"> | $Enums.FileType | null
   createdAt?: Prisma.DateTimeFilter<"Attachment"> | Date | string
   card?: Prisma.XOR<Prisma.CardScalarRelationFilter, Prisma.CardWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -283,6 +293,7 @@ export type AttachmentOrderByWithAggregationInput = {
   fileName?: Prisma.SortOrder
   fileUrl?: Prisma.SortOrder
   fileSize?: Prisma.SortOrderInput | Prisma.SortOrder
+  fileType?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.AttachmentCountOrderByAggregateInput
   _avg?: Prisma.AttachmentAvgOrderByAggregateInput
@@ -301,6 +312,7 @@ export type AttachmentScalarWhereWithAggregatesInput = {
   fileName?: Prisma.StringWithAggregatesFilter<"Attachment"> | string
   fileUrl?: Prisma.StringWithAggregatesFilter<"Attachment"> | string
   fileSize?: Prisma.IntNullableWithAggregatesFilter<"Attachment"> | number | null
+  fileType?: Prisma.EnumFileTypeNullableWithAggregatesFilter<"Attachment"> | $Enums.FileType | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Attachment"> | Date | string
 }
 
@@ -308,6 +320,7 @@ export type AttachmentCreateInput = {
   fileName: string
   fileUrl: string
   fileSize?: number | null
+  fileType?: $Enums.FileType | null
   createdAt?: Date | string
   card: Prisma.CardCreateNestedOneWithoutAttachmentsInput
   user: Prisma.UserCreateNestedOneWithoutAttachmentsInput
@@ -320,6 +333,7 @@ export type AttachmentUncheckedCreateInput = {
   fileName: string
   fileUrl: string
   fileSize?: number | null
+  fileType?: $Enums.FileType | null
   createdAt?: Date | string
 }
 
@@ -327,6 +341,7 @@ export type AttachmentUpdateInput = {
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fileType?: Prisma.NullableEnumFileTypeFieldUpdateOperationsInput | $Enums.FileType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   card?: Prisma.CardUpdateOneRequiredWithoutAttachmentsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutAttachmentsNestedInput
@@ -339,6 +354,7 @@ export type AttachmentUncheckedUpdateInput = {
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fileType?: Prisma.NullableEnumFileTypeFieldUpdateOperationsInput | $Enums.FileType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -349,6 +365,7 @@ export type AttachmentCreateManyInput = {
   fileName: string
   fileUrl: string
   fileSize?: number | null
+  fileType?: $Enums.FileType | null
   createdAt?: Date | string
 }
 
@@ -356,6 +373,7 @@ export type AttachmentUpdateManyMutationInput = {
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fileType?: Prisma.NullableEnumFileTypeFieldUpdateOperationsInput | $Enums.FileType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -366,6 +384,7 @@ export type AttachmentUncheckedUpdateManyInput = {
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fileType?: Prisma.NullableEnumFileTypeFieldUpdateOperationsInput | $Enums.FileType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -392,6 +411,7 @@ export type AttachmentCountOrderByAggregateInput = {
   fileName?: Prisma.SortOrder
   fileUrl?: Prisma.SortOrder
   fileSize?: Prisma.SortOrder
+  fileType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -409,6 +429,7 @@ export type AttachmentMaxOrderByAggregateInput = {
   fileName?: Prisma.SortOrder
   fileUrl?: Prisma.SortOrder
   fileSize?: Prisma.SortOrder
+  fileType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -419,6 +440,7 @@ export type AttachmentMinOrderByAggregateInput = {
   fileName?: Prisma.SortOrder
   fileUrl?: Prisma.SortOrder
   fileSize?: Prisma.SortOrder
+  fileType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -521,10 +543,15 @@ export type NullableIntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type NullableEnumFileTypeFieldUpdateOperationsInput = {
+  set?: $Enums.FileType | null
+}
+
 export type AttachmentCreateWithoutUserInput = {
   fileName: string
   fileUrl: string
   fileSize?: number | null
+  fileType?: $Enums.FileType | null
   createdAt?: Date | string
   card: Prisma.CardCreateNestedOneWithoutAttachmentsInput
 }
@@ -535,6 +562,7 @@ export type AttachmentUncheckedCreateWithoutUserInput = {
   fileName: string
   fileUrl: string
   fileSize?: number | null
+  fileType?: $Enums.FileType | null
   createdAt?: Date | string
 }
 
@@ -574,6 +602,7 @@ export type AttachmentScalarWhereInput = {
   fileName?: Prisma.StringFilter<"Attachment"> | string
   fileUrl?: Prisma.StringFilter<"Attachment"> | string
   fileSize?: Prisma.IntNullableFilter<"Attachment"> | number | null
+  fileType?: Prisma.EnumFileTypeNullableFilter<"Attachment"> | $Enums.FileType | null
   createdAt?: Prisma.DateTimeFilter<"Attachment"> | Date | string
 }
 
@@ -581,6 +610,7 @@ export type AttachmentCreateWithoutCardInput = {
   fileName: string
   fileUrl: string
   fileSize?: number | null
+  fileType?: $Enums.FileType | null
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutAttachmentsInput
 }
@@ -591,6 +621,7 @@ export type AttachmentUncheckedCreateWithoutCardInput = {
   fileName: string
   fileUrl: string
   fileSize?: number | null
+  fileType?: $Enums.FileType | null
   createdAt?: Date | string
 }
 
@@ -626,6 +657,7 @@ export type AttachmentCreateManyUserInput = {
   fileName: string
   fileUrl: string
   fileSize?: number | null
+  fileType?: $Enums.FileType | null
   createdAt?: Date | string
 }
 
@@ -633,6 +665,7 @@ export type AttachmentUpdateWithoutUserInput = {
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fileType?: Prisma.NullableEnumFileTypeFieldUpdateOperationsInput | $Enums.FileType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   card?: Prisma.CardUpdateOneRequiredWithoutAttachmentsNestedInput
 }
@@ -643,6 +676,7 @@ export type AttachmentUncheckedUpdateWithoutUserInput = {
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fileType?: Prisma.NullableEnumFileTypeFieldUpdateOperationsInput | $Enums.FileType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -652,6 +686,7 @@ export type AttachmentUncheckedUpdateManyWithoutUserInput = {
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fileType?: Prisma.NullableEnumFileTypeFieldUpdateOperationsInput | $Enums.FileType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -661,6 +696,7 @@ export type AttachmentCreateManyCardInput = {
   fileName: string
   fileUrl: string
   fileSize?: number | null
+  fileType?: $Enums.FileType | null
   createdAt?: Date | string
 }
 
@@ -668,6 +704,7 @@ export type AttachmentUpdateWithoutCardInput = {
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fileType?: Prisma.NullableEnumFileTypeFieldUpdateOperationsInput | $Enums.FileType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutAttachmentsNestedInput
 }
@@ -678,6 +715,7 @@ export type AttachmentUncheckedUpdateWithoutCardInput = {
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fileType?: Prisma.NullableEnumFileTypeFieldUpdateOperationsInput | $Enums.FileType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -687,6 +725,7 @@ export type AttachmentUncheckedUpdateManyWithoutCardInput = {
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fileType?: Prisma.NullableEnumFileTypeFieldUpdateOperationsInput | $Enums.FileType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -699,6 +738,7 @@ export type AttachmentSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   fileName?: boolean
   fileUrl?: boolean
   fileSize?: boolean
+  fileType?: boolean
   createdAt?: boolean
   card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -713,10 +753,11 @@ export type AttachmentSelectScalar = {
   fileName?: boolean
   fileUrl?: boolean
   fileSize?: boolean
+  fileType?: boolean
   createdAt?: boolean
 }
 
-export type AttachmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "cardId" | "userId" | "fileName" | "fileUrl" | "fileSize" | "createdAt", ExtArgs["result"]["attachment"]>
+export type AttachmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "cardId" | "userId" | "fileName" | "fileUrl" | "fileSize" | "fileType" | "createdAt", ExtArgs["result"]["attachment"]>
 export type AttachmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -735,6 +776,7 @@ export type $AttachmentPayload<ExtArgs extends runtime.Types.Extensions.Internal
     fileName: string
     fileUrl: string
     fileSize: number | null
+    fileType: $Enums.FileType | null
     createdAt: Date
   }, ExtArgs["result"]["attachment"]>
   composites: {}
@@ -1113,6 +1155,7 @@ export interface AttachmentFieldRefs {
   readonly fileName: Prisma.FieldRef<"Attachment", 'String'>
   readonly fileUrl: Prisma.FieldRef<"Attachment", 'String'>
   readonly fileSize: Prisma.FieldRef<"Attachment", 'Int'>
+  readonly fileType: Prisma.FieldRef<"Attachment", 'FileType'>
   readonly createdAt: Prisma.FieldRef<"Attachment", 'DateTime'>
 }
     

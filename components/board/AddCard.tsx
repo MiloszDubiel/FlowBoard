@@ -35,6 +35,7 @@ import {
 interface CreateCardModalProps {
   listId: number;
   members: any[];
+  boardId: number;
 }
 type Task = {
   name: string;
@@ -48,14 +49,13 @@ import { useCard } from "@/mutations/dashboard/useCard";
 export default function AddCard({
   listId,
   members = [],
+  boardId,
 }: CreateCardModalProps) {
   const {
     control,
     register,
     handleSubmit,
     reset,
-    getValues,
-    setValues,
     formState: { errors, isSubmitting },
   } = useForm<CreateCardForm>({
     resolver: zodResolver(createCardSchema),
@@ -113,8 +113,8 @@ export default function AddCard({
 
           addFile(formData);
           toast.success(data.message);
-          // route.refresh();
-          // route.back();
+
+          route.replace(`/projects/board/${boardId}`);
         },
       },
     );

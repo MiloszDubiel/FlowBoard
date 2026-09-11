@@ -12,18 +12,16 @@ export const POST = withAuth(async (user, request, context) => {
   const img = formData.getAll("img");
   const cardId = formData.get("cardId");
 
+  console.log(txt, img);
+
   if (!cardId) {
     return NextResponse.json({ message: "Brak cardId" }, { status: 400 });
   }
 
-  if (img.length === 0) {
-    return NextResponse.json(
-      { message: "Nie przesłano plików" },
-      { status: 400 },
-    );
-  }
-
-  if (img.some((file) => !(file instanceof File))) {
+  if (
+    img.some((file) => !(file instanceof File)) ||
+    txt.some((file) => !(file instanceof File))
+  ) {
     return NextResponse.json(
       { message: "Nieprawidłowy plik" },
       { status: 400 },
@@ -31,10 +29,10 @@ export const POST = withAuth(async (user, request, context) => {
   }
 
   const urls = await Promise.all([
-    ...img.map(async (file) =>
+    ...img?.map(async (file) =>
       createFile("img", file, Number(cardId), user.userID),
     ),
-    ...txt.map(async (file) =>
+    ...txt?.map(async (file) =>
       createFile("txt", file, Number(cardId), user.userID),
     ),
   ]);

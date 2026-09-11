@@ -289,7 +289,7 @@ model Attachment {
   fileName String
   fileUrl  String
   fileSize Int?
-  fileType FileType @default(null)
+  fileType FileType?
 
   createdAt DateTime @default(now())
 
