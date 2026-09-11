@@ -289,6 +289,7 @@ model Attachment {
   fileName String
   fileUrl  String
   fileSize Int?
+  fileType FileType @default(null)
 
   createdAt DateTime @default(now())
 
@@ -300,6 +301,11 @@ model Attachment {
   @@map("attachments")
 }
 
+
+enum FileType {
+  IMG
+  TEXTFILE
+}
 // =========================
 // ACTIVITY
 // =========================

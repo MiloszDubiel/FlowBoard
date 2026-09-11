@@ -12,7 +12,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { CollisionPriority } from "@dnd-kit/abstract";
 import { useState } from "react";
-import CreateCardModal from "./AddCard";
+import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+
 export const Column = ({ children, id, column, index, members }: any) => {
   const { ref, handleRef, isDropTarget } = useSortable({
     id,
@@ -21,9 +23,8 @@ export const Column = ({ children, id, column, index, members }: any) => {
     collisionPriority: CollisionPriority.Low,
     accept: ["item", "column"],
   });
-
-  const [createCardOpen, setCreateCardOpen] = useState(false);
-
+  const path = usePathname();
+  const route = useRouter();
   return (
     <>
       <Card
@@ -83,19 +84,13 @@ export const Column = ({ children, id, column, index, members }: any) => {
           <Button
             variant="ghost"
             className="mt-2 w-full cursor-pointer justify-start text-muted-foreground"
-            onClick={() => setCreateCardOpen(true)}
+            onClick={() => route.replace(path + `/card/add/${id}`)}
           >
             <Plus className="mr-2 h-4 w-4" />
             Dodaj kartę
           </Button>
         </CardContent>
       </Card>
-      <CreateCardModal
-        open={createCardOpen}
-        onOpenChange={setCreateCardOpen}
-        listId={column.id}
-        members={members}
-      />
     </>
   );
 };

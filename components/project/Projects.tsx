@@ -9,7 +9,7 @@ import {
   CheckCircle2,
   Clock3,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffectEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -37,12 +37,18 @@ const boardColorClasses: Record<string, string> = {
   PURPLE: "bg-purple-500",
   PINK: "bg-pink-500",
 };
-const Projects = ({ projects }: any) => {
+const Projects = ({ projects, children }: any) => {
   const route = useRouter();
   const [openConfirm, setOpenConfirm] = useState(false);
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [editedProject, setEditedProject] = useState<Project | undefined>();
+
+
+
+
+
+
 
   const {
     deleteProject: { mutate },

@@ -6,7 +6,7 @@ export const getBoard = async (projectId: number) => {
 
   if (!user) return null;
 
-  return prisma.board.findFirst({
+  return await prisma.board.findFirst({
     where: {
       ownerId: Number(user.userID),
       project: {
@@ -83,7 +83,6 @@ export const getBoardLists = async (boardId: number) => {
 
 export const getBoardCards = async (boardId: number) => {
   const user = await getCurrentUser();
-
   if (!user) return [];
 
   return prisma.card.findMany({
@@ -104,7 +103,7 @@ export const getBoardCards = async (boardId: number) => {
 export const getCard = async (cardId: number, boardId: number) => {
   const user = await getCurrentUser();
 
-  if (!user) return [];
+  if (!user || !boardId || !cardId) return [];
 
   return prisma.card.findFirst({
     where: {

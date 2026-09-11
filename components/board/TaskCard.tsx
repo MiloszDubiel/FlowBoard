@@ -58,7 +58,7 @@ export function TaskCard({ id, index, column, card }: any) {
       ref={ref}
       className="group relative cursor-pointer overflow-hidden border-border/60 bg-card transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-md"
       data-dragging={isDragging}
-      onClick={() => route.replace(path + `/card/${card.id}`)}
+      onClick={() => route.replace(path + `/card/get-card/${card.id}`)}
     >
       <Button
         variant="ghost"

@@ -3,6 +3,7 @@
 import { useDropzone } from "react-dropzone";
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
+import { type Accept } from "react-dropzone";
 
 type PreviewFile = File & {
   preview: string;
@@ -10,16 +11,29 @@ type PreviewFile = File & {
 
 export const DragDrop = ({
   onFileChange,
+  fileSize,
+  type,
 }: {
   onFileChange: (file: File[]) => void;
+  fileSize: number;
+  type: "text" | "img";
 }) => {
   const [files, setFiles] = useState<PreviewFile[]>([]);
   const [filesToSend, setFiilesToSend] = useState<File[]>([]);
-
+  const accept: Accept =
+    type === "text"
+      ? {
+          "application/pdf": [".pdf"],
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+            [".docx"],
+          "application/msword": [".doc"],
+          "text/plain": [".txt"],
+        }
+      : {
+          "image/*": [],
+        };
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: {
-      "image/*": [],
-    },
+    accept: accept,
 
     onDrop: (acceptedFiles) => {
       const newFiles = acceptedFiles.map((file: File) => {

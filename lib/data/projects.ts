@@ -14,5 +14,16 @@ export const getProjects = async () => {
     where: {
       ownerId: (user as any).userID,
     },
+    include: {
+      boards: {
+        include: {
+          lists: {
+            include: {
+              cards: true,
+            },
+          },
+        },
+      },
+    },
   });
 };

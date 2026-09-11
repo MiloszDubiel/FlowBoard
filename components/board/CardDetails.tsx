@@ -64,7 +64,7 @@ export default function CardDetails({ card, boardId }: any) {
   const [parsedTasks, setParsedTasks] = useState<any[]>([]);
 
   useEffect(() => {
-    const tasks = safeParseTasks(card.tasks);
+    const tasks = safeParseTasks(card.tasks || null);
     setParsedTasks(tasks);
   }, [card.tasks]);
 
