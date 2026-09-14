@@ -9,7 +9,7 @@ export const PATCH = withAuth(async (user, request, context) => {
 
   const uID = user.userID;
 
-
+  console.log(tasks);
 
   const isMember = await prisma.cardMember.findFirst({
     where: {
@@ -30,9 +30,7 @@ export const PATCH = withAuth(async (user, request, context) => {
       id: Number(cardId),
     },
     data: {
-      checklist: {
-        tasks: tasks,
-      },
+      tasks: tasks,
     },
   });
 

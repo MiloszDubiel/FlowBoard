@@ -27,26 +27,31 @@ export type AggregateCardMember = {
 }
 
 export type CardMemberAvgAggregateOutputType = {
+  id: number | null
   cardId: number | null
   userId: number | null
 }
 
 export type CardMemberSumAggregateOutputType = {
+  id: number | null
   cardId: number | null
   userId: number | null
 }
 
 export type CardMemberMinAggregateOutputType = {
+  id: number | null
   cardId: number | null
   userId: number | null
 }
 
 export type CardMemberMaxAggregateOutputType = {
+  id: number | null
   cardId: number | null
   userId: number | null
 }
 
 export type CardMemberCountAggregateOutputType = {
+  id: number
   cardId: number
   userId: number
   _all: number
@@ -54,26 +59,31 @@ export type CardMemberCountAggregateOutputType = {
 
 
 export type CardMemberAvgAggregateInputType = {
+  id?: true
   cardId?: true
   userId?: true
 }
 
 export type CardMemberSumAggregateInputType = {
+  id?: true
   cardId?: true
   userId?: true
 }
 
 export type CardMemberMinAggregateInputType = {
+  id?: true
   cardId?: true
   userId?: true
 }
 
 export type CardMemberMaxAggregateInputType = {
+  id?: true
   cardId?: true
   userId?: true
 }
 
 export type CardMemberCountAggregateInputType = {
+  id?: true
   cardId?: true
   userId?: true
   _all?: true
@@ -166,6 +176,7 @@ export type CardMemberGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 export type CardMemberGroupByOutputType = {
+  id: number
   cardId: number
   userId: number
   _count: CardMemberCountAggregateOutputType | null
@@ -194,6 +205,7 @@ export type CardMemberWhereInput = {
   AND?: Prisma.CardMemberWhereInput | Prisma.CardMemberWhereInput[]
   OR?: Prisma.CardMemberWhereInput[]
   NOT?: Prisma.CardMemberWhereInput | Prisma.CardMemberWhereInput[]
+  id?: Prisma.IntFilter<"CardMember"> | number
   cardId?: Prisma.IntFilter<"CardMember"> | number
   userId?: Prisma.IntFilter<"CardMember"> | number
   card?: Prisma.XOR<Prisma.CardScalarRelationFilter, Prisma.CardWhereInput>
@@ -201,6 +213,7 @@ export type CardMemberWhereInput = {
 }
 
 export type CardMemberOrderByWithRelationInput = {
+  id?: Prisma.SortOrder
   cardId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   card?: Prisma.CardOrderByWithRelationInput
@@ -208,6 +221,7 @@ export type CardMemberOrderByWithRelationInput = {
 }
 
 export type CardMemberWhereUniqueInput = Prisma.AtLeast<{
+  id?: number
   cardId_userId?: Prisma.CardMemberCardIdUserIdCompoundUniqueInput
   AND?: Prisma.CardMemberWhereInput | Prisma.CardMemberWhereInput[]
   OR?: Prisma.CardMemberWhereInput[]
@@ -216,9 +230,10 @@ export type CardMemberWhereUniqueInput = Prisma.AtLeast<{
   userId?: Prisma.IntFilter<"CardMember"> | number
   card?: Prisma.XOR<Prisma.CardScalarRelationFilter, Prisma.CardWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "cardId_userId">
+}, "id" | "cardId_userId">
 
 export type CardMemberOrderByWithAggregationInput = {
+  id?: Prisma.SortOrder
   cardId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   _count?: Prisma.CardMemberCountOrderByAggregateInput
@@ -232,6 +247,7 @@ export type CardMemberScalarWhereWithAggregatesInput = {
   AND?: Prisma.CardMemberScalarWhereWithAggregatesInput | Prisma.CardMemberScalarWhereWithAggregatesInput[]
   OR?: Prisma.CardMemberScalarWhereWithAggregatesInput[]
   NOT?: Prisma.CardMemberScalarWhereWithAggregatesInput | Prisma.CardMemberScalarWhereWithAggregatesInput[]
+  id?: Prisma.IntWithAggregatesFilter<"CardMember"> | number
   cardId?: Prisma.IntWithAggregatesFilter<"CardMember"> | number
   userId?: Prisma.IntWithAggregatesFilter<"CardMember"> | number
 }
@@ -242,6 +258,7 @@ export type CardMemberCreateInput = {
 }
 
 export type CardMemberUncheckedCreateInput = {
+  id?: number
   cardId: number
   userId: number
 }
@@ -252,11 +269,13 @@ export type CardMemberUpdateInput = {
 }
 
 export type CardMemberUncheckedUpdateInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   cardId?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type CardMemberCreateManyInput = {
+  id?: number
   cardId: number
   userId: number
 }
@@ -266,6 +285,7 @@ export type CardMemberUpdateManyMutationInput = {
 }
 
 export type CardMemberUncheckedUpdateManyInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   cardId?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -286,26 +306,31 @@ export type CardMemberCardIdUserIdCompoundUniqueInput = {
 }
 
 export type CardMemberCountOrderByAggregateInput = {
+  id?: Prisma.SortOrder
   cardId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
 }
 
 export type CardMemberAvgOrderByAggregateInput = {
+  id?: Prisma.SortOrder
   cardId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
 }
 
 export type CardMemberMaxOrderByAggregateInput = {
+  id?: Prisma.SortOrder
   cardId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
 }
 
 export type CardMemberMinOrderByAggregateInput = {
+  id?: Prisma.SortOrder
   cardId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
 }
 
 export type CardMemberSumOrderByAggregateInput = {
+  id?: Prisma.SortOrder
   cardId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
 }
@@ -399,6 +424,7 @@ export type CardMemberCreateWithoutUserInput = {
 }
 
 export type CardMemberUncheckedCreateWithoutUserInput = {
+  id?: number
   cardId: number
 }
 
@@ -432,6 +458,7 @@ export type CardMemberScalarWhereInput = {
   AND?: Prisma.CardMemberScalarWhereInput | Prisma.CardMemberScalarWhereInput[]
   OR?: Prisma.CardMemberScalarWhereInput[]
   NOT?: Prisma.CardMemberScalarWhereInput | Prisma.CardMemberScalarWhereInput[]
+  id?: Prisma.IntFilter<"CardMember"> | number
   cardId?: Prisma.IntFilter<"CardMember"> | number
   userId?: Prisma.IntFilter<"CardMember"> | number
 }
@@ -441,6 +468,7 @@ export type CardMemberCreateWithoutCardInput = {
 }
 
 export type CardMemberUncheckedCreateWithoutCardInput = {
+  id?: number
   userId: number
 }
 
@@ -471,6 +499,7 @@ export type CardMemberUpdateManyWithWhereWithoutCardInput = {
 }
 
 export type CardMemberCreateManyUserInput = {
+  id?: number
   cardId: number
 }
 
@@ -479,14 +508,17 @@ export type CardMemberUpdateWithoutUserInput = {
 }
 
 export type CardMemberUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   cardId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type CardMemberUncheckedUpdateManyWithoutUserInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   cardId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type CardMemberCreateManyCardInput = {
+  id?: number
   userId: number
 }
 
@@ -495,16 +527,19 @@ export type CardMemberUpdateWithoutCardInput = {
 }
 
 export type CardMemberUncheckedUpdateWithoutCardInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type CardMemberUncheckedUpdateManyWithoutCardInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
 
 export type CardMemberSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
   cardId?: boolean
   userId?: boolean
   card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
@@ -514,11 +549,12 @@ export type CardMemberSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 
 export type CardMemberSelectScalar = {
+  id?: boolean
   cardId?: boolean
   userId?: boolean
 }
 
-export type CardMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"cardId" | "userId", ExtArgs["result"]["cardMember"]>
+export type CardMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "cardId" | "userId", ExtArgs["result"]["cardMember"]>
 export type CardMemberInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -531,6 +567,7 @@ export type $CardMemberPayload<ExtArgs extends runtime.Types.Extensions.Internal
     user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
+    id: number
     cardId: number
     userId: number
   }, ExtArgs["result"]["cardMember"]>
@@ -616,8 +653,8 @@ export interface CardMemberDelegate<ExtArgs extends runtime.Types.Extensions.Int
    * // Get first 10 CardMembers
    * const cardMembers = await prisma.cardMember.findMany({ take: 10 })
    * 
-   * // Only select the `cardId`
-   * const cardMemberWithCardIdOnly = await prisma.cardMember.findMany({ select: { cardId: true } })
+   * // Only select the `id`
+   * const cardMemberWithIdOnly = await prisma.cardMember.findMany({ select: { id: true } })
    * 
    */
   findMany<T extends CardMemberFindManyArgs>(args?: Prisma.SelectSubset<T, CardMemberFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CardMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -904,6 +941,7 @@ export interface Prisma__CardMemberClient<T, Null = never, ExtArgs extends runti
  * Fields of the CardMember model
  */
 export interface CardMemberFieldRefs {
+  readonly id: Prisma.FieldRef<"CardMember", 'Int'>
   readonly cardId: Prisma.FieldRef<"CardMember", 'Int'>
   readonly userId: Prisma.FieldRef<"CardMember", 'Int'>
 }

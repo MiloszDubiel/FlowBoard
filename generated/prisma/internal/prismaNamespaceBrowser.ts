@@ -173,6 +173,7 @@ export type CardScalarFieldEnum = (typeof CardScalarFieldEnum)[keyof typeof Card
 
 
 export const CardMemberScalarFieldEnum = {
+  id: 'id',
   cardId: 'cardId',
   userId: 'userId'
 } as const

@@ -81,36 +81,40 @@ export const POST = withAuth(async (user, request, context) => {
     );
   }
 
+  const tasksToCard = tasks.map(
+    (task: { name: string; isCompleted: boolean }) => ({
+      name: task.name,
+      isCompleted: task.isCompleted,
+    }),
+  );
+
   const card = await prisma.card.create({
     data: {
       title,
       description,
       dueDate: dueDate ? new Date(dueDate) : null,
-      createdById: user.id,
-      priority: priority,
-      position: position,
+      priority,
+      position,
+      tasks: tasksToCard,
       list: {
         connect: {
           id: Number(listId),
         },
       },
-      tasks: JSON.stringify(
-        tasks.map((task: { name: string; isCompleted: boolean }) => ({
-          name: task.name,
-          isCompleted: task.isCompleted,
-        })),
-      ),
+
       createdBy: {
         connect: {
           id: Number(user.userID),
         },
       },
-      members: {
-        create: cardMembers.map((userId: number) => ({
-          userId,
-        })),
-      },
     },
+  });
+
+  await prisma.cardMember.createMany({
+    data: cardMembers.map((userId) => ({
+      cardId: card.id,
+      userId,
+    })),
   });
 
   return NextResponse.json(

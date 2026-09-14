@@ -12,6 +12,7 @@ import {
   Image as ImageIcon,
   File,
   Download,
+  ArrowLeft,
 } from "lucide-react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
@@ -33,13 +34,11 @@ const safeParseTasks = (tasks: any): any[] => {
   if (!tasks) return [];
 
   try {
-    const parsedTasks = JSON.parse(tasks);
-
-    if (!Array.isArray(parsedTasks)) {
+    if (!Array.isArray(tasks)) {
       return [];
     }
 
-    return parsedTasks;
+    return tasks;
   } catch {
     return [];
   }
@@ -72,6 +71,7 @@ export default function CardDetails({ card, boardId }: any) {
 
   const [parsedTasks, setParsedTasks] = useState<any[]>([]);
 
+
   const attachments = card.attachments ?? [];
 
   const imagesFiles = useMemo(
@@ -92,6 +92,8 @@ export default function CardDetails({ card, boardId }: any) {
     const tasks = safeParseTasks(card.tasks);
     setParsedTasks(tasks);
   }, [card.tasks]);
+
+ 
 
   const {
     register,
@@ -117,16 +119,21 @@ export default function CardDetails({ card, boardId }: any) {
 
   return (
     <main className="min-h-screen overflow-auto bg-background">
-      <div className="mx-auto max-w-7xl px-6 py-10">
+      <div className="mx-auto max-w-7xl px-6 py-8">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
-          <div className="min-w-0 space-y-10">
-            <Button
-              onClick={() => {
-                router.replace(`/projects/board/${boardId}`);
-              }}
-            >
-              Powrót do boardu
-            </Button>
+          <div className="min-w-0 space-y-8">
+            <div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => router.replace(`/projects/board/${boardId}`)}
+                className="group -ml-2 gap-2 text-muted-foreground hover:bg-muted hover:text-foreground"
+              >
+                <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+                <span>Powrót do boardu</span>
+              </Button>
+            </div>
+
             <section className="space-y-4">
               <div className="flex items-center gap-2">
                 <FileText className="h-5 w-5 text-muted-foreground" />

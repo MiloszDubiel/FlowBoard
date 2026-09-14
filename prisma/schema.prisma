@@ -206,17 +206,22 @@ enum CardPriority {
 // CARD MEMBERS
 // =========================
 
+
 model CardMember {
+  id     Int @id @default(autoincrement())
   cardId Int
   userId Int
- 
+
   card Card @relation(fields: [cardId], references: [id], onDelete: Cascade)
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@id([cardId, userId])
+  @@unique([cardId, userId])
   @@index([userId])
+  @@index([cardId])
   @@map("card_members")
 }
+
+
 
 
 // =========================

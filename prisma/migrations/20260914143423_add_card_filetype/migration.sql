@@ -1,16 +1,7 @@
-/*
-  Warnings:
-
-  - You are about to drop the `user` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropTable
-DROP TABLE `user`;
-
 -- CreateTable
 CREATE TABLE `users` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NULL,
     `email` VARCHAR(191) NOT NULL,
     `passwordHash` VARCHAR(191) NOT NULL,
     `avatarUrl` VARCHAR(191) NULL,
@@ -22,14 +13,30 @@ CREATE TABLE `users` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `boards` (
+CREATE TABLE `projects` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
     `description` VARCHAR(191) NULL,
     `ownerId` INTEGER NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
+    `color` ENUM('bg-green-500/10', 'bg-blue-500/10', 'bg-red-500/10', 'bg-orange-500/10') NOT NULL DEFAULT 'bg-orange-500/10',
 
+    INDEX `projects_ownerId_idx`(`ownerId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `boards` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `projectId` INTEGER NOT NULL,
+    `ownerId` INTEGER NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `description` VARCHAR(191) NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    INDEX `boards_projectId_idx`(`projectId`),
     INDEX `boards_ownerId_idx`(`ownerId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -44,6 +51,18 @@ CREATE TABLE `board_members` (
 
     INDEX `board_members_userId_idx`(`userId`),
     UNIQUE INDEX `board_members_boardId_userId_key`(`boardId`, `userId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `BoardInvite` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `boardId` INTEGER NOT NULL,
+    `userId` INTEGER NOT NULL,
+    `status` ENUM('PENDING', 'ACCEPTED', 'REJECTED') NOT NULL DEFAULT 'PENDING',
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    UNIQUE INDEX `BoardInvite_boardId_userId_key`(`boardId`, `userId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -68,6 +87,8 @@ CREATE TABLE `cards` (
     `description` TEXT NULL,
     `position` INTEGER NOT NULL,
     `dueDate` DATETIME(3) NULL,
+    `priority` ENUM('LOW', 'MEDIUM', 'HIGH', 'URGENT') NOT NULL DEFAULT 'MEDIUM',
+    `tasks` JSON NULL,
     `createdById` INTEGER NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
@@ -79,11 +100,14 @@ CREATE TABLE `cards` (
 
 -- CreateTable
 CREATE TABLE `card_members` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
     `cardId` INTEGER NOT NULL,
     `userId` INTEGER NOT NULL,
 
     INDEX `card_members_userId_idx`(`userId`),
-    PRIMARY KEY (`cardId`, `userId`)
+    INDEX `card_members_cardId_idx`(`cardId`),
+    UNIQUE INDEX `card_members_cardId_userId_key`(`cardId`, `userId`),
+    PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -113,6 +137,8 @@ CREATE TABLE `comments` (
     `cardId` INTEGER NOT NULL,
     `userId` INTEGER NOT NULL,
     `content` TEXT NOT NULL,
+    `fileName` VARCHAR(191) NULL,
+    `fileUrl` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -129,6 +155,7 @@ CREATE TABLE `attachments` (
     `fileName` VARCHAR(191) NOT NULL,
     `fileUrl` VARCHAR(191) NOT NULL,
     `fileSize` INTEGER NULL,
+    `fileType` ENUM('IMG', 'TEXTFILE') NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     INDEX `attachments_cardId_idx`(`cardId`),
@@ -153,6 +180,12 @@ CREATE TABLE `activities` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
+ALTER TABLE `projects` ADD CONSTRAINT `projects_ownerId_fkey` FOREIGN KEY (`ownerId`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `boards` ADD CONSTRAINT `boards_projectId_fkey` FOREIGN KEY (`projectId`) REFERENCES `projects`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `boards` ADD CONSTRAINT `boards_ownerId_fkey` FOREIGN KEY (`ownerId`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -160,6 +193,12 @@ ALTER TABLE `board_members` ADD CONSTRAINT `board_members_boardId_fkey` FOREIGN 
 
 -- AddForeignKey
 ALTER TABLE `board_members` ADD CONSTRAINT `board_members_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `BoardInvite` ADD CONSTRAINT `BoardInvite_boardId_fkey` FOREIGN KEY (`boardId`) REFERENCES `boards`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `BoardInvite` ADD CONSTRAINT `BoardInvite_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `lists` ADD CONSTRAINT `lists_boardId_fkey` FOREIGN KEY (`boardId`) REFERENCES `boards`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
