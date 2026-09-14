@@ -22,12 +22,13 @@ export const getCurrentUserData = async () => {
 
   return await prisma.user.findFirst({
     where: {
-      id: user.userID,
+      id: Number(user.userID),
+    },
+    include: {
+      memberships: true,
     },
     omit: {
       passwordHash: true,
-      createdAt: true,
-      updatedAt: true,
     },
   });
 };

@@ -3,7 +3,6 @@ import { withAuth } from "@/lib/withAuth";
 import { addListSchema } from "@/schema/addlist.schema";
 import { NextResponse } from "next/server";
 
-
 export const POST = withAuth(async (user, request, context) => {
   const { name, id } = await request.json();
 
@@ -16,13 +15,20 @@ export const POST = withAuth(async (user, request, context) => {
   const board = await prisma.board.findFirst({
     where: {
       id: Number(id),
-      ownerId: user.userID,
+      members: {
+        some: {
+          userId: Number(user.userID),
+        },
+      },
+    },
+    include: {
+      members: true,
     },
   });
 
   if (!board) {
     return NextResponse.json(
-      { message: "Nie znaleziono tablicy" },
+      { message: "Nie znaleziono tablicy z danym uzytkownkiem" },
       { status: 404 },
     );
   }
@@ -50,6 +56,19 @@ export const POST = withAuth(async (user, request, context) => {
     },
   });
 
+  const findEditorRole = board.members.find(
+    (el) => el.userId === Number(user.userID),
+  );
+
+  if (!["OWNER", "ADMIN"].includes(findEditorRole?.role || "")) {
+    return NextResponse.json(
+      {
+        message: "Nie masz uprawnień do dodawania list",
+      },
+      { status: 403 },
+    );
+  }
+
   const list = await prisma.list.create({
     data: {
       boardId: board.id,
@@ -57,7 +76,6 @@ export const POST = withAuth(async (user, request, context) => {
       position: lastList ? lastList.position + 1 : 0,
     },
   });
-
   return NextResponse.json(
     {
       message: "Dodano listę",

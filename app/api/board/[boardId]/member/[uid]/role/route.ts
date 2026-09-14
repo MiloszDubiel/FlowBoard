@@ -13,23 +13,23 @@ export const PATCH = withAuth(async (user, request, context) => {
   const board = await prisma.board.findFirst({
     where: {
       id: Number(boardId),
-      ownerId: user.userID, //Na razie owner może zmieniać role, później będzie można dodać możliwość zmiany roli przez admina
+      members: {
+        some: {
+          userId: Number(user.userID),
+        },
+      },
+    },
+    include: {
+      members: true,
     },
   });
 
   if (!board) {
     return NextResponse.json(
-      { message: "Nie znaleziono tablicy" },
+      { message: "Nie znaleziono tablicy z danym uzytkownikiem" },
       { status: 404 },
     );
   }
-
-  const include = await prisma.boardMember.findFirst({
-    where: {
-      userId: Number(uid),
-      boardId: Number(boardId),
-    },
-  });
 
   const isOwner = await prisma.board.findFirst({
     where: {
@@ -47,10 +47,10 @@ export const PATCH = withAuth(async (user, request, context) => {
     );
   }
 
-  if (!include) {
+  if (Number(uid) === Number(user.userID)) {
     return NextResponse.json(
       {
-        message: "Uzytkownik nie należy do tablicy.",
+        message: "Nie możesz zmienić swojej roli.",
       },
       { status: 409 },
     );

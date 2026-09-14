@@ -42,7 +42,7 @@ const setStyle = (priority: string) => {
   }
 };
 
-export function TaskCard({ id, index, column, card }: any) {
+export function TaskCard({ id, index, column, card, role }: any) {
   const { ref, isDragging, handleRef } = useSortable({
     id,
     index,
@@ -55,20 +55,22 @@ export function TaskCard({ id, index, column, card }: any) {
 
   return (
     <Card
-      ref={ref}
+      ref={["OWNER", "ADMIN"].includes(role) ? ref : null}
       className="group relative cursor-pointer overflow-hidden border-border/60 bg-card transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-md"
       data-dragging={isDragging}
       onClick={() => route.replace(path + `/card/get-card/${card.id}`)}
     >
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute right-2 top-2 z-10 h-7 w-7 cursor-grab text-muted-foreground opacity-0 transition-all hover:bg-muted hover:text-foreground active:cursor-grabbing group-hover:opacity-100"
-        title="Przenieś kartę"
-        ref={handleRef}
-      >
-        <GripVertical className="h-4 w-4" />
-      </Button>
+      {["OWNER", "ADMIN"].includes(role) && (
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute right-2 top-2 z-10 h-7 w-7 cursor-grab text-muted-foreground opacity-0 transition-all hover:bg-muted hover:text-foreground active:cursor-grabbing group-hover:opacity-100"
+          title="Przenieś kartę"
+          ref={handleRef}
+        >
+          <GripVertical className="h-4 w-4" />
+        </Button>
+      )}
       <CardContent className="p-3">
         <div className="pr-7">
           <p className="text-sm font-medium leading-5 text-card-foreground">

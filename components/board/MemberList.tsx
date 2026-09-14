@@ -10,6 +10,7 @@ import {
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
+import { useUser } from "@/hooks/useUser";
 
 function MembersList({
   members,
@@ -18,6 +19,8 @@ function MembersList({
   setRemoveModalOpen,
   setSelectedMember,
 }: any) {
+  const { user } = useUser();
+
   return (
     <div className="rounded-md border p-2">
       {members.length > 0 ? (
@@ -50,35 +53,39 @@ function MembersList({
             <div className="flex items-center gap-2">
               {member.role !== "OWNER" && (
                 <>
-                  <Select
-                    items={roles}
-                    onValueChange={(role) =>
-                      changeRole({
-                        id: member.userId,
-                        role,
-                      })
-                    }
-                    defaultValue={member.role || "MEMBER"}
-                  >
-                    <SelectTrigger className="w-full max-w-48">
-                      <SelectValue />
-                    </SelectTrigger>
+                  {member.userId !== user?.id && (
+                    <Select
+                      items={roles}
+                      onValueChange={(role) =>
+                        changeRole({
+                          id: member.userId,
+                          role,
+                        })
+                      }
+                      defaultValue={member.role || "MEMBER"}
+                    >
+                      <SelectTrigger className="w-full max-w-48">
+                        <SelectValue />
+                      </SelectTrigger>
 
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Rola</SelectLabel>
-                        {roles.map((item: any) => (
-                          <SelectItem
-                            key={item.value}
-                            value={item.value}
-                            disabled={item.disabled}
-                          >
-                            {item.label}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Rola</SelectLabel>
+                          {roles.map((item: any) => (
+                            <SelectItem
+                              key={item.value}
+                              value={item.value}
+                              disabled={
+                                item.disabled || member.userId == user?.id
+                              }
+                            >
+                              {item.label}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  )}
 
                   <Button
                     size="sm"

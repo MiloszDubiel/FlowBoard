@@ -12,7 +12,15 @@ export const getProjects = async () => {
 
   return await prisma.project.findMany({
     where: {
-      ownerId: (user as any).userID,
+      boards: {
+        some: {
+          members: {
+            some: {
+              userId: Number(user.userID),
+            },
+          },
+        },
+      },
     },
     include: {
       boards: {
@@ -22,6 +30,7 @@ export const getProjects = async () => {
               cards: true,
             },
           },
+          members: true,
         },
       },
     },

@@ -2,50 +2,67 @@ import { prisma } from "@/lib/prisma";
 import { withAuth } from "@/lib/withAuth";
 import { NextResponse } from "next/server";
 
-
 export const DELETE = withAuth(async (user, request, context) => {
   const { boardId, uid } = await context.params;
 
   const board = await prisma.board.findFirst({
     where: {
       id: Number(boardId),
-      ownerId: user.userID,
+      members: {
+        some: {
+          userId: Number(user.userID),
+        },
+      },
+    },
+    include: {
+      members: true,
     },
   });
 
   if (!board) {
     return NextResponse.json(
-      { message: "Nie znaleziono tablicy" },
+      { message: "Nie znaleziono tablicy z danym uzytkownkiem" },
       { status: 404 },
     );
   }
-
-  const include = await prisma.boardMember.findFirst({
+  const isOwner = await prisma.board.findFirst({
     where: {
-      userId: Number(uid),
-      boardId: Number(boardId),
+      id: Number(boardId),
+      ownerId: Number(uid),
     },
   });
 
-  if (!include) {
+  if (isOwner) {
     return NextResponse.json(
       {
-        message: "Uzytkownik nie należy do tablicy.",
+        message: "Nie możesz usunąc własciciela tablicy.",
       },
-      { status: 409 },
+      { status: 400 },
     );
   }
 
-  await prisma.boardMember.delete({
-    where: {
-      boardId_userId: {
-        boardId: Number(boardId),
-        userId: Number(uid),
-      },
-    },
-  });
+  const findEditorRole = board.members.find(
+    (el) => el.userId === Number(user.userID),
+  );
 
-  return NextResponse.json({
-    message: "Usunięto użytkownika.",
-  });
+  if (["OWNER", "ADMIN"].includes(findEditorRole?.role || "")) {
+    await prisma.boardMember.delete({
+      where: {
+        boardId_userId: {
+          boardId: Number(boardId),
+          userId: Number(uid),
+        },
+      },
+    });
+    return NextResponse.json({
+      message: "Usunięto użytkownika.",
+    });
+  }
+
+  return NextResponse.json(
+    {
+      message: "Nie masz uprawnien do usunięcia użytkownika.",
+    },
+    { status: 403 },
+  );
 });

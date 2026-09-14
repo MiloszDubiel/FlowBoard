@@ -18,6 +18,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DragDropProvider } from "@dnd-kit/react";
 import { move } from "@dnd-kit/helpers";
 import { TaskCard } from "./TaskCard";
+import { useUser } from "@/hooks/useUser";
 
 export default function Board({ board, members }: any) {
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -30,10 +31,15 @@ export default function Board({ board, members }: any) {
   } = useList(editedList?.id);
 
   const route = useRouter();
+  const { user } = useUser();
 
   const lists = [...board.lists].sort(
     (a: any, b: any) => a.position - b.position,
   );
+
+  const role = user?.memberships.find(
+    (el: any) => Number(el.boardId) === Number(board.id),
+  )?.role;
 
   const [items, setItems] = useState<any>(() =>
     Object.fromEntries(lists.map((list: any) => [String(list.id), list.cards])),
@@ -49,6 +55,7 @@ export default function Board({ board, members }: any) {
     mutationFn: async (columnOrder: string[]) => {
       const { data } = await axios.patch("/api/list/reorder", {
         columnOrder,
+        boardId: board.id,
       });
 
       return data;
@@ -156,6 +163,7 @@ export default function Board({ board, members }: any) {
                     column={currentList}
                     index={columnIndex}
                     members={members}
+                    role={role}
                   >
                     {items[column].map((card: any, index: number) => (
                       <TaskCard
@@ -164,6 +172,7 @@ export default function Board({ board, members }: any) {
                         index={index}
                         column={column}
                         card={card}
+                        role={role}
                       />
                     ))}
                   </Column>

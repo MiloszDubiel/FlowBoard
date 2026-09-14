@@ -15,7 +15,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 
-export const Column = ({ children, id, column, index, members }: any) => {
+export const Column = ({ children, id, column, index, role }: any) => {
   const { ref, handleRef, isDropTarget } = useSortable({
     id,
     index,
@@ -28,7 +28,7 @@ export const Column = ({ children, id, column, index, members }: any) => {
   return (
     <>
       <Card
-        ref={ref}
+        ref={["OWNER", "ADMIN"].includes(role) ? ref : null}
         className="flex w-80 shrink-0  bg-muted  max-h-full flex-col"
       >
         <CardHeader className="group flex flex-row items-center justify-between space-y-0 ">
@@ -66,29 +66,35 @@ export const Column = ({ children, id, column, index, members }: any) => {
           </h3>
 
           <div className="flex min-w-0 items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7 shrink-0 cursor-grab text-muted-foreground opacity-0 transition-opacity hover:bg-background hover:text-foreground active:cursor-grabbing group-hover:opacity-100"
-              title="Przenieś listę"
-              ref={handleRef}
-            >
-              <GripVertical className="h-4 w-4" />
-            </Button>
+            {["OWNER", "ADMIN"].includes(role) ? (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7 shrink-0 cursor-grab text-muted-foreground opacity-0 transition-opacity hover:bg-background hover:text-foreground active:cursor-grabbing group-hover:opacity-100"
+                title="Przenieś listę"
+                ref={handleRef}
+              >
+                <GripVertical className="h-4 w-4" />
+              </Button>
+            ) : (
+              <div className="h-7 w-7"></div>
+            )}
           </div>
         </CardHeader>
 
         <CardContent ref={ref} className="min-h-0 flex-1 overflow-y-auto">
           <div className="min-h-32 space-y-2 rounded-md">{children}</div>
 
-          <Button
-            variant="ghost"
-            className="mt-2 w-full cursor-pointer justify-start text-muted-foreground"
-            onClick={() => route.replace(path + `/card/add/${id}`)}
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            Dodaj kartę
-          </Button>
+          {["OWNER", "ADMIN"].includes(role) && (
+            <Button
+              variant="ghost"
+              className="mt-2 w-full cursor-pointer justify-start text-muted-foreground"
+              onClick={() => route.replace(path + `/card/add/${id}`)}
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Dodaj kartę
+            </Button>
+          )}
         </CardContent>
       </Card>
     </>

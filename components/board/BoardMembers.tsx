@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 import MembersList from "./MemberList";
 import MembersSkeleton from "../skeletons/MemberSkeleton";
 
+
 type BoardMembersModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -48,6 +49,8 @@ export default function BoardMembersModal({
   const [userIdToAdd, setIdUserToAdd] = useState<number>();
   const [selectedMember, setSelectedMember] = useState<any>(null);
   const [removeModalOpen, setRemoveModalOpen] = useState(false);
+
+
   const debouncedSearch = useMemo(
     () =>
       debounce(async (value: string) => {

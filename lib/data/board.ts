@@ -1,5 +1,6 @@
 import { prisma } from "../prisma";
 import { getCurrentUser } from "../auth/get-current-user";
+import { number } from "zod";
 
 export const getBoard = async (projectId: number) => {
   const user = await getCurrentUser();
@@ -8,9 +9,13 @@ export const getBoard = async (projectId: number) => {
 
   return await prisma.board.findFirst({
     where: {
-      ownerId: Number(user.userID),
       project: {
         id: projectId,
+      },
+      members: {
+        some: {
+          userId: Number(user.userID),
+        },
       },
     },
     include: {
@@ -31,6 +36,7 @@ export const getBoard = async (projectId: number) => {
           },
         },
       },
+      members: true,
     },
   });
 };
@@ -40,10 +46,19 @@ export const getBoardMembers = async (boardId: number) => {
 
   if (!user) return [];
 
+
   const board = await prisma.board.findFirst({
     where: {
       id: boardId,
-      ownerId: Number(user.userID),
+      members: {
+        some: {
+          userId: Number(user.userID),
+        },
+      },
+    },
+
+    include: {
+      members: true,
     },
   });
 
