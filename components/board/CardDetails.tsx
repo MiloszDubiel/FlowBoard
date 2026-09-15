@@ -29,6 +29,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { commentSchema, type CommentType } from "@/schema/addComment.schema";
 import { useEffect, useMemo, useState } from "react";
 import { ChecklistType } from "@/schema/addChecklist.schema";
+import { type MembershipRole, ROLES } from "@/lib/roles";
 
 const safeParseTasks = (tasks: any): any[] => {
   if (!tasks) return [];
@@ -44,7 +45,7 @@ const safeParseTasks = (tasks: any): any[] => {
   }
 };
 
-export default function CardDetails({ card, boardId }: any) {
+export default function CardDetails({ card, boardId, role }: any) {
   const router = useRouter();
 
   const { mutate } = useMutation({
@@ -69,8 +70,12 @@ export default function CardDetails({ card, boardId }: any) {
     },
   });
 
-  const [parsedTasks, setParsedTasks] = useState<any[]>([]);
+  const findRole = (userId: number) => {
+    return card?.list?.board.members.find((el: any) => el.userId === userId)
+      ?.role;
+  };
 
+  const [parsedTasks, setParsedTasks] = useState<any[]>([]);
 
   const attachments = card.attachments ?? [];
 
@@ -92,8 +97,6 @@ export default function CardDetails({ card, boardId }: any) {
     const tasks = safeParseTasks(card.tasks);
     setParsedTasks(tasks);
   }, [card.tasks]);
-
- 
 
   const {
     register,
@@ -154,7 +157,6 @@ export default function CardDetails({ card, boardId }: any) {
               </div>
             </section>
 
-            {/* CHECKLISTA */}
             <section className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -182,6 +184,7 @@ export default function CardDetails({ card, boardId }: any) {
                         <Checkbox
                           id={`task-${index}`}
                           checked={task.isCompleted}
+                          disabled={role === "MEMBER"}
                           onCheckedChange={(checked) =>
                             setParsedTasks((tasks) =>
                               tasks.map((currentTask) =>
@@ -215,20 +218,22 @@ export default function CardDetails({ card, boardId }: any) {
                   )}
                 </div>
 
-                <Separator className="my-3" />
-
-                <div className="flex justify-end">
-                  <Button
-                    size="sm"
-                    onClick={() => changeChecklist({ tasks: parsedTasks })}
-                  >
-                    Zapisz
-                  </Button>
-                </div>
+                {role !== "MEMBER" && (
+                  <>
+                    <Separator className="my-3" />
+                    <div className="flex justify-end">
+                      <Button
+                        size="sm"
+                        onClick={() => changeChecklist({ tasks: parsedTasks })}
+                      >
+                        Zapisz
+                      </Button>
+                    </div>
+                  </>
+                )}
               </div>
             </section>
 
-            {/* ZAŁĄCZNIKI */}
             <section className="space-y-5">
               <div className="flex items-center gap-2">
                 <Paperclip className="h-5 w-5 text-muted-foreground" />
@@ -245,7 +250,6 @@ export default function CardDetails({ card, boardId }: any) {
               </div>
 
               <div className="space-y-6">
-                {/* ZDJĘCIA */}
                 {imagesFiles.length > 0 && (
                   <div className="rounded-xl border bg-card p-5 shadow-sm">
                     <div className="mb-4 flex items-center gap-2">
@@ -292,7 +296,6 @@ export default function CardDetails({ card, boardId }: any) {
                   </div>
                 )}
 
-                {/* PLIKI */}
                 {textFiles.length > 0 && (
                   <div className="rounded-xl border bg-card p-5 shadow-sm">
                     <div className="mb-4 flex items-center gap-2">
@@ -345,7 +348,6 @@ export default function CardDetails({ card, boardId }: any) {
                   </div>
                 )}
 
-                {/* BRAK ZAŁĄCZNIKÓW */}
                 {attachments.length === 0 && (
                   <div className="rounded-xl border border-dashed bg-card py-12 text-center">
                     <Paperclip className="mx-auto mb-3 h-7 w-7 text-muted-foreground" />
@@ -360,7 +362,6 @@ export default function CardDetails({ card, boardId }: any) {
               </div>
             </section>
 
-            {/* KOMENTARZE */}
             <section className="space-y-5">
               <div className="flex items-center gap-2">
                 <MessageSquare className="h-5 w-5 text-muted-foreground" />
@@ -477,10 +478,8 @@ export default function CardDetails({ card, boardId }: any) {
             </section>
           </div>
 
-          {/* SIDEBAR */}
           <aside className="h-fit lg:sticky lg:top-6">
             <div className="rounded-xl border bg-card shadow-sm">
-              {/* CZŁONKOWIE */}
               <section className="p-5">
                 <div className="mb-4 flex items-center gap-2">
                   <Users className="h-4 w-4 text-muted-foreground" />
@@ -509,7 +508,13 @@ export default function CardDetails({ card, boardId }: any) {
                           </p>
 
                           <p className="text-xs text-muted-foreground">
-                            Członek
+                            {
+                              ROLES[
+                                findRole(
+                                  Number(member.userId),
+                                ) as MembershipRole
+                              ]
+                            }
                           </p>
                         </div>
                       </div>
@@ -524,7 +529,6 @@ export default function CardDetails({ card, boardId }: any) {
 
               <Separator />
 
-              {/* ETYKIETY */}
               <section className="p-5">
                 <div className="mb-4 flex items-center gap-2">
                   <Tag className="h-4 w-4 text-muted-foreground" />
@@ -555,7 +559,6 @@ export default function CardDetails({ card, boardId }: any) {
 
               <Separator />
 
-              {/* TERMIN */}
               <section className="p-5">
                 <div className="mb-4 flex items-center gap-2">
                   <CalendarDays className="h-4 w-4 text-muted-foreground" />
@@ -580,7 +583,6 @@ export default function CardDetails({ card, boardId }: any) {
 
               <Separator />
 
-              {/* ZAŁĄCZNIKI SIDEBAR */}
               <section className="p-5">
                 <div className="mb-4 flex items-center gap-2">
                   <Paperclip className="h-4 w-4 text-muted-foreground" />

@@ -19,6 +19,7 @@ import { DragDropProvider } from "@dnd-kit/react";
 import { move } from "@dnd-kit/helpers";
 import { TaskCard } from "./TaskCard";
 import { useUser } from "@/hooks/useUser";
+import { type MembershipRole, ROLES } from "@/lib/roles";
 
 export default function Board({ board, members }: any) {
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -104,7 +105,7 @@ export default function Board({ board, members }: any) {
                 </p>
 
                 <p className="mt-1 text-xs text-muted-foreground">
-                  {member.role === "OWNER" ? "Właściciel" : "Członek"}
+                  {ROLES[member.role as MembershipRole]}
                 </p>
               </div>
             </div>

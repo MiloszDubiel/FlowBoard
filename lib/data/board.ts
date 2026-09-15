@@ -46,7 +46,6 @@ export const getBoardMembers = async (boardId: number) => {
 
   if (!user) return [];
 
-
   const board = await prisma.board.findFirst({
     where: {
       id: boardId,
@@ -118,14 +117,18 @@ export const getBoardCards = async (boardId: number) => {
 export const getCard = async (cardId: number, boardId: number) => {
   const user = await getCurrentUser();
 
-  if (!user || !boardId || !cardId) return [];
+  if (!user || !boardId || !cardId) return null;
 
   return prisma.card.findFirst({
     where: {
       list: {
         board: {
           id: boardId,
-          ownerId: Number(user.userID),
+          members: {
+            some: {
+              userId: Number(user.userID),
+            },
+          },
         },
       },
       id: cardId,
@@ -133,10 +136,22 @@ export const getCard = async (cardId: number, boardId: number) => {
     include: {
       members: {
         include: {
-          user: true,
+          user: {
+            omit: {
+              passwordHash: true,
+            },
+          },
         },
       },
+
       attachments: true,
+      list: {
+        include: {
+          board: {
+            include: { members: true },
+          },
+        },
+      },
       comments: {
         include: {
           user: true,

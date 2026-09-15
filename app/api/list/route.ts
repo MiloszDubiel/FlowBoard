@@ -1,3 +1,5 @@
+import { checkBoardMembership } from "@/lib/auth/checkMembership";
+import { checkBoardRole } from "@/lib/auth/checkRole";
 import { prisma } from "@/lib/prisma";
 import { withAuth } from "@/lib/withAuth";
 import { addListSchema } from "@/schema/addlist.schema";
@@ -12,19 +14,7 @@ export const POST = withAuth(async (user, request, context) => {
     return NextResponse.json({ message: "Niepoprawne dane" }, { status: 400 });
   }
 
-  const board = await prisma.board.findFirst({
-    where: {
-      id: Number(id),
-      members: {
-        some: {
-          userId: Number(user.userID),
-        },
-      },
-    },
-    include: {
-      members: true,
-    },
-  });
+  const board = await checkBoardMembership(Number(user.userID), Number(id));
 
   if (!board) {
     return NextResponse.json(
@@ -56,14 +46,10 @@ export const POST = withAuth(async (user, request, context) => {
     },
   });
 
-  const findEditorRole = board.members.find(
-    (el) => el.userId === Number(user.userID),
-  );
-
-  if (!["OWNER", "ADMIN"].includes(findEditorRole?.role || "")) {
+  if (!checkBoardRole(board, Number(user.userID))) {
     return NextResponse.json(
       {
-        message: "Nie masz uprawnień do dodawania list",
+        message: "Nie masz upranień",
       },
       { status: 403 },
     );

@@ -34,5 +34,11 @@ export default async function CardPage({
 
   const card = await getCard(Number(cardId), boardId);
 
-  return <CardDetails card={card} boardId={boardId} />;
+  return (
+    <CardDetails
+      card={card}
+      boardId={boardId}
+      role={board.members.find((el) => el.userId === Number(user.userID))?.role}
+    />
+  );
 }
