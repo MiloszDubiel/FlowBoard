@@ -14,7 +14,7 @@ import {
   Download,
   ArrowLeft,
 } from "lucide-react";
-import axios from "axios";
+import CountdownTimer from "../CalculateTimeLeft";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -28,8 +28,9 @@ import { useRouter } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
 import { commentSchema, type CommentType } from "@/schema/addComment.schema";
 import { useEffect, useMemo, useState } from "react";
-import { ChecklistType } from "@/schema/addChecklist.schema";
 import { type MembershipRole, ROLES } from "@/lib/roles";
+import ConfirmModal from "../modals/ConfirmModal";
+import { useCard } from "@/mutations/dashboard/useCard";
 
 const safeParseTasks = (tasks: any): any[] => {
   if (!tasks) return [];
@@ -47,28 +48,8 @@ const safeParseTasks = (tasks: any): any[] => {
 
 export default function CardDetails({ card, boardId, role }: any) {
   const router = useRouter();
-
-  const { mutate } = useMutation({
-    mutationFn: async (newComment: CommentType) => {
-      const { data } = await axios.post(
-        `/api/card/${card.id}/comment`,
-        newComment,
-      );
-
-      return data;
-    },
-  });
-
-  const { mutate: changeChecklist } = useMutation({
-    mutationFn: async (newList: ChecklistType) => {
-      const { data } = await axios.patch(
-        `/api/card/${card.id}/checklist`,
-        newList,
-      );
-
-      return data;
-    },
-  });
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const { addComment, changeChecklist, deleteCard } = useCard();
 
   const findRole = (userId: number) => {
     return card?.list?.board.members.find((el: any) => el.userId === userId)
@@ -77,7 +58,7 @@ export default function CardDetails({ card, boardId, role }: any) {
 
   const [parsedTasks, setParsedTasks] = useState<any[]>([]);
 
-  const attachments = card.attachments ?? [];
+  const attachments = card?.attachments ?? [];
 
   const imagesFiles = useMemo(
     () =>
@@ -111,13 +92,16 @@ export default function CardDetails({ card, boardId, role }: any) {
   });
 
   const handleAddComment = (comment: CommentType) => {
-    mutate(comment, {
-      onSuccess: (data) => {
-        toast.success(data.message);
-        router.refresh();
-        reset();
+    addComment.mutate(
+      { newComment: comment, id: Number(card.id) },
+      {
+        onSuccess: (data) => {
+          toast.success(data.message);
+          router.refresh();
+          reset();
+        },
       },
-    });
+    );
   };
 
   return (
@@ -224,7 +208,19 @@ export default function CardDetails({ card, boardId, role }: any) {
                     <div className="flex justify-end">
                       <Button
                         size="sm"
-                        onClick={() => changeChecklist({ tasks: parsedTasks })}
+                        onClick={() =>
+                          changeChecklist.mutate(
+                            {
+                              newList: parsedTasks,
+                              id: Number(card.id),
+                            },
+                            {
+                              onSuccess: (data) => {
+                                toast.success(data.message);
+                              },
+                            },
+                          )
+                        }
                       >
                         Zapisz
                       </Button>
@@ -562,22 +558,51 @@ export default function CardDetails({ card, boardId, role }: any) {
               <section className="p-5">
                 <div className="mb-4 flex items-center gap-2">
                   <CalendarDays className="h-4 w-4 text-muted-foreground" />
-
                   <h3 className="text-sm font-semibold">Termin</h3>
                 </div>
+                {card?.dueDate ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 rounded-lg border bg-background p-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-md bg-muted">
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-xs text-muted-foreground">
+                          Termin zakończenia
+                        </span>
+                        <span className="text-sm font-medium">
+                          {new Date(card.dueDate).toLocaleString("pl-PL", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </span>
+                      </div>
+                    </div>
 
-                {card.dueDate ? (
-                  <div className="flex items-center gap-3 rounded-lg border bg-background p-3">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-
-                    <span className="text-sm">
-                      {new Date(card.dueDate).toLocaleString("pl-PL")}
-                    </span>
+                    <div className="rounded-lg border bg-muted/30 p-3">
+                      <div className="mb-2 flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                        <span className="text-xs font-medium text-muted-foreground">
+                          Pozostało
+                        </span>
+                      </div>
+                      <div className="pl-0">
+                        <CountdownTimer
+                          target={new Date(card.dueDate).getTime()}
+                        />
+                      </div>
+                    </div>
                   </div>
                 ) : (
-                  <span className="text-sm text-muted-foreground">
-                    Brak terminu
-                  </span>
+                  <div className="flex items-center gap-3 rounded-lg border border-dashed p-3">
+                    <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">
+                      Brak terminu
+                    </span>
+                  </div>
                 )}
               </section>
 
@@ -662,7 +687,34 @@ export default function CardDetails({ card, boardId, role }: any) {
                 </div>
               </section>
             </div>
+            <div className="grid grid-cols-2 gap-2">
+              <Button className="w- mt-2">Edytuj</Button>
+              <Button
+                variant="destructive"
+                className="w- mt-2"
+                onClick={() => setDeleteModalOpen(true)}
+              >
+                Usuń kartę
+              </Button>
+            </div>
           </aside>
+          <ConfirmModal
+            open={isDeleteModalOpen}
+            onCancel={() => {
+              setDeleteModalOpen(false);
+            }}
+            onSubmit={() => {
+              deleteCard.mutate(Number(card.id), {
+                onSuccess: (data) => {
+                  toast.success(data.message);
+                  router.replace(`/projects/board/${boardId}`);
+                },
+              });
+            }}
+            onOpenChange={setDeleteModalOpen}
+            message="Czy na pewno chcesz usunąc kartę? "
+            title="Czy usunąć"
+          />
         </div>
       </div>
     </main>

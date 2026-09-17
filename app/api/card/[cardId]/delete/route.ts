@@ -6,11 +6,12 @@ import {
   checkCardMembership,
 } from "@/lib/auth/checkMembership";
 
-export const PATCH = withAuth(async (user, request, context) => {
-  const { tasks } = await request.json();
+export const DELETE = withAuth(async (user, request, context) => {
   const { cardId } = await context.params;
 
-  if (!checkCardMembership(Number(user.userID), Number(cardId))) {
+  const uID: number = user.userID;
+
+  if (!checkCardMembership(Number(uID), Number(cardId))) {
     return NextResponse.json(
       { message: "Nie jesteś członkiem tej karty" },
       { status: 403 },
@@ -26,12 +27,7 @@ export const PATCH = withAuth(async (user, request, context) => {
     },
   });
 
-  if (
-    !(await checkBoardMembership(
-      Number(user.userID),
-      Number(card?.list.boardId),
-    ))
-  ) {
+  if (!(await checkBoardMembership(Number(uID), Number(card?.list.boardId)))) {
     return NextResponse.json(
       {
         message: "Nie masz uprawnien",
@@ -42,16 +38,13 @@ export const PATCH = withAuth(async (user, request, context) => {
     );
   }
 
-  await prisma.card.update({
+  await prisma.card.delete({
     where: {
       id: Number(cardId),
-    },
-    data: {
-      tasks: tasks,
     },
   });
 
   return NextResponse.json({
-    message: "Checklista została zaktualizowana",
+    message: "Usunięto kartę",
   });
 });
