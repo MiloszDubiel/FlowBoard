@@ -408,6 +408,7 @@ export const ModelName = {
   Label: 'Label',
   CardLabel: 'CardLabel',
   Comment: 'Comment',
+  CommentAttachment: 'CommentAttachment',
   Attachment: 'Attachment',
   Activity: 'Activity'
 } as const
@@ -425,7 +426,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "project" | "board" | "boardMember" | "boardInvite" | "list" | "card" | "cardMember" | "label" | "cardLabel" | "comment" | "attachment" | "activity"
+    modelProps: "user" | "project" | "board" | "boardMember" | "boardInvite" | "list" | "card" | "cardMember" | "label" | "cardLabel" | "comment" | "commentAttachment" | "attachment" | "activity"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1155,6 +1156,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CommentAttachment: {
+      payload: Prisma.$CommentAttachmentPayload<ExtArgs>
+      fields: Prisma.CommentAttachmentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CommentAttachmentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommentAttachmentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CommentAttachmentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommentAttachmentPayload>
+        }
+        findFirst: {
+          args: Prisma.CommentAttachmentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommentAttachmentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CommentAttachmentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommentAttachmentPayload>
+        }
+        findMany: {
+          args: Prisma.CommentAttachmentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommentAttachmentPayload>[]
+        }
+        create: {
+          args: Prisma.CommentAttachmentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommentAttachmentPayload>
+        }
+        createMany: {
+          args: Prisma.CommentAttachmentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.CommentAttachmentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommentAttachmentPayload>
+        }
+        update: {
+          args: Prisma.CommentAttachmentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommentAttachmentPayload>
+        }
+        deleteMany: {
+          args: Prisma.CommentAttachmentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CommentAttachmentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.CommentAttachmentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommentAttachmentPayload>
+        }
+        aggregate: {
+          args: Prisma.CommentAttachmentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCommentAttachment>
+        }
+        groupBy: {
+          args: Prisma.CommentAttachmentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommentAttachmentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CommentAttachmentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommentAttachmentCountAggregateOutputType> | number
+        }
+      }
+    }
     Attachment: {
       payload: Prisma.$AttachmentPayload<ExtArgs>
       fields: Prisma.AttachmentFieldRefs
@@ -1458,6 +1525,21 @@ export const CommentScalarFieldEnum = {
 export type CommentScalarFieldEnum = (typeof CommentScalarFieldEnum)[keyof typeof CommentScalarFieldEnum]
 
 
+export const CommentAttachmentScalarFieldEnum = {
+  id: 'id',
+  cardId: 'cardId',
+  userId: 'userId',
+  commentId: 'commentId',
+  fileName: 'fileName',
+  fileUrl: 'fileUrl',
+  fileSize: 'fileSize',
+  fileType: 'fileType',
+  createdAt: 'createdAt'
+} as const
+
+export type CommentAttachmentScalarFieldEnum = (typeof CommentAttachmentScalarFieldEnum)[keyof typeof CommentAttachmentScalarFieldEnum]
+
+
 export const AttachmentScalarFieldEnum = {
   id: 'id',
   cardId: 'cardId',
@@ -1582,6 +1664,14 @@ export const CommentOrderByRelevanceFieldEnum = {
 } as const
 
 export type CommentOrderByRelevanceFieldEnum = (typeof CommentOrderByRelevanceFieldEnum)[keyof typeof CommentOrderByRelevanceFieldEnum]
+
+
+export const CommentAttachmentOrderByRelevanceFieldEnum = {
+  fileName: 'fileName',
+  fileUrl: 'fileUrl'
+} as const
+
+export type CommentAttachmentOrderByRelevanceFieldEnum = (typeof CommentAttachmentOrderByRelevanceFieldEnum)[keyof typeof CommentAttachmentOrderByRelevanceFieldEnum]
 
 
 export const AttachmentOrderByRelevanceFieldEnum = {
@@ -1843,6 +1933,7 @@ export type GlobalOmitConfig = {
   label?: Prisma.LabelOmit
   cardLabel?: Prisma.CardLabelOmit
   comment?: Prisma.CommentOmit
+  commentAttachment?: Prisma.CommentAttachmentOmit
   attachment?: Prisma.AttachmentOmit
   activity?: Prisma.ActivityOmit
 }

@@ -73,6 +73,11 @@ export type CardLabel = Prisma.CardLabelModel
  */
 export type Comment = Prisma.CommentModel
 /**
+ * Model CommentAttachment
+ * 
+ */
+export type CommentAttachment = Prisma.CommentAttachmentModel
+/**
  * Model Attachment
  * 
  */

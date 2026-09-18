@@ -13,6 +13,8 @@ export const POST = withAuth(async (user, request, context) => {
 
   const { title, description, priority, dueDate, userIds } = result.data;
 
+  console.log(userIds);
+
   const list = await prisma.list.findUnique({
     where: {
       id: Number(listId),
@@ -49,8 +51,10 @@ export const POST = withAuth(async (user, request, context) => {
     );
   }
   const cardMembers = [
-    ...userIds,
-    ...findOwnersOrAdmins.map((member) => member.userId),
+    ...new Set([
+      ...userIds,
+      ...findOwnersOrAdmins.map((member) => member.userId),
+    ]),
   ];
 
   const boardMemberIds = new Set(

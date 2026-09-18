@@ -62,6 +62,7 @@ export const ModelName = {
   Label: 'Label',
   CardLabel: 'CardLabel',
   Comment: 'Comment',
+  CommentAttachment: 'CommentAttachment',
   Attachment: 'Attachment',
   Activity: 'Activity'
 } as const
@@ -214,6 +215,21 @@ export const CommentScalarFieldEnum = {
 export type CommentScalarFieldEnum = (typeof CommentScalarFieldEnum)[keyof typeof CommentScalarFieldEnum]
 
 
+export const CommentAttachmentScalarFieldEnum = {
+  id: 'id',
+  cardId: 'cardId',
+  userId: 'userId',
+  commentId: 'commentId',
+  fileName: 'fileName',
+  fileUrl: 'fileUrl',
+  fileSize: 'fileSize',
+  fileType: 'fileType',
+  createdAt: 'createdAt'
+} as const
+
+export type CommentAttachmentScalarFieldEnum = (typeof CommentAttachmentScalarFieldEnum)[keyof typeof CommentAttachmentScalarFieldEnum]
+
+
 export const AttachmentScalarFieldEnum = {
   id: 'id',
   cardId: 'cardId',
@@ -338,6 +354,14 @@ export const CommentOrderByRelevanceFieldEnum = {
 } as const
 
 export type CommentOrderByRelevanceFieldEnum = (typeof CommentOrderByRelevanceFieldEnum)[keyof typeof CommentOrderByRelevanceFieldEnum]
+
+
+export const CommentAttachmentOrderByRelevanceFieldEnum = {
+  fileName: 'fileName',
+  fileUrl: 'fileUrl'
+} as const
+
+export type CommentAttachmentOrderByRelevanceFieldEnum = (typeof CommentAttachmentOrderByRelevanceFieldEnum)[keyof typeof CommentAttachmentOrderByRelevanceFieldEnum]
 
 
 export const AttachmentOrderByRelevanceFieldEnum = {

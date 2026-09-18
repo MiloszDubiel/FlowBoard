@@ -51,6 +51,9 @@ export default function Board({ board, members }: any) {
   );
   const columnOrderRef = useRef(columnOrder);
 
+
+
+
   const { mutate: reorderLists } = useMutation({
     mutationKey: ["lists", "reorder"],
     mutationFn: async (columnOrder: string[]) => {

@@ -10,7 +10,7 @@ export const getProjects = async () => {
     throw new Error("Unauthorized");
   }
 
-  return await prisma.project.findMany({
+  const projects = await prisma.project.findMany({
     where: {
       boards: {
         some: {
@@ -22,6 +22,7 @@ export const getProjects = async () => {
         },
       },
     },
+
     include: {
       boards: {
         include: {
@@ -34,5 +35,34 @@ export const getProjects = async () => {
         },
       },
     },
+  });
+
+  return projects.map((project) => {
+    let totalTasks = 0;
+    let completedTasks = 0;
+
+    project.boards.forEach((board) => {
+      board.lists.forEach((list) => {
+        list.cards.forEach((card) => {
+          const tasks = Array.isArray(card.tasks) ? card.tasks : [];
+
+          totalTasks += tasks.length;
+
+          completedTasks += tasks.filter(
+            (task: any) => task.isCompleted === true,
+          ).length;
+        });
+      });
+    });
+
+    const progress =
+      totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+
+    return {
+      ...project,
+      completedTasks,
+      totalTasks,
+      progress,
+    };
   });
 };

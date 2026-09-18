@@ -6,7 +6,8 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const projects = await getProjects()
+  const projects = await getProjects();
+
 
   return (
     <div className="min-h-screen w-full">

@@ -279,6 +279,7 @@ export type CardWhereInput = {
   comments?: Prisma.CommentListRelationFilter
   attachments?: Prisma.AttachmentListRelationFilter
   activities?: Prisma.ActivityListRelationFilter
+  commentAttachments?: Prisma.CommentAttachmentListRelationFilter
 }
 
 export type CardOrderByWithRelationInput = {
@@ -300,6 +301,7 @@ export type CardOrderByWithRelationInput = {
   comments?: Prisma.CommentOrderByRelationAggregateInput
   attachments?: Prisma.AttachmentOrderByRelationAggregateInput
   activities?: Prisma.ActivityOrderByRelationAggregateInput
+  commentAttachments?: Prisma.CommentAttachmentOrderByRelationAggregateInput
   _relevance?: Prisma.CardOrderByRelevanceInput
 }
 
@@ -325,6 +327,7 @@ export type CardWhereUniqueInput = Prisma.AtLeast<{
   comments?: Prisma.CommentListRelationFilter
   attachments?: Prisma.AttachmentListRelationFilter
   activities?: Prisma.ActivityListRelationFilter
+  commentAttachments?: Prisma.CommentAttachmentListRelationFilter
 }, "id">
 
 export type CardOrderByWithAggregationInput = {
@@ -379,6 +382,7 @@ export type CardCreateInput = {
   comments?: Prisma.CommentCreateNestedManyWithoutCardInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutCardInput
   activities?: Prisma.ActivityCreateNestedManyWithoutCardInput
+  commentAttachments?: Prisma.CommentAttachmentCreateNestedManyWithoutCardInput
 }
 
 export type CardUncheckedCreateInput = {
@@ -398,6 +402,7 @@ export type CardUncheckedCreateInput = {
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutCardInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutCardInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutCardInput
+  commentAttachments?: Prisma.CommentAttachmentUncheckedCreateNestedManyWithoutCardInput
 }
 
 export type CardUpdateInput = {
@@ -416,6 +421,7 @@ export type CardUpdateInput = {
   comments?: Prisma.CommentUpdateManyWithoutCardNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutCardNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutCardNestedInput
+  commentAttachments?: Prisma.CommentAttachmentUpdateManyWithoutCardNestedInput
 }
 
 export type CardUncheckedUpdateInput = {
@@ -435,6 +441,7 @@ export type CardUncheckedUpdateInput = {
   comments?: Prisma.CommentUncheckedUpdateManyWithoutCardNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutCardNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutCardNestedInput
+  commentAttachments?: Prisma.CommentAttachmentUncheckedUpdateManyWithoutCardNestedInput
 }
 
 export type CardCreateManyInput = {
@@ -690,6 +697,20 @@ export type CardUpdateOneRequiredWithoutCommentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CardUpdateToOneWithWhereWithoutCommentsInput, Prisma.CardUpdateWithoutCommentsInput>, Prisma.CardUncheckedUpdateWithoutCommentsInput>
 }
 
+export type CardCreateNestedOneWithoutCommentAttachmentsInput = {
+  create?: Prisma.XOR<Prisma.CardCreateWithoutCommentAttachmentsInput, Prisma.CardUncheckedCreateWithoutCommentAttachmentsInput>
+  connectOrCreate?: Prisma.CardCreateOrConnectWithoutCommentAttachmentsInput
+  connect?: Prisma.CardWhereUniqueInput
+}
+
+export type CardUpdateOneRequiredWithoutCommentAttachmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.CardCreateWithoutCommentAttachmentsInput, Prisma.CardUncheckedCreateWithoutCommentAttachmentsInput>
+  connectOrCreate?: Prisma.CardCreateOrConnectWithoutCommentAttachmentsInput
+  upsert?: Prisma.CardUpsertWithoutCommentAttachmentsInput
+  connect?: Prisma.CardWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CardUpdateToOneWithWhereWithoutCommentAttachmentsInput, Prisma.CardUpdateWithoutCommentAttachmentsInput>, Prisma.CardUncheckedUpdateWithoutCommentAttachmentsInput>
+}
+
 export type CardCreateNestedOneWithoutAttachmentsInput = {
   create?: Prisma.XOR<Prisma.CardCreateWithoutAttachmentsInput, Prisma.CardUncheckedCreateWithoutAttachmentsInput>
   connectOrCreate?: Prisma.CardCreateOrConnectWithoutAttachmentsInput
@@ -735,6 +756,7 @@ export type CardCreateWithoutCreatedByInput = {
   comments?: Prisma.CommentCreateNestedManyWithoutCardInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutCardInput
   activities?: Prisma.ActivityCreateNestedManyWithoutCardInput
+  commentAttachments?: Prisma.CommentAttachmentCreateNestedManyWithoutCardInput
 }
 
 export type CardUncheckedCreateWithoutCreatedByInput = {
@@ -753,6 +775,7 @@ export type CardUncheckedCreateWithoutCreatedByInput = {
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutCardInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutCardInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutCardInput
+  commentAttachments?: Prisma.CommentAttachmentUncheckedCreateNestedManyWithoutCardInput
 }
 
 export type CardCreateOrConnectWithoutCreatedByInput = {
@@ -813,6 +836,7 @@ export type CardCreateWithoutListInput = {
   comments?: Prisma.CommentCreateNestedManyWithoutCardInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutCardInput
   activities?: Prisma.ActivityCreateNestedManyWithoutCardInput
+  commentAttachments?: Prisma.CommentAttachmentCreateNestedManyWithoutCardInput
 }
 
 export type CardUncheckedCreateWithoutListInput = {
@@ -831,6 +855,7 @@ export type CardUncheckedCreateWithoutListInput = {
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutCardInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutCardInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutCardInput
+  commentAttachments?: Prisma.CommentAttachmentUncheckedCreateNestedManyWithoutCardInput
 }
 
 export type CardCreateOrConnectWithoutListInput = {
@@ -874,6 +899,7 @@ export type CardCreateWithoutMembersInput = {
   comments?: Prisma.CommentCreateNestedManyWithoutCardInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutCardInput
   activities?: Prisma.ActivityCreateNestedManyWithoutCardInput
+  commentAttachments?: Prisma.CommentAttachmentCreateNestedManyWithoutCardInput
 }
 
 export type CardUncheckedCreateWithoutMembersInput = {
@@ -892,6 +918,7 @@ export type CardUncheckedCreateWithoutMembersInput = {
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutCardInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutCardInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutCardInput
+  commentAttachments?: Prisma.CommentAttachmentUncheckedCreateNestedManyWithoutCardInput
 }
 
 export type CardCreateOrConnectWithoutMembersInput = {
@@ -925,6 +952,7 @@ export type CardUpdateWithoutMembersInput = {
   comments?: Prisma.CommentUpdateManyWithoutCardNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutCardNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutCardNestedInput
+  commentAttachments?: Prisma.CommentAttachmentUpdateManyWithoutCardNestedInput
 }
 
 export type CardUncheckedUpdateWithoutMembersInput = {
@@ -943,6 +971,7 @@ export type CardUncheckedUpdateWithoutMembersInput = {
   comments?: Prisma.CommentUncheckedUpdateManyWithoutCardNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutCardNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutCardNestedInput
+  commentAttachments?: Prisma.CommentAttachmentUncheckedUpdateManyWithoutCardNestedInput
 }
 
 export type CardCreateWithoutLabelsInput = {
@@ -960,6 +989,7 @@ export type CardCreateWithoutLabelsInput = {
   comments?: Prisma.CommentCreateNestedManyWithoutCardInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutCardInput
   activities?: Prisma.ActivityCreateNestedManyWithoutCardInput
+  commentAttachments?: Prisma.CommentAttachmentCreateNestedManyWithoutCardInput
 }
 
 export type CardUncheckedCreateWithoutLabelsInput = {
@@ -978,6 +1008,7 @@ export type CardUncheckedCreateWithoutLabelsInput = {
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutCardInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutCardInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutCardInput
+  commentAttachments?: Prisma.CommentAttachmentUncheckedCreateNestedManyWithoutCardInput
 }
 
 export type CardCreateOrConnectWithoutLabelsInput = {
@@ -1011,6 +1042,7 @@ export type CardUpdateWithoutLabelsInput = {
   comments?: Prisma.CommentUpdateManyWithoutCardNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutCardNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutCardNestedInput
+  commentAttachments?: Prisma.CommentAttachmentUpdateManyWithoutCardNestedInput
 }
 
 export type CardUncheckedUpdateWithoutLabelsInput = {
@@ -1029,6 +1061,7 @@ export type CardUncheckedUpdateWithoutLabelsInput = {
   comments?: Prisma.CommentUncheckedUpdateManyWithoutCardNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutCardNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutCardNestedInput
+  commentAttachments?: Prisma.CommentAttachmentUncheckedUpdateManyWithoutCardNestedInput
 }
 
 export type CardCreateWithoutCommentsInput = {
@@ -1046,6 +1079,7 @@ export type CardCreateWithoutCommentsInput = {
   labels?: Prisma.CardLabelCreateNestedManyWithoutCardInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutCardInput
   activities?: Prisma.ActivityCreateNestedManyWithoutCardInput
+  commentAttachments?: Prisma.CommentAttachmentCreateNestedManyWithoutCardInput
 }
 
 export type CardUncheckedCreateWithoutCommentsInput = {
@@ -1064,6 +1098,7 @@ export type CardUncheckedCreateWithoutCommentsInput = {
   labels?: Prisma.CardLabelUncheckedCreateNestedManyWithoutCardInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutCardInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutCardInput
+  commentAttachments?: Prisma.CommentAttachmentUncheckedCreateNestedManyWithoutCardInput
 }
 
 export type CardCreateOrConnectWithoutCommentsInput = {
@@ -1097,6 +1132,7 @@ export type CardUpdateWithoutCommentsInput = {
   labels?: Prisma.CardLabelUpdateManyWithoutCardNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutCardNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutCardNestedInput
+  commentAttachments?: Prisma.CommentAttachmentUpdateManyWithoutCardNestedInput
 }
 
 export type CardUncheckedUpdateWithoutCommentsInput = {
@@ -1113,6 +1149,97 @@ export type CardUncheckedUpdateWithoutCommentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.CardMemberUncheckedUpdateManyWithoutCardNestedInput
   labels?: Prisma.CardLabelUncheckedUpdateManyWithoutCardNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutCardNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutCardNestedInput
+  commentAttachments?: Prisma.CommentAttachmentUncheckedUpdateManyWithoutCardNestedInput
+}
+
+export type CardCreateWithoutCommentAttachmentsInput = {
+  title: string
+  description?: string | null
+  position: number
+  dueDate?: Date | string | null
+  priority?: $Enums.CardPriority
+  tasks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  list: Prisma.ListCreateNestedOneWithoutCardsInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCardsCreatedInput
+  members?: Prisma.CardMemberCreateNestedManyWithoutCardInput
+  labels?: Prisma.CardLabelCreateNestedManyWithoutCardInput
+  comments?: Prisma.CommentCreateNestedManyWithoutCardInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutCardInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutCardInput
+}
+
+export type CardUncheckedCreateWithoutCommentAttachmentsInput = {
+  id?: number
+  listId: number
+  title: string
+  description?: string | null
+  position: number
+  dueDate?: Date | string | null
+  priority?: $Enums.CardPriority
+  tasks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdById: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.CardMemberUncheckedCreateNestedManyWithoutCardInput
+  labels?: Prisma.CardLabelUncheckedCreateNestedManyWithoutCardInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutCardInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutCardInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutCardInput
+}
+
+export type CardCreateOrConnectWithoutCommentAttachmentsInput = {
+  where: Prisma.CardWhereUniqueInput
+  create: Prisma.XOR<Prisma.CardCreateWithoutCommentAttachmentsInput, Prisma.CardUncheckedCreateWithoutCommentAttachmentsInput>
+}
+
+export type CardUpsertWithoutCommentAttachmentsInput = {
+  update: Prisma.XOR<Prisma.CardUpdateWithoutCommentAttachmentsInput, Prisma.CardUncheckedUpdateWithoutCommentAttachmentsInput>
+  create: Prisma.XOR<Prisma.CardCreateWithoutCommentAttachmentsInput, Prisma.CardUncheckedCreateWithoutCommentAttachmentsInput>
+  where?: Prisma.CardWhereInput
+}
+
+export type CardUpdateToOneWithWhereWithoutCommentAttachmentsInput = {
+  where?: Prisma.CardWhereInput
+  data: Prisma.XOR<Prisma.CardUpdateWithoutCommentAttachmentsInput, Prisma.CardUncheckedUpdateWithoutCommentAttachmentsInput>
+}
+
+export type CardUpdateWithoutCommentAttachmentsInput = {
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  priority?: Prisma.EnumCardPriorityFieldUpdateOperationsInput | $Enums.CardPriority
+  tasks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  list?: Prisma.ListUpdateOneRequiredWithoutCardsNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCardsCreatedNestedInput
+  members?: Prisma.CardMemberUpdateManyWithoutCardNestedInput
+  labels?: Prisma.CardLabelUpdateManyWithoutCardNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutCardNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutCardNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutCardNestedInput
+}
+
+export type CardUncheckedUpdateWithoutCommentAttachmentsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  listId?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  priority?: Prisma.EnumCardPriorityFieldUpdateOperationsInput | $Enums.CardPriority
+  tasks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdById?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.CardMemberUncheckedUpdateManyWithoutCardNestedInput
+  labels?: Prisma.CardLabelUncheckedUpdateManyWithoutCardNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutCardNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutCardNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutCardNestedInput
 }
@@ -1132,6 +1259,7 @@ export type CardCreateWithoutAttachmentsInput = {
   labels?: Prisma.CardLabelCreateNestedManyWithoutCardInput
   comments?: Prisma.CommentCreateNestedManyWithoutCardInput
   activities?: Prisma.ActivityCreateNestedManyWithoutCardInput
+  commentAttachments?: Prisma.CommentAttachmentCreateNestedManyWithoutCardInput
 }
 
 export type CardUncheckedCreateWithoutAttachmentsInput = {
@@ -1150,6 +1278,7 @@ export type CardUncheckedCreateWithoutAttachmentsInput = {
   labels?: Prisma.CardLabelUncheckedCreateNestedManyWithoutCardInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutCardInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutCardInput
+  commentAttachments?: Prisma.CommentAttachmentUncheckedCreateNestedManyWithoutCardInput
 }
 
 export type CardCreateOrConnectWithoutAttachmentsInput = {
@@ -1183,6 +1312,7 @@ export type CardUpdateWithoutAttachmentsInput = {
   labels?: Prisma.CardLabelUpdateManyWithoutCardNestedInput
   comments?: Prisma.CommentUpdateManyWithoutCardNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutCardNestedInput
+  commentAttachments?: Prisma.CommentAttachmentUpdateManyWithoutCardNestedInput
 }
 
 export type CardUncheckedUpdateWithoutAttachmentsInput = {
@@ -1201,6 +1331,7 @@ export type CardUncheckedUpdateWithoutAttachmentsInput = {
   labels?: Prisma.CardLabelUncheckedUpdateManyWithoutCardNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutCardNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutCardNestedInput
+  commentAttachments?: Prisma.CommentAttachmentUncheckedUpdateManyWithoutCardNestedInput
 }
 
 export type CardCreateWithoutActivitiesInput = {
@@ -1218,6 +1349,7 @@ export type CardCreateWithoutActivitiesInput = {
   labels?: Prisma.CardLabelCreateNestedManyWithoutCardInput
   comments?: Prisma.CommentCreateNestedManyWithoutCardInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutCardInput
+  commentAttachments?: Prisma.CommentAttachmentCreateNestedManyWithoutCardInput
 }
 
 export type CardUncheckedCreateWithoutActivitiesInput = {
@@ -1236,6 +1368,7 @@ export type CardUncheckedCreateWithoutActivitiesInput = {
   labels?: Prisma.CardLabelUncheckedCreateNestedManyWithoutCardInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutCardInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutCardInput
+  commentAttachments?: Prisma.CommentAttachmentUncheckedCreateNestedManyWithoutCardInput
 }
 
 export type CardCreateOrConnectWithoutActivitiesInput = {
@@ -1269,6 +1402,7 @@ export type CardUpdateWithoutActivitiesInput = {
   labels?: Prisma.CardLabelUpdateManyWithoutCardNestedInput
   comments?: Prisma.CommentUpdateManyWithoutCardNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutCardNestedInput
+  commentAttachments?: Prisma.CommentAttachmentUpdateManyWithoutCardNestedInput
 }
 
 export type CardUncheckedUpdateWithoutActivitiesInput = {
@@ -1287,6 +1421,7 @@ export type CardUncheckedUpdateWithoutActivitiesInput = {
   labels?: Prisma.CardLabelUncheckedUpdateManyWithoutCardNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutCardNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutCardNestedInput
+  commentAttachments?: Prisma.CommentAttachmentUncheckedUpdateManyWithoutCardNestedInput
 }
 
 export type CardCreateManyCreatedByInput = {
@@ -1317,6 +1452,7 @@ export type CardUpdateWithoutCreatedByInput = {
   comments?: Prisma.CommentUpdateManyWithoutCardNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutCardNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutCardNestedInput
+  commentAttachments?: Prisma.CommentAttachmentUpdateManyWithoutCardNestedInput
 }
 
 export type CardUncheckedUpdateWithoutCreatedByInput = {
@@ -1335,6 +1471,7 @@ export type CardUncheckedUpdateWithoutCreatedByInput = {
   comments?: Prisma.CommentUncheckedUpdateManyWithoutCardNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutCardNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutCardNestedInput
+  commentAttachments?: Prisma.CommentAttachmentUncheckedUpdateManyWithoutCardNestedInput
 }
 
 export type CardUncheckedUpdateManyWithoutCreatedByInput = {
@@ -1378,6 +1515,7 @@ export type CardUpdateWithoutListInput = {
   comments?: Prisma.CommentUpdateManyWithoutCardNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutCardNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutCardNestedInput
+  commentAttachments?: Prisma.CommentAttachmentUpdateManyWithoutCardNestedInput
 }
 
 export type CardUncheckedUpdateWithoutListInput = {
@@ -1396,6 +1534,7 @@ export type CardUncheckedUpdateWithoutListInput = {
   comments?: Prisma.CommentUncheckedUpdateManyWithoutCardNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutCardNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutCardNestedInput
+  commentAttachments?: Prisma.CommentAttachmentUncheckedUpdateManyWithoutCardNestedInput
 }
 
 export type CardUncheckedUpdateManyWithoutListInput = {
@@ -1422,6 +1561,7 @@ export type CardCountOutputType = {
   comments: number
   attachments: number
   activities: number
+  commentAttachments: number
 }
 
 export type CardCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1430,6 +1570,7 @@ export type CardCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   comments?: boolean | CardCountOutputTypeCountCommentsArgs
   attachments?: boolean | CardCountOutputTypeCountAttachmentsArgs
   activities?: boolean | CardCountOutputTypeCountActivitiesArgs
+  commentAttachments?: boolean | CardCountOutputTypeCountCommentAttachmentsArgs
 }
 
 /**
@@ -1477,6 +1618,13 @@ export type CardCountOutputTypeCountActivitiesArgs<ExtArgs extends runtime.Types
   where?: Prisma.ActivityWhereInput
 }
 
+/**
+ * CardCountOutputType without action
+ */
+export type CardCountOutputTypeCountCommentAttachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CommentAttachmentWhereInput
+}
+
 
 export type CardSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1497,6 +1645,7 @@ export type CardSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   comments?: boolean | Prisma.Card$commentsArgs<ExtArgs>
   attachments?: boolean | Prisma.Card$attachmentsArgs<ExtArgs>
   activities?: boolean | Prisma.Card$activitiesArgs<ExtArgs>
+  commentAttachments?: boolean | Prisma.Card$commentAttachmentsArgs<ExtArgs>
   _count?: boolean | Prisma.CardCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["card"]>
 
@@ -1525,6 +1674,7 @@ export type CardInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   comments?: boolean | Prisma.Card$commentsArgs<ExtArgs>
   attachments?: boolean | Prisma.Card$attachmentsArgs<ExtArgs>
   activities?: boolean | Prisma.Card$activitiesArgs<ExtArgs>
+  commentAttachments?: boolean | Prisma.Card$commentAttachmentsArgs<ExtArgs>
   _count?: boolean | Prisma.CardCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -1538,6 +1688,7 @@ export type $CardPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     comments: Prisma.$CommentPayload<ExtArgs>[]
     attachments: Prisma.$AttachmentPayload<ExtArgs>[]
     activities: Prisma.$ActivityPayload<ExtArgs>[]
+    commentAttachments: Prisma.$CommentAttachmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1898,6 +2049,7 @@ export interface Prisma__CardClient<T, Null = never, ExtArgs extends runtime.Typ
   comments<T extends Prisma.Card$commentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Card$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   attachments<T extends Prisma.Card$attachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Card$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   activities<T extends Prisma.Card$activitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Card$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  commentAttachments<T extends Prisma.Card$commentAttachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Card$commentAttachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2403,6 +2555,30 @@ export type Card$activitiesArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.ActivityScalarFieldEnum | Prisma.ActivityScalarFieldEnum[]
+}
+
+/**
+ * Card.commentAttachments
+ */
+export type Card$commentAttachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CommentAttachment
+   */
+  select?: Prisma.CommentAttachmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CommentAttachment
+   */
+  omit?: Prisma.CommentAttachmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CommentAttachmentInclude<ExtArgs> | null
+  where?: Prisma.CommentAttachmentWhereInput
+  orderBy?: Prisma.CommentAttachmentOrderByWithRelationInput | Prisma.CommentAttachmentOrderByWithRelationInput[]
+  cursor?: Prisma.CommentAttachmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CommentAttachmentScalarFieldEnum | Prisma.CommentAttachmentScalarFieldEnum[]
 }
 
 /**

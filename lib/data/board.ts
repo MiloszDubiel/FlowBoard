@@ -155,6 +155,7 @@ export const getCard = async (cardId: number, boardId: number) => {
       comments: {
         include: {
           user: true,
+          commentAttachments: true,
         },
       },
     },

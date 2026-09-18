@@ -250,6 +250,7 @@ export type CommentWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Comment"> | Date | string
   card?: Prisma.XOR<Prisma.CardScalarRelationFilter, Prisma.CardWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  commentAttachments?: Prisma.CommentAttachmentListRelationFilter
 }
 
 export type CommentOrderByWithRelationInput = {
@@ -263,6 +264,7 @@ export type CommentOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   card?: Prisma.CardOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
+  commentAttachments?: Prisma.CommentAttachmentOrderByRelationAggregateInput
   _relevance?: Prisma.CommentOrderByRelevanceInput
 }
 
@@ -280,6 +282,7 @@ export type CommentWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Comment"> | Date | string
   card?: Prisma.XOR<Prisma.CardScalarRelationFilter, Prisma.CardWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  commentAttachments?: Prisma.CommentAttachmentListRelationFilter
 }, "id">
 
 export type CommentOrderByWithAggregationInput = {
@@ -320,6 +323,7 @@ export type CommentCreateInput = {
   updatedAt?: Date | string
   card: Prisma.CardCreateNestedOneWithoutCommentsInput
   user: Prisma.UserCreateNestedOneWithoutCommentsInput
+  commentAttachments?: Prisma.CommentAttachmentCreateNestedManyWithoutCommentInput
 }
 
 export type CommentUncheckedCreateInput = {
@@ -331,6 +335,7 @@ export type CommentUncheckedCreateInput = {
   fileUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  commentAttachments?: Prisma.CommentAttachmentUncheckedCreateNestedManyWithoutCommentInput
 }
 
 export type CommentUpdateInput = {
@@ -341,6 +346,7 @@ export type CommentUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   card?: Prisma.CardUpdateOneRequiredWithoutCommentsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCommentsNestedInput
+  commentAttachments?: Prisma.CommentAttachmentUpdateManyWithoutCommentNestedInput
 }
 
 export type CommentUncheckedUpdateInput = {
@@ -352,6 +358,7 @@ export type CommentUncheckedUpdateInput = {
   fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  commentAttachments?: Prisma.CommentAttachmentUncheckedUpdateManyWithoutCommentNestedInput
 }
 
 export type CommentCreateManyInput = {
@@ -445,6 +452,11 @@ export type CommentSumOrderByAggregateInput = {
   userId?: Prisma.SortOrder
 }
 
+export type CommentScalarRelationFilter = {
+  is?: Prisma.CommentWhereInput
+  isNot?: Prisma.CommentWhereInput
+}
+
 export type CommentCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.CommentCreateWithoutUserInput, Prisma.CommentUncheckedCreateWithoutUserInput> | Prisma.CommentCreateWithoutUserInput[] | Prisma.CommentUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.CommentCreateOrConnectWithoutUserInput | Prisma.CommentCreateOrConnectWithoutUserInput[]
@@ -529,6 +541,20 @@ export type CommentUncheckedUpdateManyWithoutCardNestedInput = {
   deleteMany?: Prisma.CommentScalarWhereInput | Prisma.CommentScalarWhereInput[]
 }
 
+export type CommentCreateNestedOneWithoutCommentAttachmentsInput = {
+  create?: Prisma.XOR<Prisma.CommentCreateWithoutCommentAttachmentsInput, Prisma.CommentUncheckedCreateWithoutCommentAttachmentsInput>
+  connectOrCreate?: Prisma.CommentCreateOrConnectWithoutCommentAttachmentsInput
+  connect?: Prisma.CommentWhereUniqueInput
+}
+
+export type CommentUpdateOneRequiredWithoutCommentAttachmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.CommentCreateWithoutCommentAttachmentsInput, Prisma.CommentUncheckedCreateWithoutCommentAttachmentsInput>
+  connectOrCreate?: Prisma.CommentCreateOrConnectWithoutCommentAttachmentsInput
+  upsert?: Prisma.CommentUpsertWithoutCommentAttachmentsInput
+  connect?: Prisma.CommentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CommentUpdateToOneWithWhereWithoutCommentAttachmentsInput, Prisma.CommentUpdateWithoutCommentAttachmentsInput>, Prisma.CommentUncheckedUpdateWithoutCommentAttachmentsInput>
+}
+
 export type CommentCreateWithoutUserInput = {
   content: string
   fileName?: string | null
@@ -536,6 +562,7 @@ export type CommentCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   card: Prisma.CardCreateNestedOneWithoutCommentsInput
+  commentAttachments?: Prisma.CommentAttachmentCreateNestedManyWithoutCommentInput
 }
 
 export type CommentUncheckedCreateWithoutUserInput = {
@@ -546,6 +573,7 @@ export type CommentUncheckedCreateWithoutUserInput = {
   fileUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  commentAttachments?: Prisma.CommentAttachmentUncheckedCreateNestedManyWithoutCommentInput
 }
 
 export type CommentCreateOrConnectWithoutUserInput = {
@@ -595,6 +623,7 @@ export type CommentCreateWithoutCardInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutCommentsInput
+  commentAttachments?: Prisma.CommentAttachmentCreateNestedManyWithoutCommentInput
 }
 
 export type CommentUncheckedCreateWithoutCardInput = {
@@ -605,6 +634,7 @@ export type CommentUncheckedCreateWithoutCardInput = {
   fileUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  commentAttachments?: Prisma.CommentAttachmentUncheckedCreateNestedManyWithoutCommentInput
 }
 
 export type CommentCreateOrConnectWithoutCardInput = {
@@ -633,6 +663,64 @@ export type CommentUpdateManyWithWhereWithoutCardInput = {
   data: Prisma.XOR<Prisma.CommentUpdateManyMutationInput, Prisma.CommentUncheckedUpdateManyWithoutCardInput>
 }
 
+export type CommentCreateWithoutCommentAttachmentsInput = {
+  content: string
+  fileName?: string | null
+  fileUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  card: Prisma.CardCreateNestedOneWithoutCommentsInput
+  user: Prisma.UserCreateNestedOneWithoutCommentsInput
+}
+
+export type CommentUncheckedCreateWithoutCommentAttachmentsInput = {
+  id?: number
+  cardId: number
+  userId: number
+  content: string
+  fileName?: string | null
+  fileUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type CommentCreateOrConnectWithoutCommentAttachmentsInput = {
+  where: Prisma.CommentWhereUniqueInput
+  create: Prisma.XOR<Prisma.CommentCreateWithoutCommentAttachmentsInput, Prisma.CommentUncheckedCreateWithoutCommentAttachmentsInput>
+}
+
+export type CommentUpsertWithoutCommentAttachmentsInput = {
+  update: Prisma.XOR<Prisma.CommentUpdateWithoutCommentAttachmentsInput, Prisma.CommentUncheckedUpdateWithoutCommentAttachmentsInput>
+  create: Prisma.XOR<Prisma.CommentCreateWithoutCommentAttachmentsInput, Prisma.CommentUncheckedCreateWithoutCommentAttachmentsInput>
+  where?: Prisma.CommentWhereInput
+}
+
+export type CommentUpdateToOneWithWhereWithoutCommentAttachmentsInput = {
+  where?: Prisma.CommentWhereInput
+  data: Prisma.XOR<Prisma.CommentUpdateWithoutCommentAttachmentsInput, Prisma.CommentUncheckedUpdateWithoutCommentAttachmentsInput>
+}
+
+export type CommentUpdateWithoutCommentAttachmentsInput = {
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  card?: Prisma.CardUpdateOneRequiredWithoutCommentsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutCommentsNestedInput
+}
+
+export type CommentUncheckedUpdateWithoutCommentAttachmentsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  cardId?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type CommentCreateManyUserInput = {
   id?: number
   cardId: number
@@ -650,6 +738,7 @@ export type CommentUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   card?: Prisma.CardUpdateOneRequiredWithoutCommentsNestedInput
+  commentAttachments?: Prisma.CommentAttachmentUpdateManyWithoutCommentNestedInput
 }
 
 export type CommentUncheckedUpdateWithoutUserInput = {
@@ -660,6 +749,7 @@ export type CommentUncheckedUpdateWithoutUserInput = {
   fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  commentAttachments?: Prisma.CommentAttachmentUncheckedUpdateManyWithoutCommentNestedInput
 }
 
 export type CommentUncheckedUpdateManyWithoutUserInput = {
@@ -689,6 +779,7 @@ export type CommentUpdateWithoutCardInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutCommentsNestedInput
+  commentAttachments?: Prisma.CommentAttachmentUpdateManyWithoutCommentNestedInput
 }
 
 export type CommentUncheckedUpdateWithoutCardInput = {
@@ -699,6 +790,7 @@ export type CommentUncheckedUpdateWithoutCardInput = {
   fileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  commentAttachments?: Prisma.CommentAttachmentUncheckedUpdateManyWithoutCommentNestedInput
 }
 
 export type CommentUncheckedUpdateManyWithoutCardInput = {
@@ -712,6 +804,35 @@ export type CommentUncheckedUpdateManyWithoutCardInput = {
 }
 
 
+/**
+ * Count Type CommentCountOutputType
+ */
+
+export type CommentCountOutputType = {
+  commentAttachments: number
+}
+
+export type CommentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  commentAttachments?: boolean | CommentCountOutputTypeCountCommentAttachmentsArgs
+}
+
+/**
+ * CommentCountOutputType without action
+ */
+export type CommentCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CommentCountOutputType
+   */
+  select?: Prisma.CommentCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * CommentCountOutputType without action
+ */
+export type CommentCountOutputTypeCountCommentAttachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CommentAttachmentWhereInput
+}
+
 
 export type CommentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -724,6 +845,8 @@ export type CommentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   updatedAt?: boolean
   card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  commentAttachments?: boolean | Prisma.Comment$commentAttachmentsArgs<ExtArgs>
+  _count?: boolean | Prisma.CommentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["comment"]>
 
 
@@ -743,6 +866,8 @@ export type CommentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type CommentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  commentAttachments?: boolean | Prisma.Comment$commentAttachmentsArgs<ExtArgs>
+  _count?: boolean | Prisma.CommentCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $CommentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -750,6 +875,7 @@ export type $CommentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     card: Prisma.$CardPayload<ExtArgs>
     user: Prisma.$UserPayload<ExtArgs>
+    commentAttachments: Prisma.$CommentAttachmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1102,6 +1228,7 @@ export interface Prisma__CommentClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   card<T extends Prisma.CardDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CardDefaultArgs<ExtArgs>>): Prisma.Prisma__CardClient<runtime.Types.Result.GetResult<Prisma.$CardPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  commentAttachments<T extends Prisma.Comment$commentAttachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Comment$commentAttachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1484,6 +1611,30 @@ export type CommentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Comments to delete.
    */
   limit?: number
+}
+
+/**
+ * Comment.commentAttachments
+ */
+export type Comment$commentAttachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CommentAttachment
+   */
+  select?: Prisma.CommentAttachmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CommentAttachment
+   */
+  omit?: Prisma.CommentAttachmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CommentAttachmentInclude<ExtArgs> | null
+  where?: Prisma.CommentAttachmentWhereInput
+  orderBy?: Prisma.CommentAttachmentOrderByWithRelationInput | Prisma.CommentAttachmentOrderByWithRelationInput[]
+  cursor?: Prisma.CommentAttachmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CommentAttachmentScalarFieldEnum | Prisma.CommentAttachmentScalarFieldEnum[]
 }
 
 /**

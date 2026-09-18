@@ -26,15 +26,16 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  projects     Project[]
-  boards       Board[]
-  memberships  BoardMember[]
-  cardsCreated Card[]        @relation("CardCreator")
-  cardMembers  CardMember[]
-  comments     Comment[]
-  attachments  Attachment[]
-  activities   Activity[]
-  boardInvites BoardInvite[]
+  projects           Project[]
+  boards             Board[]
+  memberships        BoardMember[]
+  cardsCreated       Card[]              @relation("CardCreator")
+  cardMembers        CardMember[]
+  comments           Comment[]
+  attachments        Attachment[]
+  activities         Activity[]
+  boardInvites       BoardInvite[]
+  commentAttachments CommentAttachment[]
 
   @@map("users")
 }
@@ -166,29 +167,28 @@ model List {
 // =========================
 
 model Card {
-  id          Int       @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   listId      Int
   title       String
-  description String?   @db.Text
+  description String?      @db.Text
   position    Int
   dueDate     DateTime?
   priority    CardPriority @default(MEDIUM)
   tasks       Json?
 
-
- 
   createdById Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  list        List         @relation(fields: [listId], references: [id], onDelete: Cascade)
-  createdBy   User         @relation("CardCreator", fields: [createdById], references: [id])
-  members     CardMember[]
-  labels      CardLabel[]
-  comments    Comment[]
-  attachments Attachment[]
-  activities  Activity[]
+  list               List                @relation(fields: [listId], references: [id], onDelete: Cascade)
+  createdBy          User                @relation("CardCreator", fields: [createdById], references: [id])
+  members            CardMember[]
+  labels             CardLabel[]
+  comments           Comment[]
+  attachments        Attachment[]
+  activities         Activity[]
+  commentAttachments CommentAttachment[]
 
   @@index([listId])
   @@index([createdById])
@@ -206,7 +206,6 @@ enum CardPriority {
 // CARD MEMBERS
 // =========================
 
-
 model CardMember {
   id     Int @id @default(autoincrement())
   cardId Int
@@ -220,9 +219,6 @@ model CardMember {
   @@index([cardId])
   @@map("card_members")
 }
-
-
-
 
 // =========================
 // LABEL
@@ -264,22 +260,46 @@ model CardLabel {
 // =========================
 
 model Comment {
-  id      Int    @id @default(autoincrement())
-  cardId  Int
-  userId  Int
-  content String @db.Text
+  id       Int     @id @default(autoincrement())
+  cardId   Int
+  userId   Int
+  content  String  @db.Text
   fileName String?
-  fileUrl String? 
+  fileUrl  String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  card Card @relation(fields: [cardId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  card               Card                @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  commentAttachments CommentAttachment[]
 
   @@index([cardId])
   @@index([userId])
   @@map("comments")
+}
+
+model CommentAttachment {
+  id        Int @id @default(autoincrement())
+  cardId    Int
+  userId    Int
+  commentId Int
+
+  fileName String
+  fileUrl  String
+  fileSize Int?
+  fileType FileType?
+
+  createdAt DateTime @default(now())
+
+  card    Card    @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@index([cardId])
+  @@index([userId])
+  @@index([commentId])
+  @@map("commentattachments")
 }
 
 // =========================
@@ -306,11 +326,11 @@ model Attachment {
   @@map("attachments")
 }
 
-
 enum FileType {
   IMG
   TEXTFILE
 }
+
 // =========================
 // ACTIVITY
 // =========================

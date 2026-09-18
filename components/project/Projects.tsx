@@ -37,18 +37,12 @@ const boardColorClasses: Record<string, string> = {
   PURPLE: "bg-purple-500",
   PINK: "bg-pink-500",
 };
-const Projects = ({ projects, children }: any) => {
+const Projects = ({ projects, children, taskState }: any) => {
   const route = useRouter();
   const [openConfirm, setOpenConfirm] = useState(false);
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
-  const [editedProject, setEditedProject] = useState<Project | undefined>();
-
-
-
-
-
-
+  const [editedProject, setEditedProject] = useState<any | undefined>();
 
   const {
     deleteProject: { mutate },
@@ -95,13 +89,7 @@ const Projects = ({ projects, children }: any) => {
             <div>
               <p className="text-sm text-muted-foreground">Ukończone zadania</p>
 
-              <p className="text-2xl font-bold">
-                {/* {projects.reduce(
-                  (total: number, project: Project) =>
-                    total + project.completed,
-                  0,
-                )} */}
-              </p>
+              <p className="text-2xl font-bold">{taskState?.doneTasks}</p>
             </div>
           </CardContent>
         </Card>
@@ -115,12 +103,7 @@ const Projects = ({ projects, children }: any) => {
             <div>
               <p className="text-sm text-muted-foreground">Wszystkie zadania</p>
 
-              <p className="text-2xl font-bold">
-                {/* {projects.reduce(
-                  (total: number, project: Project) => total + project.tasks,
-                  0,
-                )} */}
-              </p>
+              <p className="text-2xl font-bold">{taskState?.allTasks}</p>
             </div>
           </CardContent>
         </Card>
@@ -144,112 +127,114 @@ const Projects = ({ projects, children }: any) => {
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project: Project) => (
-            <Card
-              key={project.id}
-              className="group transition-shadow hover:shadow-md"
-            >
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`h-10 w-10 rounded-lg ${boardColorClasses[project.color]} flex items-center justify-center text-white`}
-                    >
-                      <FolderKanban className="h-5 w-5" />
+          {projects.map((project: any) => {
+            return (
+              <Card
+                key={project.id}
+                className="group transition-shadow hover:shadow-md"
+              >
+                <CardHeader>
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={`h-10 w-10 rounded-lg ${boardColorClasses[project.color]} flex items-center justify-center text-white`}
+                      >
+                        <FolderKanban className="h-5 w-5" />
+                      </div>
+
+                      <div>
+                        <CardTitle className="text-base hover:underline hover:cursor-pointer">
+                          <Link href={`/projects/board/${project.id}`}>
+                            {project.name}
+                          </Link>
+                        </CardTitle>
+
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          {project.description}
+                        </p>
+                      </div>
                     </div>
 
-                    <div>
-                      <CardTitle className="text-base">
-                        {project.name}
-                      </CardTitle>
-
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        {project.description}
-                      </p>
-                    </div>
-                  </div>
-
-                  <DropdownMenu>
-                    <DropdownMenuTrigger
-                      render={
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="opacity-0 transition-opacity group-hover:opacity-100"
-                        >
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      }
-                    ></DropdownMenuTrigger>
-
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
-                        <Link href={`/projects/board/${project.id}`}>
-                          Otwórz projekt
-                        </Link>
-                      </DropdownMenuItem>
-
-                      <DropdownMenuItem
-                        onClick={() => {
-                          setEditedProject(project);
-                          setOpenEdit(true);
-                        }}
-                      >
-                        Edytuj projekt
-                      </DropdownMenuItem>
-
-                      <DropdownMenuItem
-                        className="text-destructive"
-                        onClick={() => {
-                          setEditedProject(project);
-                          setOpenConfirm(true);
-                        }}
-                      >
-                        Usuń projekt
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </CardHeader>
-
-              <CardContent>
-                <div className="mb-5">
-                  <div className="mb-2 flex justify-between text-sm">
-                    <span className="text-muted-foreground">Postęp</span>
-
-                    {/* <span className="font-medium">{project.progress}%</span> */}
-                  </div>
-
-                  <div className="h-2 overflow-hidden rounded-full bg-muted">
-                    <div
-                      className={`h-full ${project.color} transition-all`}
-                      style={
-                        {
-                          // width: `${project.progress}%`,
+                    <DropdownMenu>
+                      <DropdownMenuTrigger
+                        render={
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="opacity-0 transition-opacity group-hover:opacity-100"
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
                         }
-                      }
-                    />
+                      ></DropdownMenuTrigger>
+
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem>
+                          <Link href={`/projects/board/${project.id}`}>
+                            Otwórz projekt
+                          </Link>
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                          onClick={() => {
+                            setEditedProject(project);
+                            setOpenEdit(true);
+                          }}
+                        >
+                          Edytuj projekt
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                          className="text-destructive"
+                          onClick={(e) => {
+                            setEditedProject(project);
+                            setOpenConfirm(true);
+                          }}
+                        >
+                          Usuń projekt
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
-                </div>
+                </CardHeader>
 
-                <div className="flex items-center justify-between text-sm text-muted-foreground">
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="h-4 w-4" />
+                <CardContent>
+                  <div className="mb-5">
+                    <div className="mb-2 flex justify-between text-sm">
+                      <span className="text-muted-foreground">Postęp</span>
 
-                    <span>
-                      {/* {project.completed}/{project.tasks} zadań */}
-                    </span>
+                      <span className="font-medium">{project.progress}%</span>
+                    </div>
+
+                    <div className="h-2 overflow-hidden rounded-full bg-muted">
+                      <div
+                        className={`h-full bg-muted-foreground transition-all`}
+                        style={{
+                          width: `${project.progress}%`,
+                        }}
+                      />
+                    </div>
                   </div>
 
-                  <div className="flex items-center gap-1.5">
-                    <Users className="h-4 w-4" />
+                  <div className="flex items-center justify-between text-sm text-muted-foreground">
+                    <div className="flex items-center gap-1.5">
+                      <CheckCircle2 className="h-4 w-4" />
 
-                    {/* <span>{project.members}</span> */}
+                      <span>
+                        {/* {project.completed}/{project.tasks} zadań */}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      <Users className="h-4 w-4" />
+
+                      {/* <span>{project.members}</span> */}
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            );
+          })}
 
           <button
             type="button"

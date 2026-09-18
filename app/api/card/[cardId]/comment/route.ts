@@ -7,7 +7,6 @@ export const POST = withAuth(async (user, request, context) => {
   const { comment } = await request.json();
   const { cardId } = await context.params;
 
-
   const result = commentSchema.safeParse({ comment });
   const uID: number = user.userID;
 
@@ -32,7 +31,7 @@ export const POST = withAuth(async (user, request, context) => {
     );
   }
 
-  await prisma.comment.create({
+  const addedComment = await prisma.comment.create({
     data: {
       cardId: Number(cardId),
       userId: uID,
@@ -42,5 +41,6 @@ export const POST = withAuth(async (user, request, context) => {
 
   return NextResponse.json({
     message: "Komentarz został dodany",
+    commentId: addedComment.id,
   });
 });

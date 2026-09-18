@@ -535,18 +535,6 @@ export type AttachmentUncheckedUpdateManyWithoutCardNestedInput = {
   deleteMany?: Prisma.AttachmentScalarWhereInput | Prisma.AttachmentScalarWhereInput[]
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
-export type NullableEnumFileTypeFieldUpdateOperationsInput = {
-  set?: $Enums.FileType | null
-}
-
 export type AttachmentCreateWithoutUserInput = {
   fileName: string
   fileUrl: string

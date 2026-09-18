@@ -72,7 +72,7 @@ export const DragDrop = ({
   }, [files]);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full">
       <div
         {...getRootProps({
           className: `

@@ -31,6 +31,7 @@ import { useEffect, useMemo, useState } from "react";
 import { type MembershipRole, ROLES } from "@/lib/roles";
 import ConfirmModal from "../modals/ConfirmModal";
 import { useCard } from "@/mutations/dashboard/useCard";
+import { DragDrop } from "../DragDropFile";
 
 const safeParseTasks = (tasks: any): any[] => {
   if (!tasks) return [];
@@ -49,7 +50,10 @@ const safeParseTasks = (tasks: any): any[] => {
 export default function CardDetails({ card, boardId, role }: any) {
   const router = useRouter();
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-  const { addComment, changeChecklist, deleteCard } = useCard();
+  const [files, setFiles] = useState<File[] | null>(null);
+
+  const { addComment, changeChecklist, deleteCard, addFileToComment } =
+    useCard();
 
   const findRole = (userId: number) => {
     return card?.list?.board.members.find((el: any) => el.userId === userId)
@@ -57,7 +61,6 @@ export default function CardDetails({ card, boardId, role }: any) {
   };
 
   const [parsedTasks, setParsedTasks] = useState<any[]>([]);
-
   const attachments = card?.attachments ?? [];
 
   const imagesFiles = useMemo(
@@ -65,6 +68,8 @@ export default function CardDetails({ card, boardId, role }: any) {
       attachments.filter((attachment: any) => attachment.fileType === "IMG"),
     [attachments],
   );
+
+  console.log(card);
 
   const textFiles = useMemo(
     () =>
@@ -98,6 +103,18 @@ export default function CardDetails({ card, boardId, role }: any) {
         onSuccess: (data) => {
           toast.success(data.message);
           router.refresh();
+          const formData = new FormData();
+
+          files?.forEach((file) => {
+            formData.append("files", file);
+          });
+
+          addFileToComment.mutate({
+            body: formData,
+            cardId: card.id,
+            commentId: data.commentId,
+          });
+          toast.success(data.message);
           reset();
         },
       },
@@ -372,7 +389,6 @@ export default function CardDetails({ card, boardId, role }: any) {
                   </span>
                 )}
               </div>
-
               <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
                 <textarea
                   placeholder="Napisz komentarz..."
@@ -380,16 +396,12 @@ export default function CardDetails({ card, boardId, role }: any) {
                   {...register("comment")}
                 />
 
-                <div className="flex items-center justify-between border-t px-4 py-3">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="text-muted-foreground"
-                  >
-                    <Paperclip className="mr-2 h-4 w-4" />
-                    Dodaj plik
-                  </Button>
+                <div className="flex flex-col items-end justify-between border-t px-4 py-3 gap-4">
+                  <DragDrop
+                    onFileChange={(file: File[]) => setFiles(file)}
+                    fileSize={5}
+                    type="img"
+                  />
 
                   <Button
                     size="sm"
@@ -419,7 +431,7 @@ export default function CardDetails({ card, boardId, role }: any) {
                       </Avatar>
 
                       <div className="min-w-0 flex-1">
-                        <div className="mb-1.5 flex items-center gap-2">
+                        <div className="mb-2 flex items-center gap-2">
                           <span className="text-sm font-semibold">
                             {comment.user.name}
                           </span>
@@ -437,23 +449,35 @@ export default function CardDetails({ card, boardId, role }: any) {
                           </p>
                         </div>
 
-                        {comment.attachments?.length > 0 && (
-                          <div className="mt-2 space-y-2">
-                            {comment.attachments.map((attachment: any) => (
-                              <a
-                                key={attachment.id}
-                                href={attachment.fileUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-3 rounded-lg border bg-card px-3 py-2.5 text-sm hover:bg-muted"
-                              >
-                                <Paperclip className="h-4 w-4" />
+                        {comment.commentAttachments?.length > 0 && (
+                          <div className="mt-3">
+                            <div className="grid gap-2 sm:grid-cols-2">
+                              {comment.commentAttachments.map(
+                                (attachment: any) => {
+                                  return (
+                                    <a
+                                      key={attachment.id}
+                                      href={attachment.fileUrl}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="group relative overflow-hidden rounded-xl border bg-muted/30"
+                                    >
+                                      <img
+                                        src={attachment.fileUrl}
+                                        alt={attachment.fileName}
+                                        className="h-48 w-full object-cover transition-transform duration-200 group-hover:scale-105"
+                                      />
 
-                                <span className="truncate">
-                                  {attachment.fileName}
-                                </span>
-                              </a>
-                            ))}
+                                      <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent px-3 pb-3 pt-8">
+                                        <p className="truncate text-xs font-medium text-white">
+                                          {attachment.fileName}
+                                        </p>
+                                      </div>
+                                    </a>
+                                  );
+                                },
+                              )}
+                            </div>
                           </div>
                         )}
                       </div>
@@ -658,7 +682,6 @@ export default function CardDetails({ card, boardId, role }: any) {
 
               <Separator />
 
-              {/* INFORMACJE */}
               <section className="p-5">
                 <h3 className="mb-4 text-sm font-semibold">Informacje</h3>
 

@@ -14,6 +14,21 @@ export const useCard = () => {
     },
   });
 
+  const addFileToComment = useMutation({
+    mutationFn: async ({ body, cardId, commentId }: any) => {
+      const { data } = await axios.post(
+        `/api/card/${cardId}/comment/${commentId}/file`,
+        body,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+      return data;
+    },
+  });
+
   const addCard = useMutation({
     mutationFn: async (body: any) => {
       const { data } = await axios.post("/api/card/add", body);
@@ -61,5 +76,6 @@ export const useCard = () => {
     deleteCard,
     changeChecklist,
     addComment,
+    addFileToComment,
   };
 };

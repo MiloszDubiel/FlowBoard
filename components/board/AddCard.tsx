@@ -45,6 +45,7 @@ import { FieldError } from "@/components/ui/field";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useCard } from "@/mutations/dashboard/useCard";
+import { useUser } from "@/hooks/useUser";
 
 export default function AddCard({
   listId,
@@ -67,6 +68,10 @@ export default function AddCard({
       userIds: [],
     },
   });
+
+  const { user } = useUser();
+
+  console.log(members);
 
   const route = useRouter();
   const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
@@ -218,7 +223,6 @@ export default function AddCard({
           </div>
         </div>
 
-        {/* Zadania */}
         <div className="space-y-4 rounded-xl border bg-card p-6">
           <div>
             <h2 className="text-lg font-semibold">Zadania</h2>
@@ -326,39 +330,41 @@ export default function AddCard({
                     <CommandEmpty>Nie znaleziono użytkownika.</CommandEmpty>
 
                     <CommandGroup heading="Użytkownicy">
-                      {members.map((member) => {
-                        const isSelected = selectedUsers.includes(
-                          member.user.id,
-                        );
+                      {members
+                        .filter((el) => !["OWNER", "ADMIN"].includes(el.role))
+                        .map((member) => {
+                          const isSelected = selectedUsers.includes(
+                            member.user.id,
+                          );
 
-                        return (
-                          <CommandItem
-                            key={member.user.id}
-                            value={member.user.name}
-                            onSelect={() => {
-                              setSelectedUsers((current) =>
-                                isSelected
-                                  ? current.filter(
-                                      (id) => id !== member.user.id,
-                                    )
-                                  : [...current, member.user.id],
-                              );
-                            }}
-                          >
-                            <div
-                              className={`mr-2 flex h-4 w-4 items-center justify-center rounded-sm border ${
-                                isSelected
-                                  ? "bg-primary text-primary-foreground"
-                                  : ""
-                              }`}
+                          return (
+                            <CommandItem
+                              key={member.user.id}
+                              value={member.user.name}
+                              onSelect={() => {
+                                setSelectedUsers((current) =>
+                                  isSelected
+                                    ? current.filter(
+                                        (id) => id !== member.user.id,
+                                      )
+                                    : [...current, member.user.id],
+                                );
+                              }}
                             >
-                              {isSelected && "✓"}
-                            </div>
+                              <div
+                                className={`mr-2 flex h-4 w-4 items-center justify-center rounded-sm border ${
+                                  isSelected
+                                    ? "bg-primary text-primary-foreground"
+                                    : ""
+                                }`}
+                              >
+                                {isSelected && "✓"}
+                              </div>
 
-                            {member.user.name}
-                          </CommandItem>
-                        );
-                      })}
+                              {member.user.name}
+                            </CommandItem>
+                          );
+                        })}
                     </CommandGroup>
                   </CommandList>
                 </Command>
