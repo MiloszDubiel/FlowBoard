@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Users, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import { Plus } from "lucide-react";
 import { Column } from "./Column";
 import AddList from "./AddList";
@@ -63,6 +63,11 @@ export default function Board({ board, members }: any) {
     },
   });
 
+  const me = useMemo(
+    () => members.find((el: any) => el.userId == user?.id),
+    [user],
+  );
+
   const { mutate: switchList } = useMutation({
     mutationKey: ["card", "switch"],
     mutationFn: async (cards: string[]) => {
@@ -111,15 +116,17 @@ export default function Board({ board, members }: any) {
             </div>
           ))}
 
-          <Button
-            variant="outline"
-            size="sm"
-            className="ml-2 cursor-pointer"
-            onClick={() => setShowMembers(true)}
-          >
-            <Users className="mr-2 h-4 w-4" />
-            Zarządzaj zespołem
-          </Button>
+          {["OWNER", "ADMIN"].includes(me?.role) && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="ml-2 cursor-pointer"
+              onClick={() => setShowMembers(true)}
+            >
+              <Users className="mr-2 h-4 w-4" />
+              Zarządzaj zespołem
+            </Button>
+          )}
         </div>
       </header>
       <div className="min-h-0 flex-1 overflow-x-auto bg-muted/40 p-6">

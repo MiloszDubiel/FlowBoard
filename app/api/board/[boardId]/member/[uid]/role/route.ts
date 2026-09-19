@@ -48,8 +48,8 @@ export const PATCH = withAuth(async (user, request, context) => {
     );
   }
 
-  const getMyRole = await board.members.find(
-    (el) => el.id === Number(user.userID),
+  const getMyRole = board.members.find(
+    (el) => Number(el.userId) === Number(user.userID),
   );
 
   if (!["ADMIN", "OWNER"].includes(getMyRole?.role || " ")) {

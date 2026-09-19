@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import MembersList from "./MemberList";
 import MembersSkeleton from "../skeletons/MemberSkeleton";
+import { useUser } from "@/hooks/useUser";
 
 type BoardMembersModalProps = {
   open: boolean;
@@ -48,6 +49,12 @@ export default function BoardMembersModal({
   const [userIdToAdd, setIdUserToAdd] = useState<number>();
   const [selectedMember, setSelectedMember] = useState<any>(null);
   const [removeModalOpen, setRemoveModalOpen] = useState(false);
+  const { user } = useUser();
+
+  const me = useMemo(
+    () => members.find((el: any) => el.userId == user?.id),
+    [user],
+  );
 
   const debouncedSearch = useMemo(
     () =>
@@ -136,104 +143,106 @@ export default function BoardMembersModal({
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-5">
-            <div className="space-y-2">
-              <p className="text-sm font-medium">Dodaj członka</p>
+          {["OWNER", "ADMIN"].includes(me?.role) && (
+            <div className="space-y-5">
+              <div className="space-y-2">
+                <p className="text-sm font-medium">Dodaj członka</p>
 
-              <div className="flex gap-2">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 
-                  {
-                    <Input
-                      placeholder="Wyszukaj użytkownika..."
-                      className="pl-9"
-                      onKeyUp={({ target }: { target: any }) => {
-                        debouncedSearch(target.value);
-                      }}
-                    />
-                  }
+                    {
+                      <Input
+                        placeholder="Wyszukaj użytkownika..."
+                        className="pl-9"
+                        onKeyUp={({ target }: { target: any }) => {
+                          debouncedSearch(target.value);
+                        }}
+                      />
+                    }
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <p className="text-sm font-medium">Wyniki wyszukiwania</p>
+              <div className="space-y-2">
+                <p className="text-sm font-medium">Wyniki wyszukiwania</p>
 
-              <div className="rounded-md border p-2">
-                {users?.length > 0 ? (
-                  users?.map((el: any) => (
-                    <div
-                      className="flex items-center justify-between rounded-md p-2 hover:bg-muted"
-                      key={el.id}
-                    >
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-9 w-9">
-                          <AvatarFallback>
-                            {el.name
-                              .split(" ")
-                              .map((name: any) => name[0])
-                              .join("")
-                              .slice(0, 2)
-                              .toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
+                <div className="rounded-md border p-2">
+                  {users?.length > 0 ? (
+                    users?.map((el: any) => (
+                      <div
+                        className="flex items-center justify-between rounded-md p-2 hover:bg-muted"
+                        key={el.id}
+                      >
+                        <div className="flex items-center gap-3">
+                          <Avatar className="h-9 w-9">
+                            <AvatarFallback>
+                              {el.name
+                                .split(" ")
+                                .map((name: any) => name[0])
+                                .join("")
+                                .slice(0, 2)
+                                .toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
 
-                        <div>
-                          <p className="text-sm font-medium">{el.name}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {el.email}
-                          </p>
+                          <div>
+                            <p className="text-sm font-medium">{el.name}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {el.email}
+                            </p>
+                          </div>
                         </div>
+
+                        {el.boardInvites?.[0]?.status == "PENDING" ? (
+                          <p className="text-sm">WYSŁANO</p>
+                        ) : (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              setIsOpen(true);
+                              setMessage(
+                                `Czy na pewno chcesz dodać użytkownika ${el.name}? Email: ${el.email}`,
+                              );
+                              setIdUserToAdd(Number(el.id));
+                            }}
+                          >
+                            Dodaj
+                          </Button>
+                        )}
                       </div>
-
-                      {el.boardInvites?.[0]?.status == "PENDING" ? (
-                        <p className="text-sm">WYSŁANO</p>
-                      ) : (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => {
-                            setIsOpen(true);
-                            setMessage(
-                              `Czy na pewno chcesz dodać użytkownika ${el.name}? Email: ${el.email}`,
-                            );
-                            setIdUserToAdd(Number(el.id));
-                          }}
-                        >
-                          Dodaj
-                        </Button>
-                      )}
+                    ))
+                  ) : (
+                    <div className="flex items-center justify-between rounded-md p-2">
+                      Brak wyników
                     </div>
-                  ))
-                ) : (
-                  <div className="flex items-center justify-between rounded-md p-2">
-                    Brak wyników
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium">Członkowie</p>
-
-                <span className="text-xs text-muted-foreground">
-                  {members?.length}
-                </span>
+                  )}
+                </div>
               </div>
 
-              <Suspense fallback={<MembersSkeleton />}>
-                <MembersList
-                  members={members}
-                  roles={roles}
-                  changeRole={changeRole}
-                  setRemoveModalOpen={setRemoveModalOpen}
-                  setSelectedMember={setSelectedMember}
-                />
-              </Suspense>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium">Członkowie</p>
+
+                  <span className="text-xs text-muted-foreground">
+                    {members?.length}
+                  </span>
+                </div>
+
+                <Suspense fallback={<MembersSkeleton />}>
+                  <MembersList
+                    members={members}
+                    roles={roles}
+                    changeRole={changeRole}
+                    setRemoveModalOpen={setRemoveModalOpen}
+                    setSelectedMember={setSelectedMember}
+                  />
+                </Suspense>
+              </div>
             </div>
-          </div>
+          )}
         </DialogContent>
       </Dialog>
       <ConfirmModal

@@ -49,14 +49,6 @@ export default function CountdownTimer({ target }: { target: number }) {
       <span className="text-muted-foreground">:</span>
 
       <TimeUnit value={timeLeft.hours} label="godz." />
-
-      <span className="text-muted-foreground">:</span>
-
-      <TimeUnit value={timeLeft.minutes} label="min." />
-
-      <span className="text-muted-foreground">:</span>
-
-      <TimeUnit value={timeLeft.seconds} label="sek." />
     </div>
   );
 }

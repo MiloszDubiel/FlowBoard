@@ -29,7 +29,6 @@ import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
 import { useLogout } from "@/mutations/useLogout";
 
-
 const mainItems = [
   {
     title: "Projekty",
@@ -158,7 +157,7 @@ export default function AppSidebar({ projects = [] }: any) {
               ))}
               <SidebarMenuItem>
                 <SidebarMenuButton
-                  className="flex  items-center gap-4"
+                  className="flex  items-center gap-4 cursor-pointer"
                   onClick={() => {
                     logout();
                   }}
