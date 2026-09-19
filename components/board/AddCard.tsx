@@ -373,7 +373,6 @@ export default function AddCard({
           </div>
         </div>
 
-        {/* Przyciski */}
         <div className="flex justify-end gap-3 border-t pt-6">
           <Button type="button" variant="outline" onClick={() => {}}>
             Anuluj

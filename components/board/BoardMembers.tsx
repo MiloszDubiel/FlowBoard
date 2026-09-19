@@ -23,7 +23,6 @@ import { useRouter } from "next/navigation";
 import MembersList from "./MemberList";
 import MembersSkeleton from "../skeletons/MemberSkeleton";
 
-
 type BoardMembersModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -49,7 +48,6 @@ export default function BoardMembersModal({
   const [userIdToAdd, setIdUserToAdd] = useState<number>();
   const [selectedMember, setSelectedMember] = useState<any>(null);
   const [removeModalOpen, setRemoveModalOpen] = useState(false);
-
 
   const debouncedSearch = useMemo(
     () =>
@@ -146,13 +144,15 @@ export default function BoardMembersModal({
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 
-                  <Input
-                    placeholder="Wyszukaj użytkownika..."
-                    className="pl-9"
-                    onKeyUp={({ target }: { target: any }) => {
-                      debouncedSearch(target.value);
-                    }}
-                  />
+                  {
+                    <Input
+                      placeholder="Wyszukaj użytkownika..."
+                      className="pl-9"
+                      onKeyUp={({ target }: { target: any }) => {
+                        debouncedSearch(target.value);
+                      }}
+                    />
+                  }
                 </div>
               </div>
             </div>

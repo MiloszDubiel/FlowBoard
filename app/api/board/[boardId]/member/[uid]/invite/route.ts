@@ -62,4 +62,3 @@ export const PUT = withAuth(async (user, request, context) => {
     message: "Wysłano zaproszenie.",
   });
 });
-

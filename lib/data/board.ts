@@ -161,3 +161,36 @@ export const getCard = async (cardId: number, boardId: number) => {
     },
   });
 };
+
+export const getMyCards = async () => {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  return await prisma.card.findMany({
+    where: {
+      members: {
+        some: {
+          userId: Number(user.userID),
+        },
+      },
+    },
+    include: {
+      list: {
+        include: { board: true },
+      },
+      members: {
+        include: {
+          user: true,
+        },
+      },
+
+      createdBy: true,
+    },
+    orderBy: {
+      dueDate: "asc",
+    },
+  });
+};

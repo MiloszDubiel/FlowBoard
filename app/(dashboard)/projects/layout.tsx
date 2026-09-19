@@ -8,7 +8,6 @@ export default async function DashboardLayout({
 }) {
   const projects = await getProjects();
 
-
   return (
     <div className="min-h-screen w-full">
       <div className="flex">

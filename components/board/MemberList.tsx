@@ -50,68 +50,70 @@ function MembersList({
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              {member.role !== "OWNER" && (
-                <>
-                  <Select
-                    items={roles}
-                    onValueChange={(role) =>
-                      changeRole({
-                        id: member.userId,
-                        role,
-                      })
-                    }
-                    defaultValue={member.role || "MEMBER"}
-                    disabled={member.userId == user?.id}
-                  >
-                    <SelectTrigger className="w-full max-w-48">
-                      <SelectValue />
-                    </SelectTrigger>
-
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Rola</SelectLabel>
-                        {roles.map((item: any) => (
-                          <SelectItem
-                            key={item.value}
-                            value={item.value}
-                            disabled={
-                              item.disabled || member.userId == user?.id
-                            }
-                          >
-                            {item.label}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-
-                  {member.userId == user?.id ? (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
-                        setRemoveModalOpen(true);
-                        setSelectedMember(member);
-                      }}
+            {
+              <div className="flex items-center gap-2">
+                {member.role !== "OWNER" && (
+                  <>
+                    <Select
+                      items={roles}
+                      onValueChange={(role) =>
+                        changeRole({
+                          id: member.userId,
+                          role,
+                        })
+                      }
+                      defaultValue={member.role || "MEMBER"}
+                      disabled={member.userId == user?.id}
                     >
-                      <LogOut />
-                    </Button>
-                  ) : (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
-                        setRemoveModalOpen(true);
-                        setSelectedMember(member);
-                      }}
-                    >
-                      <X />
-                    </Button>
-                  )}
-                </>
-              )}
-            </div>
+                      <SelectTrigger className="w-full max-w-48">
+                        <SelectValue />
+                      </SelectTrigger>
+
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Rola</SelectLabel>
+                          {roles.map((item: any) => (
+                            <SelectItem
+                              key={item.value}
+                              value={item.value}
+                              disabled={
+                                item.disabled || member.userId == user?.id
+                              }
+                            >
+                              {item.label}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+
+                    {member.userId == user?.id ? (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          setRemoveModalOpen(true);
+                          setSelectedMember(member);
+                        }}
+                      >
+                        <LogOut />
+                      </Button>
+                    ) : (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          setRemoveModalOpen(true);
+                          setSelectedMember(member);
+                        }}
+                      >
+                        <X />
+                      </Button>
+                    )}
+                  </>
+                )}
+              </div>
+            }
           </div>
         ))
       ) : (

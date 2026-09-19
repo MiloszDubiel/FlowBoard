@@ -28,7 +28,7 @@ export const POST = withAuth(async (user, request, context) => {
       },
     },
   });
-    
+
   await prisma.boardMember.create({
     data: {
       userId: Number(user.userID),

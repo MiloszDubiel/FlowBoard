@@ -56,7 +56,7 @@ export default function RegisterForm() {
             placeholder="Email"
             {...register("email")}
           />
-          <FieldError errors={[errors.email]}  />
+          <FieldError errors={[errors.email]} />
         </div>
         <div className="space-y-2">
           <Label htmlFor="name">Imię</Label>
@@ -66,7 +66,7 @@ export default function RegisterForm() {
             placeholder="Imię"
             {...register("name")}
           />
-          <FieldError errors={[errors.email]}  />
+          <FieldError errors={[errors.email]} />
         </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between">

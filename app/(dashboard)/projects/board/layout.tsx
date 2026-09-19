@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 
-
 interface BoardLayoutProps {
   children: ReactNode;
 }

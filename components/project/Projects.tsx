@@ -28,6 +28,7 @@ import { useDashboard } from "@/mutations/dashboard/useDashboard";
 import { toast } from "sonner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Progress } from "../ui/progress";
 
 const boardColorClasses: Record<string, string> = {
   ORANGE: "bg-orange-500",
@@ -207,12 +208,7 @@ const Projects = ({ projects, children, taskState }: any) => {
                     </div>
 
                     <div className="h-2 overflow-hidden rounded-full bg-muted">
-                      <div
-                        className={`h-full bg-muted-foreground transition-all`}
-                        style={{
-                          width: `${project.progress}%`,
-                        }}
-                      />
+                      <Progress value={project.progress} />
                     </div>
                   </div>
 

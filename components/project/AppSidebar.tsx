@@ -28,7 +28,7 @@ import CreateProject from "./CreateProject";
 import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
 import { useLogout } from "@/mutations/useLogout";
-import { getProjects } from "@/lib/data/projects";
+
 
 const mainItems = [
   {
@@ -61,13 +61,8 @@ const mainItems = [
 const secondaryItems = [
   {
     title: "Ustawienia",
-    url: "/dashboard/settings",
+    url: "/settings",
     icon: Settings,
-  },
-  {
-    title: "Pomoc",
-    url: "/dashboard/help",
-    icon: HelpCircle,
   },
 ];
 
@@ -129,16 +124,18 @@ export default function AppSidebar({ projects = [] }: any) {
 
           <SidebarGroupContent>
             <SidebarMenu>
-              {projects.map((el: any) => (
-                <SidebarMenuItem key={el.id}>
-                  <SidebarMenuButton>
-                    <a href="/dashboard/projects/flowboard">
-                      <span className="size-2 rounded-full bg-blue-500" />
-                      <span>{el.name}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {projects.map((el: any) => {
+                return (
+                  <SidebarMenuItem key={el.id}>
+                    <SidebarMenuButton>
+                      <a href={`/projects/board/${el?.boards?.[0].id}`}>
+                        <span className="size-2 rounded-full bg-blue-500" />
+                        <span>{el.name}</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

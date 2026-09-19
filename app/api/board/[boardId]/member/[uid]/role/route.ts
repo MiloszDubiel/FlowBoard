@@ -1,3 +1,4 @@
+import { checkBoardMembership } from "@/lib/auth/checkMembership";
 import { prisma } from "@/lib/prisma";
 import { withAuth } from "@/lib/withAuth";
 import { NextResponse } from "next/server";
@@ -47,12 +48,25 @@ export const PATCH = withAuth(async (user, request, context) => {
     );
   }
 
+  const getMyRole = await board.members.find(
+    (el) => el.id === Number(user.userID),
+  );
+
+  if (!["ADMIN", "OWNER"].includes(getMyRole?.role || " ")) {
+    return NextResponse.json(
+      {
+        message: "Nie masz uprawnien do zmiany ról.",
+      },
+      { status: 403 },
+    );
+  }
+
   if (Number(uid) === Number(user.userID)) {
     return NextResponse.json(
       {
         message: "Nie możesz zmienić swojej roli.",
       },
-      { status: 409 },
+      { status: 403 },
     );
   }
 
