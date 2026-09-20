@@ -27,10 +27,15 @@ export const DELETE = withAuth(async (user, request, context) => {
     },
   });
 
-  if (!(await checkBoardMembership(Number(uID), Number(card?.list.boardId)))) {
+  const userExits = await checkBoardMembership(
+    Number(uID),
+    Number(card?.list.boardId),
+  );
+
+  if (!userExits) {
     return NextResponse.json(
       {
-        message: "Nie masz uprawnien",
+        message: "Nie masz dostępu do tej tablicy",
       },
       {
         status: 403,
@@ -38,6 +43,16 @@ export const DELETE = withAuth(async (user, request, context) => {
     );
   }
 
+  if (!["OWNER", "ADMIN"].includes(userExits.role)) {
+    return NextResponse.json(
+      {
+        message: "Nie masz uprawnień",
+      },
+      {
+        status: 403,
+      },
+    );
+  }
   await prisma.card.delete({
     where: {
       id: Number(cardId),

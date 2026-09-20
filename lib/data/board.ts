@@ -25,13 +25,24 @@ export const getBoard = async (projectId: number) => {
         },
         include: {
           cards: {
+            where: {
+              members: {
+                some: {
+                  userId: Number(user.userID),
+                },
+              },
+            },
             orderBy: {
               position: "asc",
             },
-
             include: {
               attachments: true,
               createdBy: true,
+              members: {
+                include: {
+                  user: true,
+                },
+              },
             },
           },
         },
@@ -40,7 +51,6 @@ export const getBoard = async (projectId: number) => {
     },
   });
 };
-
 export const getBoardMembers = async (boardId: number) => {
   const user = await getCurrentUser();
 
@@ -121,6 +131,8 @@ export const getCard = async (cardId: number, boardId: number) => {
 
   return prisma.card.findFirst({
     where: {
+      id: cardId,
+
       list: {
         board: {
           id: boardId,
@@ -131,8 +143,14 @@ export const getCard = async (cardId: number, boardId: number) => {
           },
         },
       },
-      id: cardId,
+
+      members: {
+        some: {
+          userId: Number(user.userID),
+        },
+      },
     },
+
     include: {
       members: {
         include: {
@@ -145,13 +163,17 @@ export const getCard = async (cardId: number, boardId: number) => {
       },
 
       attachments: true,
+
       list: {
         include: {
           board: {
-            include: { members: true },
+            include: {
+              members: true,
+            },
           },
         },
       },
+
       comments: {
         include: {
           user: true,

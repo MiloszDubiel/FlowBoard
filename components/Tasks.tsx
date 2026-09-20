@@ -35,7 +35,7 @@ export default function Tasks({ cards }: any) {
       ) : (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {cards.map((card: any) => {
-            const tasks = (card.tasks ?? []) as Task[];
+            const tasks = (card?.tasks ?? []) as Task[];
 
             const completedTasks = tasks.filter(
               (task) => task.isCompleted,

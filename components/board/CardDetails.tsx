@@ -1,5 +1,5 @@
 "use client";
-
+import axios from "axios";
 import {
   CheckSquare,
   Paperclip,
@@ -82,7 +82,7 @@ export default function CardDetails({ card, boardId, role }: any) {
   useEffect(() => {
     const tasks = safeParseTasks(card.tasks);
     setParsedTasks(tasks);
-  }, [card.tasks]);
+  }, [card?.tasks]);
 
   const {
     register,
@@ -710,16 +710,18 @@ export default function CardDetails({ card, boardId, role }: any) {
                 </div>
               </section>
             </div>
-            <div className="grid grid-cols-2 gap-2">
-              <Button className="w- mt-2">Edytuj</Button>
-              <Button
-                variant="destructive"
-                className="w- mt-2"
-                onClick={() => setDeleteModalOpen(true)}
-              >
-                Usuń kartę
-              </Button>
-            </div>
+            {["ADMIN", "OWNER"].includes(role) && (
+              <div className="grid grid-cols-2 gap-2">
+                <Button className="w- mt-2">Edytuj</Button>
+                <Button
+                  variant="destructive"
+                  className="w- mt-2"
+                  onClick={() => setDeleteModalOpen(true)}
+                >
+                  Usuń kartę
+                </Button>
+              </div>
+            )}
           </aside>
           <ConfirmModal
             open={isDeleteModalOpen}
@@ -731,6 +733,13 @@ export default function CardDetails({ card, boardId, role }: any) {
                 onSuccess: (data) => {
                   toast.success(data.message);
                   router.replace(`/projects/board/${boardId}`);
+                },
+                onError: (error) => {
+                  if (axios.isAxiosError(error)) {
+                    toast.error(
+                      error.response?.data?.message ?? "Wystąpił błąd",
+                    );
+                  }
                 },
               });
             }}

@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 export const checkBoardMembership = async (userID: number, boardID: number) => {
   const board = await prisma.board.findFirst({
     where: {
-      id: Number(boardID),
+      id: boardID,
       members: {
         some: {
           userId: userID,
@@ -11,13 +11,20 @@ export const checkBoardMembership = async (userID: number, boardID: number) => {
       },
     },
     include: {
-      members: true,
+      members: {
+        where: {
+          userId: userID,
+        },
+      },
     },
   });
 
   if (!board) return null;
 
-  return board;
+  return {
+    board,
+    role: board.members[0]?.role,
+  };
 };
 
 export const checkCardMembership = async (userID: number, cardID: number) => {

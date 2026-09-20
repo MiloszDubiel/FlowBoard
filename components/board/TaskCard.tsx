@@ -19,7 +19,7 @@ import {
 const priorityRecord: Record<string, string> = {
   LOW: "Niski",
   MEDIUM: "Średni",
-  HIGHT: "Wysoki",
+  HIGH: "Wysoki",
   URGENT: "Nagły",
 };
 
