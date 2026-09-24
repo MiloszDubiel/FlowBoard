@@ -57,7 +57,7 @@ export function TaskCard({ id, index, column, card, role }: any) {
     <Card
       ref={["OWNER", "ADMIN"].includes(role) ? ref : null}
       className="group relative cursor-pointer overflow-hidden border-border/60 bg-card transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-md"
-      data-dragging={isDragging}
+      data-dragging={["OWNER", "ADMIN"].includes(role) ? isDragging : null}
       onClick={() => route.replace(path + `/card/get-card/${card.id}`)}
     >
       {["OWNER", "ADMIN"].includes(role) && (

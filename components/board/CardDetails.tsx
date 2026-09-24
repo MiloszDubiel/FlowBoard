@@ -51,6 +51,7 @@ export default function CardDetails({ card, boardId, role }: any) {
   const router = useRouter();
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [files, setFiles] = useState<File[] | null>(null);
+  const [edit, setEdit] = useState<boolean>(false);
 
   const { addComment, changeChecklist, deleteCard, addFileToComment } =
     useCard();
@@ -712,7 +713,16 @@ export default function CardDetails({ card, boardId, role }: any) {
             </div>
             {["ADMIN", "OWNER"].includes(role) && (
               <div className="grid grid-cols-2 gap-2">
-                <Button className="w- mt-2">Edytuj</Button>
+                <Button
+                  className="w- mt-2"
+                  onClick={() =>
+                    router.replace(
+                      `/projects/board/${boardId}/card/edit-card/${card.id}`,
+                    )
+                  }
+                >
+                  Edytuj
+                </Button>
                 <Button
                   variant="destructive"
                   className="w- mt-2"

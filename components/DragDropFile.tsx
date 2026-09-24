@@ -2,24 +2,33 @@
 
 import { useDropzone } from "react-dropzone";
 import { useEffect, useState } from "react";
-import { X } from "lucide-react";
+import { X, FileText } from "lucide-react";
 import { type Accept } from "react-dropzone";
+import { Attachment } from "@/generated/prisma/client";
 
-type PreviewFile = File & {
+type PreviewFile = {
+  file: File;
   preview: string;
 };
 
 export const DragDrop = ({
   onFileChange,
-  fileSize,
   type,
+  defaultFiles = [],
 }: {
-  onFileChange: (file: File[]) => void;
+  onFileChange: (files: File[]) => void;
   fileSize: number;
   type: "text" | "img";
+  defaultFiles?: Attachment[];
 }) => {
-  const [files, setFiles] = useState<PreviewFile[]>([]);
-  const [filesToSend, setFiilesToSend] = useState<File[]>([]);
+  const [existingFiles, setExistingFiles] =
+    useState<Attachment[]>(defaultFiles);
+  const [removeExistinfFiles, setRemoveExistingFiles] = useState<Attachment[]>(
+    [],
+  );
+
+  const [newFiles, setNewFiles] = useState<PreviewFile[]>([]);
+
   const accept: Accept =
     type === "text"
       ? {
@@ -32,51 +41,58 @@ export const DragDrop = ({
       : {
           "image/*": [],
         };
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: accept,
+    accept,
 
     onDrop: (acceptedFiles) => {
-      const newFiles = acceptedFiles.map((file: File) => {
-        setFiilesToSend((prev) => [...prev, file]);
+      const files = acceptedFiles.map((file) => ({
+        file,
+        preview: URL.createObjectURL(file),
+      }));
 
-        return Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        });
-      });
-
-      setFiles((previous) => [...previous, ...newFiles]);
+      setNewFiles((prev) => [...prev, ...files]);
+      onFileChange([...newFiles.map((item) => item.file), ...acceptedFiles]);
     },
     maxFiles: 3,
   });
 
-  useEffect(() => {
-    if (!filesToSend.length) return;
+  const removeExistingFile = (id: number) => {
+    setExistingFiles((prev) => prev.filter((file) => file.id !== id));
 
-    onFileChange(filesToSend);
-  }, [filesToSend]);
+    setRemoveExistingFiles((prev: Attachment[]) => [
+      ...prev,
+      ...existingFiles.filter((el) => el.id === id),
+    ]);
+  };
 
-  const removeFile = (fileToRemove: PreviewFile) => {
-    setFiles((files) => {
-      const newFiles = files.filter((file) => file !== fileToRemove);
+  const removeNewFile = (fileToRemove: PreviewFile) => {
+    setNewFiles((prev) => {
+      const updated = prev.filter((file) => file.file !== fileToRemove.file);
 
-      URL.revokeObjectURL(fileToRemove.preview);
+      onFileChange(updated.map((item) => item.file));
 
-      return newFiles;
+      return updated;
     });
+
+    URL.revokeObjectURL(fileToRemove.preview);
   };
 
   useEffect(() => {
     return () => {
-      files.forEach((file) => URL.revokeObjectURL(file.preview));
+      newFiles.forEach((file) => {
+        URL.revokeObjectURL(file.preview);
+      });
     };
-  }, [files]);
+  }, [newFiles]);
 
   return (
-    <div className="space-y-4 w-full">
+    <div className="w-full space-y-4">
       <div
         {...getRootProps({
           className: `
-            flex min-h-32 cursor-pointer flex-col items-center justify-center
+            flex min-h-32 cursor-pointer flex-col
+            items-center justify-center
             rounded-lg border-2 border-dashed p-6
             transition-colors
             ${
@@ -88,54 +104,108 @@ export const DragDrop = ({
         <input {...getInputProps()} />
 
         <p className="text-sm font-medium">
-          {isDragActive
-            ? "Upuść zdjęcia tutaj..."
-            : "Przeciągnij zdjęcia tutaj"}
+          {isDragActive ? "Upuść pliki tutaj..." : "Przeciągnij pliki tutaj"}
         </p>
 
         <p className="mt-1 text-xs text-muted-foreground">
-          lub kliknij, aby wybrać zdjęcia
+          lub kliknij, aby wybrać pliki
         </p>
       </div>
 
-      {files.length > 0 && (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {files.map((file) => (
-            <div
-              key={`${file.name}-${file.lastModified}`}
-              className="group relative aspect-square overflow-hidden rounded-lg border bg-muted"
-            >
-              <img
-                src={file.preview}
-                alt={file.name}
-                className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105"
-              />
+      {existingFiles.length > 0 && (
+        <div>
+          <h3 className="mb-2 text-sm font-medium">Istniejące pliki</h3>
 
-              <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/20" />
-
-              <button
-                type="button"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  removeFile(file);
-                }}
-                className="
-                  absolute right-2 top-2
-                  flex h-7 w-7 items-center justify-center
-                  rounded-full bg-black/60 text-white
-                  opacity-0 transition-opacity
-                  hover:bg-black/80
-                  group-hover:opacity-100
-                "
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {existingFiles.map((file) => (
+              <div
+                key={file.id}
+                className="group relative aspect-square overflow-hidden rounded-lg border bg-muted"
               >
-                <X className="h-4 w-4" />
-              </button>
+                {type === "img" ? (
+                  <img
+                    src={file.fileUrl}
+                    alt={file.fileName}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <a
+                    href={file.fileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-full flex-col items-center justify-center gap-2 p-4"
+                  >
+                    <FileText className="h-10 w-10" />
 
-              <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent p-2 pt-6">
-                <p className="truncate text-xs text-white">{file.name}</p>
+                    <span className="max-w-full truncate text-xs">
+                      {file.fileName}
+                    </span>
+                  </a>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => removeExistingFile(file.id)}
+                  className="
+                    absolute right-2 top-2
+                    flex h-7 w-7 items-center justify-center
+                    rounded-full bg-black/60 text-white
+                    opacity-0 transition-opacity
+                    hover:bg-black/80
+                    group-hover:opacity-100
+                  "
+                >
+                  <X className="h-4 w-4" />
+                </button>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+        </div>
+      )}
+
+      {newFiles.length > 0 && (
+        <div>
+          <h3 className="mb-2 text-sm font-medium">Nowe pliki</h3>
+
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {newFiles.map((item) => (
+              <div
+                key={`${item.file.name}-${item.file.lastModified}`}
+                className="group relative aspect-square overflow-hidden rounded-lg border bg-muted"
+              >
+                {type === "img" ? (
+                  <img
+                    src={item.preview}
+                    alt={item.file.name}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full flex-col items-center justify-center gap-2 p-4">
+                    <FileText className="h-10 w-10" />
+
+                    <span className="max-w-full truncate text-xs">
+                      {item.file.name}
+                    </span>
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => removeNewFile(item)}
+                  className="
+                    absolute right-2 top-2
+                    flex h-7 w-7 items-center justify-center
+                    rounded-full bg-black/60 text-white
+                    opacity-0 transition-opacity
+                    hover:bg-black/80
+                    group-hover:opacity-100
+                  "
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

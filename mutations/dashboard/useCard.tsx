@@ -70,6 +70,13 @@ export const useCard = () => {
       return data;
     },
   });
+
+  const editCard = useMutation({
+    mutationFn: async ({ id, body }: any) => {
+      const { data } = await axios.patch(`/api/card/${id}/edit`, body);
+      return data;
+    },
+  });
   return {
     addFile,
     addCard,
@@ -77,5 +84,6 @@ export const useCard = () => {
     changeChecklist,
     addComment,
     addFileToComment,
+    editCard,
   };
 };

@@ -34,6 +34,8 @@ export default async function CardPage({
 
   const card = await getCard(Number(cardId), boardId);
 
+  if (!card) return <>Karta nie istnieje lub nie masz do niej dostępu</>;
+
   return (
     <CardDetails
       card={card}

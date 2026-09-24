@@ -1,47 +1,52 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-
 import { type CreateCardForm, createCardSchema } from "@/schema/addcard.schema";
 
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useUser } from "@/hooks/useUser";
+import { useEffect, useState } from "react";
+import CardForm from "../CardForm";
+import { useCard } from "@/mutations/dashboard/useCard";
+
 interface CreateCardModalProps {
-  listId: number;
-  members: any[];
-  boardId: number;
+  card: any;
+  cardMemebrs: any;
 }
 type Task = {
   name: string;
   isCompleted: boolean;
 };
 
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { useCard } from "@/mutations/dashboard/useCard";
-import { useUser } from "@/hooks/useUser";
-import { useState } from "react";
-import CardForm from "../CardForm";
+const formatDateTimeLocal = (date: Date | null) => {
+  if (!date) return "";
 
-export default function AddCard({
-  listId,
-  members = [],
-  boardId,
+  const pad = (value: number) => String(value).padStart(2, "0");
+
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
+    date.getDate(),
+  )}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
+export default function EditCard({
+  cardMemebrs = [],
+  card,
 }: CreateCardModalProps) {
-  const { user } = useUser();
-
-  console.log(members);
-
-  const route = useRouter();
-  const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
   const [imgFiles, setImgFiles] = useState<File[] | null>(null);
   const [textFils, setTextFiles] = useState<File[] | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [currentTasks, setCurrentTasks] = useState<string>("");
+  const route = useRouter();
 
   const {
+    editCard: { mutate: editCard },
     addFile: { mutate: addFile },
-    addCard: { mutate: addCard },
   } = useCard();
+
+  useEffect(() => {
+    if (!card?.tasks) return;
+
+    setTasks(card?.tasks);
+  }, [card?.tasks]);
 
   const addTask = () => {
     setTasks((prevTasks) => {
@@ -59,8 +64,8 @@ export default function AddCard({
   };
 
   const onSubmit = async (data: CreateCardForm) => {
-    addCard(
-      { ...data, tasks },
+    editCard(
+      { body: { ...data, tasks }, id: card.id },
       {
         onSuccess: (data) => {
           const formData = new FormData();
@@ -77,7 +82,7 @@ export default function AddCard({
           addFile(formData);
           toast.success(data.message);
 
-          route.replace(`/projects/board/${boardId}`);
+          route.replace(`/projects/board/${card.boardId}`);
         },
       },
     );
@@ -92,9 +97,7 @@ export default function AddCard({
     <div className="w-full p-2">
       <div className="mb-8">
         <h1 className="text-2xl font-semibold">Utwórz kartę</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Utwórz nową kartę i przypisz do niej użytkowników.
-        </p>
+        <p className="mt-1 text-sm text-muted-foreground">Edytuj kartę</p>
       </div>
       <CardForm
         config={{
@@ -105,17 +108,21 @@ export default function AddCard({
           setImgFiles,
           setTextFiles,
         }}
-        members={members
-          .filter((el) => el.role === "MEMBER")
-          .map((el) => ({ id: el.userId, name: el.user.name }))}
+        attachemnts={card?.attachments}
+        members={cardMemebrs?.map((el: any) => ({
+          id: el.userId,
+          name: el.user.name,
+        }))}
+        type="edit"
         onSubmit={onSubmit}
-        onSelectUser={setSelectedUsers}
         defaults={{
-          title: "",
-          description: "",
-          dueDate: "",
-          priority: "MEDIUM",
-          userIds: [],
+          title: card?.title,
+          description: card?.description,
+          dueDate: formatDateTimeLocal(card.dueDate),
+          priority: card?.priority,
+          userIds: card.members.filter((el: any) =>
+            ["MEMEBR"].includes(el.role),
+          ),
         }}
       />
     </div>
