@@ -36,6 +36,7 @@ export default async function AddCardPage({
   const members = await getBoardMembers(board.id);
 
   const card = await getCard(Number(cardId), Number(board.id));
+  
   const memebrships = await prisma.cardMember.findMany({
     where: {
       cardId: Number(cardId),

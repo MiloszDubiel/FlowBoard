@@ -39,6 +39,12 @@ export default function EditCard({
   const [currentTasks, setCurrentTasks] = useState<string>("");
   const route = useRouter();
 
+  const removeTask = (index: number) => {
+    setTasks((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  console.log(card);
+
   const {
     editCard: { mutate: editCard },
     addFile: { mutate: addFile },
@@ -62,11 +68,20 @@ export default function EditCard({
         return prevTasks;
       }
 
+      const taskToAdd = currentTasks.trim();
+
+      if (taskToAdd === "") {
+        toast.error("Nie można dodać pustego zadania");
+        return prevTasks;
+      }
+
       return [...prevTasks, { name: currentTasks, isCompleted: false }];
     });
   };
 
   const onSubmit = async (data: CreateCardForm) => {
+    console.log(tasks);
+
     editCard(
       { body: { ...data, tasks }, id: card.id },
       {
@@ -112,6 +127,9 @@ export default function EditCard({
           tasks,
           setImgFiles,
           setTextFiles,
+          removeTask,
+          card,
+          
         }}
         attachemnts={card?.attachments}
         members={cardMemebrs?.map((el: any) => ({

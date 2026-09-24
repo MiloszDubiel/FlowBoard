@@ -9,7 +9,6 @@ export const PATCH = withAuth(async (user, request, context) => {
 
   const result = createCardSchema.safeParse(body);
 
-
   if (!result.success) {
     return NextResponse.json({ message: "Niepoprawne dane" }, { status: 400 });
   }
@@ -17,8 +16,6 @@ export const PATCH = withAuth(async (user, request, context) => {
   const uid: number = user.userID;
 
   const { title, description, priority, dueDate, userIds } = result.data;
-
-  console.log(dueDate);
 
   const card = await prisma.card.findFirst({
     where: {
@@ -64,13 +61,6 @@ export const PATCH = withAuth(async (user, request, context) => {
     );
   }
 
-  const updatedTasks = [
-    ...(card?.tasks as []).filter(
-      (task: any) => !tasks.some((newTask: any) => newTask.name === task.name),
-    ),
-    ...tasks,
-  ];
-
   //MUSZA BYC ADMINI I OWNER
   const permittedUsers = await prisma.boardMember.findMany({
     where: {
@@ -96,7 +86,7 @@ export const PATCH = withAuth(async (user, request, context) => {
         priority,
 
         dueDate: dueDate ? new Date(dueDate) : null,
-        tasks: updatedTasks,
+        tasks: tasks,
       },
     });
 

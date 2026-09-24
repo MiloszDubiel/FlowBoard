@@ -22,6 +22,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -49,6 +50,7 @@ export default function CardForm({
     tasks,
     setImgFiles,
     setTextFiles,
+    removeTask,
   } = config;
 
   const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
@@ -56,7 +58,6 @@ export default function CardForm({
   useEffect(() => {
     setSelectedUsers(defaults.userIds);
   }, []);
-
 
   const {
     control,
@@ -79,12 +80,7 @@ export default function CardForm({
 
   useEffect(() => {}, []);
   return (
-    <form
-      onSubmit={handleSubmit((data) =>
-        onSubmit({ ...data, userIds: selectedUsers }),
-      )}
-      className="space-y-8"
-    >
+    <form className="space-y-8">
       <div className="space-y-5 rounded-xl border bg-card p-6">
         <div>
           <h2 className="text-lg font-semibold">Informacje podstawowe</h2>
@@ -168,6 +164,12 @@ export default function CardForm({
             placeholder="Nazwa zadania..."
             value={currentTasks}
             onChange={(e) => setCurrentTasks(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                addTask();
+              }
+            }}
           />
 
           <Button type="button" onClick={() => addTask()}>
@@ -185,7 +187,17 @@ export default function CardForm({
                 <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded border bg-background">
                   <div className="h-2 w-2 rounded-full bg-muted-foreground/40" />
                 </div>
+
                 <span className="flex-1 text-sm font-medium">{task.name}</span>
+
+                <button
+                  type="button"
+                  onClick={() => removeTask(index)}
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                  aria-label={`Usuń zadanie ${task.name}`}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
               </div>
             ))
           ) : (
@@ -307,7 +319,14 @@ export default function CardForm({
           Anuluj
         </Button>
 
-        <Button type="submit">Utwórz kartę</Button>
+        <Button
+          type="button"
+          onClick={handleSubmit((data) =>
+            onSubmit({ ...data, userIds: selectedUsers }),
+          )}
+        >
+          {type === "edit" ? "Edytuj" : "Utwórz kartę"}
+        </Button>
       </div>
     </form>
   );
