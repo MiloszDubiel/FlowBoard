@@ -14,6 +14,15 @@ export const useCard = () => {
     },
   });
 
+  const removeFile = useMutation({
+    mutationFn: async ({ id, files }: any) => {
+      console.log(id);
+
+      const { data } = await axios.post(`/api/card/${id}/file/`, { files });
+      return data;
+    },
+  });
+
   const addFileToComment = useMutation({
     mutationFn: async ({ body, cardId, commentId }: any) => {
       const { data } = await axios.post(
@@ -85,5 +94,6 @@ export const useCard = () => {
     addComment,
     addFileToComment,
     editCard,
+    removeFile,
   };
 };

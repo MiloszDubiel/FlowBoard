@@ -8,6 +8,7 @@ import { useUser } from "@/hooks/useUser";
 import { useEffect, useState } from "react";
 import CardForm from "../CardForm";
 import { useCard } from "@/mutations/dashboard/useCard";
+import { Attachment } from "@/generated/prisma/client";
 
 interface CreateCardModalProps {
   card: any;
@@ -34,12 +35,14 @@ export default function EditCard({
   const [imgFiles, setImgFiles] = useState<File[] | null>(null);
   const [textFils, setTextFiles] = useState<File[] | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [fileToDelete, setFileToDelete] = useState<Attachment[]>([]);
   const [currentTasks, setCurrentTasks] = useState<string>("");
   const route = useRouter();
 
   const {
     editCard: { mutate: editCard },
     addFile: { mutate: addFile },
+    removeFile: { mutate: removeFiles },
   } = useCard();
 
   useEffect(() => {
@@ -77,12 +80,14 @@ export default function EditCard({
             formData.append("txt", file);
           });
 
-          formData.append("cardId", data.cardId);
+          formData.append("cardId", card.id);
 
           addFile(formData);
-          toast.success(data.message);
 
-          route.replace(`/projects/board/${card.boardId}`);
+          if (fileToDelete.length > 0)
+            removeFiles({ id: card.id, files: fileToDelete });
+
+          toast.success(data.message);
         },
       },
     );
@@ -115,6 +120,7 @@ export default function EditCard({
         }))}
         type="edit"
         onSubmit={onSubmit}
+        onFileDelete={setFileToDelete}
         defaults={{
           title: card?.title,
           description: card?.description,

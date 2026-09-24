@@ -15,17 +15,16 @@ export const DragDrop = ({
   onFileChange,
   type,
   defaultFiles = [],
+  onFileDelete,
 }: {
   onFileChange: (files: File[]) => void;
   fileSize: number;
   type: "text" | "img";
   defaultFiles?: Attachment[];
+  onFileDelete: any;
 }) => {
   const [existingFiles, setExistingFiles] =
     useState<Attachment[]>(defaultFiles);
-  const [removeExistinfFiles, setRemoveExistingFiles] = useState<Attachment[]>(
-    [],
-  );
 
   const [newFiles, setNewFiles] = useState<PreviewFile[]>([]);
 
@@ -60,7 +59,8 @@ export const DragDrop = ({
   const removeExistingFile = (id: number) => {
     setExistingFiles((prev) => prev.filter((file) => file.id !== id));
 
-    setRemoveExistingFiles((prev: Attachment[]) => [
+   
+    onFileDelete((prev: Attachment[]) => [
       ...prev,
       ...existingFiles.filter((el) => el.id === id),
     ]);

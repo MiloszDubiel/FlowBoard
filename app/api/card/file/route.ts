@@ -12,8 +12,6 @@ export const POST = withAuth(async (user, request, context) => {
   const img = formData.getAll("img");
   const cardId = formData.get("cardId");
 
-  console.log(txt, img);
-
   if (!cardId) {
     return NextResponse.json({ message: "Brak cardId" }, { status: 400 });
   }

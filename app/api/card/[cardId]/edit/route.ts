@@ -9,6 +9,7 @@ export const PATCH = withAuth(async (user, request, context) => {
 
   const result = createCardSchema.safeParse(body);
 
+
   if (!result.success) {
     return NextResponse.json({ message: "Niepoprawne dane" }, { status: 400 });
   }

@@ -40,6 +40,7 @@ export default function CardForm({
   defaults,
   type,
   attachemnts,
+  onFileDelete,
 }: any) {
   const {
     currentTasks,
@@ -56,7 +57,6 @@ export default function CardForm({
     setSelectedUsers(defaults.userIds);
   }, []);
 
-  console.log(defaults);
 
   const {
     control,
@@ -209,6 +209,7 @@ export default function CardForm({
           fileSize={5}
           type="img"
           defaultFiles={attachemnts.filter((el: any) => el.fileType === "IMG")}
+          onFileDelete={onFileDelete}
         />
       </div>
 
@@ -224,6 +225,7 @@ export default function CardForm({
           onFileChange={(file: File[]) => setTextFiles(file)}
           fileSize={5}
           type="text"
+          onFileDelete={onFileDelete}
           defaultFiles={attachemnts.filter(
             (el: any) => el.fileType === "TEXTFILE",
           )}
