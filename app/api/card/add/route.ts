@@ -1,9 +1,26 @@
+import { Label } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import { withAuth } from "@/lib/withAuth";
 import { createCardSchema } from "@/schema/addcard.schema";
 import { NextResponse } from "next/server";
+
+const createLabels = async (
+  label: Pick<Label, "color" | "name">,
+  boardId: number,
+) => {
+  const newLabel = await prisma.label.create({
+    data: {
+      name: label.name,
+      color: label.color,
+      boardId: boardId,
+    },
+  });
+
+  return newLabel.id;
+};
+
 export const POST = withAuth(async (user, request, context) => {
-  const { listId, tasks, ...body } = await request.json();
+  const { listId, tasks, newLabels, ...body } = await request.json();
 
   const result = createCardSchema.safeParse(body);
 
@@ -12,8 +29,6 @@ export const POST = withAuth(async (user, request, context) => {
   }
 
   const { title, description, priority, dueDate, userIds } = result.data;
-
-  console.log(userIds);
 
   const list = await prisma.list.findUnique({
     where: {
@@ -112,7 +127,25 @@ export const POST = withAuth(async (user, request, context) => {
         },
       },
     },
+    include: {
+      list: true,
+    },
   });
+
+  if (newLabels?.length) {
+    const labelsId = await Promise.all(
+      newLabels.map((el: Pick<Label, "color" | "name">) =>
+        createLabels(el, Number(list.boardId)),
+      ),
+    );
+
+    await prisma.cardLabel.createMany({
+      data: labelsId.map((labelId) => ({
+        cardId: card.id,
+        labelId: Number(labelId),
+      })),
+    });
+  }
 
   await prisma.cardMember.createMany({
     data: cardMembers.map((userId) => ({

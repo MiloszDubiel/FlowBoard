@@ -28,7 +28,13 @@ export const getProjects = async () => {
         include: {
           lists: {
             include: {
-              cards: true,
+              cards: {
+                include: {
+                  labels: {
+                    include: { label: true },
+                  },
+                },
+              },
             },
           },
           members: true,

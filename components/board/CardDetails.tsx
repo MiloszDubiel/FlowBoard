@@ -16,10 +16,8 @@ import {
 } from "lucide-react";
 import CountdownTimer from "../CalculateTimeLeft";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldError } from "@/components/ui/field";
@@ -402,6 +400,7 @@ export default function CardDetails({ card, boardId, role }: any) {
                     onFileChange={(file: File[]) => setFiles(file)}
                     fileSize={5}
                     type="img"
+                    onFileDelete={new Function()}
                   />
 
                   <Button
@@ -559,16 +558,18 @@ export default function CardDetails({ card, boardId, role }: any) {
 
                 <div className="flex flex-wrap gap-2">
                   {card.labels?.length > 0 ? (
-                    card.labels.map((label: any) => (
-                      <Badge
-                        key={label.id}
+                    card.labels.map((item: any) => (
+                      <span
+                        key={item.label.id}
+                        className="rounded-full px-2.5 py-1 text-[10px] font-semibold"
                         style={{
-                          backgroundColor: label.color,
+                          backgroundColor: `${item.label.color}20`,
+                          color: item.label.color,
+                          border: `1px solid ${item.label.color}40`,
                         }}
-                        className="border-0 text-white"
                       >
-                        {label.name}
-                      </Badge>
+                        {item.label.name}
+                      </span>
                     ))
                   ) : (
                     <span className="text-sm text-muted-foreground">

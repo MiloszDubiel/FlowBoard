@@ -2,7 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { GripVertical, CalendarDays, Paperclip } from "lucide-react";
+import { GripVertical, CalendarDays, Paperclip, Flag } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSortable } from "@dnd-kit/react/sortable";
 import { CollisionPriority } from "@dnd-kit/abstract";
@@ -15,6 +15,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { ca } from "zod/v4/locales";
 
 const priorityRecord: Record<string, string> = {
   LOW: "Niski",
@@ -53,6 +54,8 @@ export function TaskCard({ id, index, column, card, role }: any) {
   const path = usePathname();
   const route = useRouter();
 
+  console.log(card);
+
   return (
     <Card
       ref={["OWNER", "ADMIN"].includes(role) ? ref : null}
@@ -72,6 +75,7 @@ export function TaskCard({ id, index, column, card, role }: any) {
         </Button>
       )}
       <CardContent className="p-3">
+        {/* Tytuł + opis */}
         <div className="pr-7">
           <p className="text-sm font-medium leading-5 text-card-foreground">
             {card?.title}
@@ -83,6 +87,8 @@ export function TaskCard({ id, index, column, card, role }: any) {
             </p>
           )}
         </div>
+
+        {/* Autor + ID */}
         <div className="mt-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Avatar className="h-6 w-6">
@@ -90,8 +96,9 @@ export function TaskCard({ id, index, column, card, role }: any) {
                 src={card?.createdBy?.avatarUrl ?? undefined}
                 alt={card?.createdBy?.name ?? ""}
               />
+
               <AvatarFallback className="text-[10px]">
-                {card.createdBy?.name?.slice(0, 2).toUpperCase() ?? "U"}
+                {card?.createdBy?.name?.slice(0, 2).toUpperCase() ?? "U"}
               </AvatarFallback>
             </Avatar>
 
@@ -104,7 +111,9 @@ export function TaskCard({ id, index, column, card, role }: any) {
             #{card?.id}
           </span>
         </div>
-        <div className="mt-3 flex items-center">
+
+    
+        <div className="mt-3 flex flex-wrap items-center gap-1.5">
           <span
             className={`rounded-full px-2.5 py-1 text-[10px] font-semibold ${setStyle(
               card?.priority,
@@ -112,38 +121,59 @@ export function TaskCard({ id, index, column, card, role }: any) {
           >
             {priorityRecord[card?.priority] ?? card?.priority}
           </span>
+
+          {card?.labels?.map((item: any) => (
+            <span
+              key={item.label.id}
+              className="rounded-full px-2.5 py-1 text-[10px] font-semibold"
+              style={{
+                backgroundColor: `${item.label.color}20`,
+                color: item.label.color,
+                border: `1px solid ${item.label.color}40`,
+              }}
+            >
+              {item.label.name}
+            </span>
+          ))}
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="mt-5 w-full">
-            <Carousel className=" w-full">
+
+        {card?.attachments?.length > 0 && (
+          <div className="mt-3">
+            <Carousel className="w-full">
               <CarouselContent>
                 {card.attachments.map((attachment: any) => (
-                  <CarouselItem key={`atachment-${attachment.id}`}>
+                  <CarouselItem key={`attachment-${attachment.id}`}>
                     <a
-                      key={attachment.fileName}
                       href={attachment.fileUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group overflow-hidden "
+                      className="group block overflow-hidden rounded-lg"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <img
                         src={attachment.fileUrl}
                         alt={attachment.fileName ?? "Załącznik"}
-                        className="h-40 w-full object-cover transition-transform group-hover:scale-102 rounded"
+                        className="h-40 w-full object-cover transition-transform group-hover:scale-[1.02]"
                       />
                     </a>
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
+
+              {card.attachments.length > 1 && (
+                <>
+                  <CarouselPrevious />
+                  <CarouselNext />
+                </>
+              )}
             </Carousel>
           </div>
-        </div>
+        )}
+
 
         <div className="mt-3 flex items-center gap-3 border-t border-border/50 pt-2.5">
+  
           {card?.dueDate && (
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <CalendarDays className="h-3.5 w-3.5" />
@@ -152,14 +182,17 @@ export function TaskCard({ id, index, column, card, role }: any) {
             </div>
           )}
 
-          {card.attachments?.length > 0 && (
+   
+          {card?.attachments?.length > 0 && (
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Paperclip className="h-3.5 w-3.5" />
-              <span>{card?.attachments.length}</span>
+
+              <span>{card.attachments.length}</span>
             </div>
           )}
 
-          {card.members?.length > 0 && (
+
+          {card?.members?.length > 0 && (
             <div className="ml-auto flex -space-x-1.5">
               {card.members.slice(0, 3).map((member: any) => (
                 <Avatar
@@ -167,12 +200,12 @@ export function TaskCard({ id, index, column, card, role }: any) {
                   className="h-6 w-6 border-2 border-card"
                 >
                   <AvatarImage
-                    src={member.user.avatarUrl ?? undefined}
-                    alt={member.user.name ?? ""}
+                    src={member.user?.avatarUrl ?? undefined}
+                    alt={member.user?.name ?? ""}
                   />
 
                   <AvatarFallback className="text-[9px]">
-                    {member.user.name?.slice(0, 1).toUpperCase() ?? "U"}
+                    {member.user?.name?.slice(0, 1).toUpperCase() ?? "U"}
                   </AvatarFallback>
                 </Avatar>
               ))}

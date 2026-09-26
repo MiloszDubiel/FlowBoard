@@ -2,6 +2,7 @@ import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { getBoard, getBoardMembers, getCard } from "@/lib/data/board";
 import CardDetails from "@/components/board/CardDetails";
 import AddCard from "@/components/board/AddCard";
+import { prisma } from "@/lib/prisma";
 
 export default async function AddCardPage({
   params,
@@ -32,8 +33,18 @@ export default async function AddCardPage({
   }
 
   const members = await getBoardMembers(board.id);
+  const labels = await prisma.label.findMany({
+    where: {
+      boardId: board.id,
+    },
+  });
 
   return (
-    <AddCard listId={Number(listId)} members={members} boardId={board.id} />
+    <AddCard
+      listId={Number(listId)}
+      members={members}
+      boardId={board.id}
+      labels={labels}
+    />
   );
 }

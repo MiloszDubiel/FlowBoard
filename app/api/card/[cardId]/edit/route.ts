@@ -2,9 +2,25 @@ import { prisma } from "@/lib/prisma";
 import { withAuth } from "@/lib/withAuth";
 import { createCardSchema } from "@/schema/addcard.schema";
 import { NextResponse } from "next/server";
-import { use } from "react";
+import { Label } from "@/generated/prisma/client";
+
+const createLabels = async (
+  label: Pick<Label, "color" | "name">,
+  boardId: number,
+) => {
+  const newLabel = await prisma.label.create({
+    data: {
+      name: label.name,
+      color: label.color,
+      boardId: boardId,
+    },
+  });
+
+  return newLabel.id;
+};
+
 export const PATCH = withAuth(async (user, request, context) => {
-  const { tasks, ...body } = await request.json();
+  const { tasks, newLabels, selectedLabels, ...body } = await request.json();
   const { cardId } = await context.params;
 
   const result = createCardSchema.safeParse(body);
@@ -89,6 +105,43 @@ export const PATCH = withAuth(async (user, request, context) => {
         tasks: tasks,
       },
     });
+
+    const existingLabels = await tx.cardLabel.findMany({
+      where: {
+        cardId: Number(cardId),
+      },
+    });
+
+    const labelsToDelete = existingLabels.filter(
+      (el) => !selectedLabels.includes(el.labelId),
+    );
+
+    if (labelsToDelete.length > 0) {
+      await tx.cardLabel.deleteMany({
+        where: {
+          cardId: Number(cardId),
+          labelId: {
+            in: labelsToDelete.map((el) => el.labelId),
+          },
+        },
+      });
+    }
+
+    if (newLabels?.length) {
+      const labelsId = await Promise.all(
+        newLabels.map((el: Pick<Label, "color" | "name">) =>
+          createLabels(el, Number(card?.list.boardId)),
+        ),
+      );
+
+      await tx.cardLabel.createMany({
+        data: labelsId.map((labelId) => ({
+          cardId: Number(cardId),
+          labelId: Number(labelId),
+        })),
+        skipDuplicates: true,
+      });
+    }
 
     await tx.cardMember.deleteMany({
       where: {

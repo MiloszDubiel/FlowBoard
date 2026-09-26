@@ -28,10 +28,8 @@ const formatDateTimeLocal = (date: Date | null) => {
     date.getDate(),
   )}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 };
-export default function EditCard({
-  cardMemebrs = [],
-  card,
-}: CreateCardModalProps) {
+
+export default function EditCard({ cardMemebrs = [], card, labels }: any) {
   const [imgFiles, setImgFiles] = useState<File[] | null>(null);
   const [textFils, setTextFiles] = useState<File[] | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -42,8 +40,6 @@ export default function EditCard({
   const removeTask = (index: number) => {
     setTasks((prev) => prev.filter((_, i) => i !== index));
   };
-
-  console.log(card);
 
   const {
     editCard: { mutate: editCard },
@@ -129,8 +125,9 @@ export default function EditCard({
           setTextFiles,
           removeTask,
           card,
-          
         }}
+        labels={labels}
+        selectedLabels={card.labels.map(el => el.labelId)}
         attachemnts={card?.attachments}
         members={cardMemebrs?.map((el: any) => ({
           id: el.userId,

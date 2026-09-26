@@ -43,6 +43,7 @@ export const getBoard = async (projectId: number) => {
                   user: true,
                 },
               },
+              labels: { include: { label: true } },
             },
           },
         },
@@ -178,6 +179,11 @@ export const getCard = async (cardId: number, boardId: number) => {
         include: {
           user: true,
           commentAttachments: true,
+        },
+      },
+      labels: {
+        include: {
+          label: true,
         },
       },
     },

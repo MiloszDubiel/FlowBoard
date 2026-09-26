@@ -18,21 +18,18 @@ type Task = {
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useCard } from "@/mutations/dashboard/useCard";
-import { useUser } from "@/hooks/useUser";
 import { useState } from "react";
 import CardForm from "../CardForm";
+import { BoardMember, CardMember } from "@/generated/prisma/client";
 
 export default function AddCard({
   listId,
   members = [],
   boardId,
-}: CreateCardModalProps) {
-  const { user } = useUser();
-
-  console.log(members);
-
+  labels,
+}: any) {
   const route = useRouter();
-  const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
+  const [, setSelectedUsers] = useState<number[]>([]);
   const [imgFiles, setImgFiles] = useState<File[] | null>(null);
   const [textFils, setTextFiles] = useState<File[] | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -58,9 +55,13 @@ export default function AddCard({
     });
   };
 
+  console.log(labels);
+
   const onSubmit = async (data: CreateCardForm) => {
+    console.log(data);
+
     addCard(
-      { ...data, tasks },
+      { ...data, tasks, listId },
       {
         onSuccess: (data) => {
           const formData = new FormData();
@@ -106,9 +107,10 @@ export default function AddCard({
           setTextFiles,
         }}
         members={members
-          .filter((el) => el.role === "MEMBER")
-          .map((el) => ({ id: el.userId, name: el.user.name }))}
+          .filter((el: BoardMember) => el.role === "MEMBER")
+          .map((el: any) => ({ id: el.userId, name: el.user.name }))}
         onSubmit={onSubmit}
+        labels={labels}
         onSelectUser={setSelectedUsers}
         defaults={{
           title: "",

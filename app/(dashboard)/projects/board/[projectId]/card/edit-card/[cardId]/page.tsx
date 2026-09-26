@@ -36,7 +36,7 @@ export default async function AddCardPage({
   const members = await getBoardMembers(board.id);
 
   const card = await getCard(Number(cardId), Number(board.id));
-  
+
   const memebrships = await prisma.cardMember.findMany({
     where: {
       cardId: Number(cardId),
@@ -52,5 +52,11 @@ export default async function AddCardPage({
     return findUser;
   });
 
-  return <EditCard card={card} cardMemebrs={onlyMemebrs} />;
+  const labels = await prisma.label.findMany({
+    where: {
+      boardId: board.id,
+    },
+  });
+
+  return <EditCard card={card} cardMemebrs={onlyMemebrs} labels={labels} />;
 }
