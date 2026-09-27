@@ -10,10 +10,6 @@ import CardForm from "../CardForm";
 import { useCard } from "@/mutations/dashboard/useCard";
 import { Attachment } from "@/generated/prisma/client";
 
-interface CreateCardModalProps {
-  card: any;
-  cardMemebrs: any;
-}
 type Task = {
   name: string;
   isCompleted: boolean;
@@ -75,11 +71,14 @@ export default function EditCard({ cardMemebrs = [], card, labels }: any) {
     });
   };
 
-  const onSubmit = async (data: CreateCardForm) => {
-    console.log(tasks);
+  const onSubmit = async (data: any) => {
+    console.log({ ...data, tasks });
 
     editCard(
-      { body: { ...data, tasks }, id: card.id },
+      {
+        body: { ...data, tasks },
+        id: card.id,
+      },
       {
         onSuccess: (data) => {
           const formData = new FormData();
@@ -127,7 +126,7 @@ export default function EditCard({ cardMemebrs = [], card, labels }: any) {
           card,
         }}
         labels={labels}
-        selectedLabels={card.labels.map(el => el.labelId)}
+        selectedLabels={card?.labels?.map((el: any) => el.labelId)}
         attachemnts={card?.attachments}
         members={cardMemebrs?.map((el: any) => ({
           id: el.userId,
@@ -141,9 +140,7 @@ export default function EditCard({ cardMemebrs = [], card, labels }: any) {
           description: card?.description,
           dueDate: formatDateTimeLocal(card.dueDate),
           priority: card?.priority,
-          userIds: card.members.filter((el: any) =>
-            ["MEMEBR"].includes(el.role),
-          ),
+          userIds: card.members.map((el: any) => el.userId),
         }}
       />
     </div>

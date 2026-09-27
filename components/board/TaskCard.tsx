@@ -61,7 +61,7 @@ export function TaskCard({ id, index, column, card, role }: any) {
       ref={["OWNER", "ADMIN"].includes(role) ? ref : null}
       className="group relative cursor-pointer overflow-hidden border-border/60 bg-card transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-md"
       data-dragging={["OWNER", "ADMIN"].includes(role) ? isDragging : null}
-      onClick={() => route.replace(path + `/card/get-card/${card.id}`)}
+      onClick={() => route.replace(path + `/card/get/${card.id}`)}
     >
       {["OWNER", "ADMIN"].includes(role) && (
         <Button
@@ -112,7 +112,6 @@ export function TaskCard({ id, index, column, card, role }: any) {
           </span>
         </div>
 
-    
         <div className="mt-3 flex flex-wrap items-center gap-1.5">
           <span
             className={`rounded-full px-2.5 py-1 text-[10px] font-semibold ${setStyle(
@@ -136,7 +135,6 @@ export function TaskCard({ id, index, column, card, role }: any) {
             </span>
           ))}
         </div>
-
 
         {card?.attachments?.length > 0 && (
           <div className="mt-3">
@@ -171,9 +169,7 @@ export function TaskCard({ id, index, column, card, role }: any) {
           </div>
         )}
 
-
         <div className="mt-3 flex items-center gap-3 border-t border-border/50 pt-2.5">
-  
           {card?.dueDate && (
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <CalendarDays className="h-3.5 w-3.5" />
@@ -182,7 +178,6 @@ export function TaskCard({ id, index, column, card, role }: any) {
             </div>
           )}
 
-   
           {card?.attachments?.length > 0 && (
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Paperclip className="h-3.5 w-3.5" />
@@ -190,7 +185,6 @@ export function TaskCard({ id, index, column, card, role }: any) {
               <span>{card.attachments.length}</span>
             </div>
           )}
-
 
           {card?.members?.length > 0 && (
             <div className="ml-auto flex -space-x-1.5">

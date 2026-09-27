@@ -59,7 +59,6 @@ export const DragDrop = ({
   const removeExistingFile = (id: number) => {
     setExistingFiles((prev) => prev.filter((file) => file.id !== id));
 
-   
     onFileDelete((prev: Attachment[]) => [
       ...prev,
       ...existingFiles.filter((el) => el.id === id),

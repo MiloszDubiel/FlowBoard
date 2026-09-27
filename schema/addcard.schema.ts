@@ -11,7 +11,7 @@ export const createCardSchema = z.object({
     ),
   priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]),
 
-  userIds: z.array(z.number())
+  userIds: z.array(z.number()),
 });
 
 export type CreateCardForm = z.infer<typeof createCardSchema>;

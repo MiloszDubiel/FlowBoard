@@ -718,7 +718,7 @@ export default function CardDetails({ card, boardId, role }: any) {
                   className="w- mt-2"
                   onClick={() =>
                     router.replace(
-                      `/projects/board/${boardId}/card/edit-card/${card.id}`,
+                      `/projects/board/${boardId}/card/edit/${card.id}`,
                     )
                   }
                 >

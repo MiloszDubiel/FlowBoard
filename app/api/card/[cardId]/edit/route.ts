@@ -116,6 +116,7 @@ export const PATCH = withAuth(async (user, request, context) => {
       (el) => !selectedLabels.includes(el.labelId),
     );
 
+    //TU USUWAME TE KTORE SA ODZNACZONE
     if (labelsToDelete.length > 0) {
       await tx.cardLabel.deleteMany({
         where: {
@@ -126,6 +127,15 @@ export const PATCH = withAuth(async (user, request, context) => {
         },
       });
     }
+
+    //Tu ZANZNACZAM I POMIJAM TUPL:IKATY
+    await tx.cardLabel.createMany({
+      data: selectedLabels.map((id: number) => ({
+        cardId: Number(cardId),
+        labelId: Number(id),
+      })),
+      skipDuplicates: true,
+    });
 
     if (newLabels?.length) {
       const labelsId = await Promise.all(

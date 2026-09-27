@@ -68,9 +68,6 @@ export default function CardForm({
   const [newLabelColor, setNewLabelColor] = useState("#3B82F6");
   const [labelFromDb, _] = useState(labels);
 
-
-
-
   const [newLabels, setNewLabels] = useState<
     Pick<LabelType, "name" | "color">[]
   >([]);
@@ -299,8 +296,7 @@ export default function CardForm({
               <Button
                 type="button"
                 disabled={!newLabelName.trim()}
-                  onClick={() => {
-                  
+                onClick={() => {
                   setNewLabels((prev) => {
                     const exists = prev.some(
                       (el) =>
@@ -375,7 +371,7 @@ export default function CardForm({
         )}
 
         <div className="flex flex-wrap gap-2">
-          {labels
+          {selectedLabels
             ?.filter((label: LabelType) => selectedLabels.includes(label.id))
             ?.map((label: LabelType) => (
               <div
@@ -391,7 +387,7 @@ export default function CardForm({
                 <button
                   type="button"
                   onClick={() =>
-                    setSelectedLabels((current) =>
+                    setSelectedLabel((current) =>
                       current.filter((id) => id !== label.id),
                     )
                   }
@@ -587,7 +583,7 @@ export default function CardForm({
               ...data,
               userIds: selectedUsers,
               newLabels,
-              selectedLabels,
+              selectedLabels: selectedLabel,
             }),
           )}
         >
