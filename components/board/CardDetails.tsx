@@ -30,6 +30,9 @@ import { type MembershipRole, ROLES } from "@/lib/roles";
 import ConfirmModal from "../modals/ConfirmModal";
 import { useCard } from "@/mutations/dashboard/useCard";
 import { DragDrop } from "../DragDropFile";
+import { colorRecord } from "@/lib/colors";
+import { Label } from "./Label";
+import { setStyle, priorityRecord } from "@/lib/priorityStyles";
 
 const safeParseTasks = (tasks: any): any[] => {
   if (!tasks) return [];
@@ -68,7 +71,7 @@ export default function CardDetails({ card, boardId, role }: any) {
     [attachments],
   );
 
-  console.log(card);
+  console.log(parsedTasks);
 
   const textFiles = useMemo(
     () =>
@@ -559,23 +562,21 @@ export default function CardDetails({ card, boardId, role }: any) {
                 <div className="flex flex-wrap gap-2">
                   {card.labels?.length > 0 ? (
                     card.labels.map((item: any) => (
-                      <span
+                      <Label
                         key={item.label.id}
-                        className="rounded-full px-2.5 py-1 text-[10px] font-semibold"
-                        style={{
-                          backgroundColor: `${item.label.color}20`,
-                          color: item.label.color,
-                          border: `1px solid ${item.label.color}40`,
-                        }}
-                      >
-                        {item.label.name}
-                      </span>
+                        color={colorRecord[item.label.color]}
+                        name={item.label.name}
+                      />
                     ))
                   ) : (
                     <span className="text-sm text-muted-foreground">
                       Brak etykiet
                     </span>
                   )}
+                  <Label
+                    name={priorityRecord[card?.priority] ?? card?.priority}
+                    color={colorRecord[setStyle(card?.priority)]}
+                  />
                 </div>
               </section>
 

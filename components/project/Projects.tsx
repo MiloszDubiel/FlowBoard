@@ -29,15 +29,8 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Progress } from "../ui/progress";
+import { colorRecord } from "@/lib/colors";
 
-const boardColorClasses: Record<string, string> = {
-  ORANGE: "bg-orange-500",
-  BLUE: "bg-blue-500",
-  GREEN: "bg-green-500",
-  RED: "bg-red-500",
-  PURPLE: "bg-purple-500",
-  PINK: "bg-pink-500",
-};
 const Projects = ({ projects, children, taskState }: any) => {
   const route = useRouter();
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -129,6 +122,8 @@ const Projects = ({ projects, children, taskState }: any) => {
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((project: any) => {
+            const color = project.color;
+
             return (
               <Card
                 key={project.id}
@@ -138,7 +133,10 @@ const Projects = ({ projects, children, taskState }: any) => {
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
                       <div
-                        className={`h-10 w-10 rounded-lg ${boardColorClasses[project.color]} flex items-center justify-center text-white`}
+                        className={`h-10 w-10 rounded-lg flex items-center justify-center text-white`}
+                        style={{
+                          backgroundColor: `${colorRecord[color]+"33"}`,
+                        }}
                       >
                         <FolderKanban className="h-5 w-5" />
                       </div>
@@ -217,14 +215,14 @@ const Projects = ({ projects, children, taskState }: any) => {
                       <CheckCircle2 className="h-4 w-4" />
 
                       <span>
-                        {/* {project.completed}/{project.tasks} zadań */}
+                        {project.completed}/{project.tasks} zadań
                       </span>
                     </div>
 
                     <div className="flex items-center gap-1.5">
                       <Users className="h-4 w-4" />
 
-                      {/* <span>{project.members}</span> */}
+                      <span>{project.members}</span>
                     </div>
                   </div>
                 </CardContent>

@@ -14,7 +14,7 @@ export const POST = withAuth(async (user, request) => {
 
   const creatorID = user.userID;
 
-  const { name, description } = result.data;
+  const { name, description, color } = result.data;
 
   await prisma.$transaction(async (tx) => {
     const project = await tx.project.create({
@@ -22,6 +22,7 @@ export const POST = withAuth(async (user, request) => {
         name,
         description,
         ownerId: user.userID,
+        color: color,
       },
     });
 
@@ -38,6 +39,16 @@ export const POST = withAuth(async (user, request) => {
           },
         },
       },
+    });
+
+    const deafutlLists = ["Do zrobienia", "W trakcie", "Zrobione"];
+
+    await tx.list.createMany({
+      data: deafutlLists.map((list, index) => ({
+        boardId: board.id,
+        position: index,
+        name: list,
+      })),
     });
 
     return {

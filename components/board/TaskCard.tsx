@@ -15,33 +15,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { ca } from "zod/v4/locales";
-
-const priorityRecord: Record<string, string> = {
-  LOW: "Niski",
-  MEDIUM: "Średni",
-  HIGH: "Wysoki",
-  URGENT: "Nagły",
-};
-
-const setStyle = (priority: string) => {
-  switch (priority) {
-    case "LOW":
-      return "bg-green-500/10 text-green-600 dark:text-green-400";
-
-    case "MEDIUM":
-      return "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400";
-
-    case "HIGH":
-      return "bg-orange-500/10 text-orange-600 dark:text-orange-400";
-
-    case "URGENT":
-      return "bg-red-500/10 text-red-600 dark:text-red-400";
-
-    default:
-      return "bg-muted text-muted-foreground";
-  }
-};
+import { Label } from "./Label";
+import { colorRecord } from "@/lib/colors";
+import { setStyle, priorityRecord } from "@/lib/priorityStyles";
 
 export function TaskCard({ id, index, column, card, role }: any) {
   const { ref, isDragging, handleRef } = useSortable({
@@ -53,8 +29,6 @@ export function TaskCard({ id, index, column, card, role }: any) {
   });
   const path = usePathname();
   const route = useRouter();
-
-  console.log(card);
 
   return (
     <Card
@@ -75,7 +49,6 @@ export function TaskCard({ id, index, column, card, role }: any) {
         </Button>
       )}
       <CardContent className="p-3">
-        {/* Tytuł + opis */}
         <div className="pr-7">
           <p className="text-sm font-medium leading-5 text-card-foreground">
             {card?.title}
@@ -88,7 +61,6 @@ export function TaskCard({ id, index, column, card, role }: any) {
           )}
         </div>
 
-        {/* Autor + ID */}
         <div className="mt-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Avatar className="h-6 w-6">
@@ -113,26 +85,17 @@ export function TaskCard({ id, index, column, card, role }: any) {
         </div>
 
         <div className="mt-3 flex flex-wrap items-center gap-1.5">
-          <span
-            className={`rounded-full px-2.5 py-1 text-[10px] font-semibold ${setStyle(
-              card?.priority,
-            )}`}
-          >
-            {priorityRecord[card?.priority] ?? card?.priority}
-          </span>
+          <Label
+            name={priorityRecord[card?.priority] ?? card?.priority}
+            color={colorRecord[setStyle(card?.priority)]}
+          />
 
           {card?.labels?.map((item: any) => (
-            <span
+            <Label
               key={item.label.id}
-              className="rounded-full px-2.5 py-1 text-[10px] font-semibold"
-              style={{
-                backgroundColor: `${item.label.color}20`,
-                color: item.label.color,
-                border: `1px solid ${item.label.color}40`,
-              }}
-            >
-              {item.label.name}
-            </span>
+              color={colorRecord[item.label.color]}
+              name={item.label.name}
+            />
           ))}
         </div>
 
@@ -140,26 +103,29 @@ export function TaskCard({ id, index, column, card, role }: any) {
           <div className="mt-3">
             <Carousel className="w-full">
               <CarouselContent>
-                {card.attachments.map((attachment: any) => (
-                  <CarouselItem key={`attachment-${attachment.id}`}>
-                    <a
-                      href={attachment.fileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group block overflow-hidden rounded-lg"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <img
-                        src={attachment.fileUrl}
-                        alt={attachment.fileName ?? "Załącznik"}
-                        className="h-40 w-full object-cover transition-transform group-hover:scale-[1.02]"
-                      />
-                    </a>
-                  </CarouselItem>
-                ))}
+                {card.attachments
+                  .filter((el: any) => el.fileType === "IMG")
+                  ?.map((attachment: any) => (
+                    <CarouselItem key={`attachment-${attachment.id}`}>
+                      <a
+                        href={attachment.fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group block overflow-hidden rounded-lg"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <img
+                          src={attachment.fileUrl}
+                          alt={attachment.fileName ?? "Załącznik"}
+                          className="h-40 w-full object-cover transition-transform group-hover:scale-[1.02]"
+                        />
+                      </a>
+                    </CarouselItem>
+                  ))}
               </CarouselContent>
 
-              {card.attachments.length > 1 && (
+              {card.attachments.filter((el: any) => el.fileType === "IMG") >
+                1 && (
                 <>
                   <CarouselPrevious />
                   <CarouselNext />

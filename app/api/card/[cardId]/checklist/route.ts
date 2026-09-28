@@ -7,7 +7,7 @@ import {
 } from "@/lib/auth/checkMembership";
 
 export const PATCH = withAuth(async (user, request, context) => {
-  const { tasks } = await request.json();
+  const { newList } = await request.json();
   const { cardId } = await context.params;
 
   if (!checkCardMembership(Number(user.userID), Number(cardId))) {
@@ -47,7 +47,7 @@ export const PATCH = withAuth(async (user, request, context) => {
       id: Number(cardId),
     },
     data: {
-      tasks: tasks,
+      tasks: newList,
     },
   });
 

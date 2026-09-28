@@ -1,7 +1,6 @@
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { getBoard, getBoardMembers, getCard } from "@/lib/data/board";
-import AddCard from "@/components/board/AddCard";
-import CardForm from "@/components/CardForm";
+import Forbidden from "@/components/Forbbiden";
 import EditCard from "@/components/board/EditCard";
 import { prisma } from "@/lib/prisma";
 
@@ -18,7 +17,7 @@ export default async function AddCardPage({
   const user = await getCurrentUser();
 
   if (!user) {
-    return <>Brak dostępu</>;
+    return <Forbidden />;
   }
 
   const id = Number(projectId);
@@ -30,12 +29,16 @@ export default async function AddCardPage({
   const board = await getBoard(id);
 
   if (!board) {
-    return <>Board nie istnieje lub nie masz do niego dostępu</>;
+    return <Forbidden />;
   }
 
   const members = await getBoardMembers(board.id);
 
   const card = await getCard(Number(cardId), Number(board.id));
+
+  if (!card) {
+    return <Forbidden />;
+  }
 
   const memebrships = await prisma.cardMember.findMany({
     where: {

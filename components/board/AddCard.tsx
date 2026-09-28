@@ -55,10 +55,8 @@ export default function AddCard({
     });
   };
 
-  console.log(labels);
 
   const onSubmit = async (data: CreateCardForm) => {
-    console.log(data);
 
     addCard(
       { ...data, tasks, listId },

@@ -1,10 +1,6 @@
 import { getCurrentUser } from "@/lib/auth/get-current-user";
-import {
-  getBoard,
-  getBoardCards,
-  getBoardLists,
-  getBoardMembers,
-} from "@/lib/data/board";
+import { getBoard, getBoardMembers } from "@/lib/data/board";
+import Forbidden from "@/components/Forbbiden";
 import Board from "@/components/board/Board";
 
 export default async function BoardPage({
@@ -19,7 +15,7 @@ export default async function BoardPage({
   const user = await getCurrentUser();
 
   if (!user) {
-    return <>Brak dostępu</>;
+    return <Forbidden />;
   }
 
   const id = Number(projectId);
@@ -31,7 +27,7 @@ export default async function BoardPage({
   const board = await getBoard(id);
 
   if (!board) {
-    return <>Board nie istnieje lub nie masz do niego dostępu</>;
+    return <Forbidden />;
   }
 
   const boardId = board.id;

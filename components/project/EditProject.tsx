@@ -21,7 +21,8 @@ import { addProjectSchema, AddProjectType } from "@/schema/addproject.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Project } from "@/types/project.type";
-
+import { ProjectForm } from "../ProjectForm";
+import { colorRecord } from "@/lib/colors";
 type EditProjectProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -45,15 +46,16 @@ export default function EditProject({
     defaultValues: {
       name: project?.name,
       description: project?.description,
+      color: project?.color || "ORANGE",
     },
   });
 
-  //Defualt values tylko przy pierwszym renderze
   useEffect(() => {
     if (project) {
       reset({
         name: project.name,
         description: project.description ?? "",
+        color: project.color ?? "ORANGE",
       });
     }
   }, [project, reset]);
@@ -92,63 +94,15 @@ export default function EditProject({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-125">
-        <DialogHeader>
-          <DialogTitle>Edytuj projekt</DialogTitle>
-          <DialogDescription>
-            Edytuj projekt, który już istnieje
-          </DialogDescription>
-        </DialogHeader>
-
-        <form onSubmit={handleSubmit(submit)} className="space-y-5">
-          <div className="space-y-2">
-            <Label htmlFor="project-name">Nazwa projektu</Label>
-
-            <Input
-              id="project-name"
-              placeholder="np. Website redesign"
-              {...register("name")}
-              disabled={isPending}
-              autoFocus
-            />
-            <FieldError errors={[errors.name]} />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="project-description">Opis</Label>
-
-            <Textarea
-              id="project-description"
-              placeholder="O czym jest ten projekt?"
-              {...register("description")}
-              disabled={isPending}
-              rows={4}
-            />
-            <FieldError errors={[errors.description]} />
-          </div>
-
-          <div className="flex justify-end gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-              disabled={isPending}
-              className="cursor-pointer"
-            >
-              Anuluj
-            </Button>
-
-            <Button
-              type="submit"
-              disabled={isPending}
-              className="cursor-pointer"
-            >
-              {isPending ? "Edytowanie..." : "Edytuj projekt"}
-            </Button>
-          </div>
-        </form>
-      </DialogContent>
-    </Dialog>
+    <ProjectForm
+      open={open}
+      onOpenChange={onOpenChange}
+      onSubmit={submit}
+      handleSubmit={handleSubmit}
+      register={register}
+      errors={errors}
+      isPending={isPending}
+      type="edit"
+    />
   );
 }

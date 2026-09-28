@@ -40,16 +40,17 @@ const mainItems = [
     url: "/projects/tasks",
     icon: CheckSquare,
   },
-  {
-    title: "Kalendarz",
-    url: "/projects/calendar",
-    icon: Calendar,
-  },
-  {
-    title: "Zespół",
-    url: "/projects/team",
-    icon: Users,
-  },
+  //DO IMPLEMENTACJI
+  // {
+  //   title: "Kalendarz",
+  //   url: "/projects/calendar",
+  //   icon: Calendar,
+  // },
+  // {
+  //   title: "Zespół",
+  //   url: "/projects/team",
+  //   icon: Users,
+  // },
   {
     title: "Zaproszenia",
     url: "/projects/invits",

@@ -50,12 +50,12 @@ export default function LoginForm() {
         onSubmit={handleSubmit(submit, (err) => console.log(err))}
       >
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">email</Label>
           <Input
             id="email"
             type="email"
             {...register("email")}
-            placeholder="Email"
+            placeholder="email@example.com"
           />
         </div>
 

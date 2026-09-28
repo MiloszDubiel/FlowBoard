@@ -64,11 +64,14 @@ export const getProjects = async () => {
     const progress =
       totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
+    const members = project.boards[0].members.length;
+
     return {
       ...project,
       completedTasks,
       totalTasks,
       progress,
+      members,
     };
   });
 };

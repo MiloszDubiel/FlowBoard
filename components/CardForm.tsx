@@ -40,6 +40,7 @@ type LabelType = {
 
 import { type CreateCardForm, createCardSchema } from "@/schema/addcard.schema";
 import { toast } from "sonner";
+import { projectColors } from "@/lib/colors";
 export default function CardForm({
   config,
   members,
@@ -62,7 +63,9 @@ export default function CardForm({
   } = config;
 
   const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
-  const [selectedLabel, setSelectedLabel] = useState<number[]>(selectedLabels);
+  const [selectedLabel, setSelectedLabel] = useState<number[]>(
+    selectedLabels || [],
+  );
   const [isCreatingLabel, setIsCreatingLabel] = useState(false);
   const [newLabelName, setNewLabelName] = useState("");
   const [newLabelColor, setNewLabelColor] = useState("#3B82F6");
@@ -244,28 +247,18 @@ export default function CardForm({
               <Label>Kolor etykiety</Label>
 
               <div className="flex flex-wrap gap-3">
-                {[
-                  "#EF4444",
-                  "#F97316",
-                  "#EAB308",
-                  "#22C55E",
-                  "#06B6D4",
-                  "#3B82F6",
-                  "#8B5CF6",
-                  "#EC4899",
-                  "#64748B",
-                ].map((color) => (
+                {projectColors.map((color) => (
                   <button
-                    key={color}
+                    key={color.value}
                     type="button"
-                    onClick={() => setNewLabelColor(color)}
+                    onClick={() => setNewLabelColor(color.value)}
                     className={`h-8 w-8 rounded-full border-2 ${
-                      newLabelColor === color
+                      newLabelColor === color.value
                         ? "border-foreground ring-2 ring-ring ring-offset-2"
                         : "border-transparent"
                     }`}
-                    style={{ backgroundColor: color }}
-                    aria-label={`Wybierz kolor ${color}`}
+                    style={{ backgroundColor: color.value }}
+                    aria-label={`Wybierz kolor ${color.color}`}
                   />
                 ))}
               </div>

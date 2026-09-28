@@ -149,8 +149,6 @@ export default function Board({ board, members }: any) {
             onDragEnd={(event) => {
               const { source } = event.operation;
 
-              console.log(source?.type);
-
               if (event.canceled || source?.type == "item") {
                 switchList(items);
               }

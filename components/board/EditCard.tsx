@@ -72,7 +72,7 @@ export default function EditCard({ cardMemebrs = [], card, labels }: any) {
   };
 
   const onSubmit = async (data: any) => {
-    console.log({ ...data, tasks });
+
 
     editCard(
       {
@@ -138,7 +138,7 @@ export default function EditCard({ cardMemebrs = [], card, labels }: any) {
         defaults={{
           title: card?.title,
           description: card?.description,
-          dueDate: formatDateTimeLocal(card.dueDate),
+          dueDate: formatDateTimeLocal(card?.dueDate),
           priority: card?.priority,
           userIds: card.members.map((el: any) => el.userId),
         }}

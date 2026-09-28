@@ -16,6 +16,21 @@ datasource db {
 // USER
 // =========================
 
+enum Colors {
+  BLUE   @map("#3B82F6")
+  PURPLE @map("#8B5CF6")
+  PINK   @map("#EC4899")
+  RED    @map("#EF4444")
+  ORANGE @map("#F97316")
+  YELLOW @map("#EAB308")
+  GREEN  @map("#22C55E")
+  TEAL   @map("#14B8A6")
+  CYAN   @map("#06B6D4")
+  SLATE  @map("#64748B")
+}
+
+
+
 model User {
   id           Int     @id @default(autoincrement())
   name         String?
@@ -57,18 +72,12 @@ model Project {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  color Color @default(ORANGE)
+  color Colors @default(ORANGE)
 
   @@index([ownerId])
   @@map("projects")
 }
 
-enum Color {
-  GREEN  @map("bg-green-500/10")
-  BLUE   @map("bg-blue-500/10")
-  RED    @map("bg-red-500/10")
-  ORANGE @map("bg-orange-500/10")
-}
 
 // =========================
 // BOARD

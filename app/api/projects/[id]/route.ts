@@ -20,7 +20,7 @@ export const PATCH = withAuth(async (user, request, { params }) => {
 
   await prisma.project.update({
     where: { id: projectID },
-    data: { name: body.name, description: body.description },
+    data: { name: body.name, description: body.description, color: body.color },
   });
 
   return NextResponse.json({});

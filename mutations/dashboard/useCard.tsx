@@ -16,8 +16,6 @@ export const useCard = () => {
 
   const removeFile = useMutation({
     mutationFn: async ({ id, files }: any) => {
-      console.log(id);
-
       const { data } = await axios.post(`/api/card/${id}/file/`, { files });
       return data;
     },
@@ -74,7 +72,9 @@ export const useCard = () => {
       newList: ChecklistType[];
       id: number;
     }) => {
-      const { data } = await axios.patch(`/api/card/${id}/checklist`, newList);
+      const { data } = await axios.patch(`/api/card/${id}/checklist`, {
+        newList,
+      });
 
       return data;
     },

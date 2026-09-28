@@ -1,8 +1,8 @@
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { getBoard, getBoardMembers, getCard } from "@/lib/data/board";
-import CardDetails from "@/components/board/CardDetails";
 import AddCard from "@/components/board/AddCard";
 import { prisma } from "@/lib/prisma";
+import Forbidden from "@/components/Forbbiden";
 
 export default async function AddCardPage({
   params,
@@ -17,7 +17,7 @@ export default async function AddCardPage({
   const user = await getCurrentUser();
 
   if (!user) {
-    return <>Brak dostępu</>;
+    return <Forbidden />;
   }
 
   const id = Number(projectId);
@@ -29,7 +29,7 @@ export default async function AddCardPage({
   const board = await getBoard(id);
 
   if (!board) {
-    return <>Board nie istnieje lub nie masz do niego dostępu</>;
+    return <Forbidden />;
   }
 
   const members = await getBoardMembers(board.id);
