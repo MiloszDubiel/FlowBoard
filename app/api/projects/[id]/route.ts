@@ -23,7 +23,10 @@ export const PATCH = withAuth(async (user, request, { params }) => {
     data: { name: body.name, description: body.description, color: body.color },
   });
 
-  return NextResponse.json({});
+  return NextResponse.json(
+    { message: "Zaaktualizowano projekt" },
+    { status: 200 },
+  );
 });
 
 export const DELETE = withAuth(async (user, request, { params }) => {
