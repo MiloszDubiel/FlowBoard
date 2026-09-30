@@ -518,7 +518,7 @@ export default function CardDetails({ card, boardId, role }: any) {
                         className="flex items-center gap-3"
                       >
                         <Avatar className="h-8 w-8">
-                          <AvatarImage src={member.avatarUrl ?? undefined} />
+                          <AvatarImage src={member.user.avatarUrl ?? undefined} />
 
                           <AvatarFallback>
                             {member.user?.name?.slice(0, 2).toUpperCase()}

@@ -124,7 +124,6 @@ const Projects = ({ projects, children, taskState }: any) => {
         </Card>
       </div>
 
-      {/* Wyszukiwanie i filtry */}
       <div className="mb-8 space-y-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <div className="relative max-w-md flex-1">
@@ -166,7 +165,7 @@ const Projects = ({ projects, children, taskState }: any) => {
         </div>
       </div>
 
-      {/* Lista projektów */}
+ 
       <section>
         <div className="mb-5 flex items-center justify-between">
           <div>
@@ -276,7 +275,6 @@ const Projects = ({ projects, children, taskState }: any) => {
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem>
                             <Link href={`/projects/board/${project.id}`}>
-                        
                               Otwórz projekt
                             </Link>
                           </DropdownMenuItem>
@@ -287,7 +285,6 @@ const Projects = ({ projects, children, taskState }: any) => {
                               setOpenEdit(true);
                             }}
                           >
-                           
                             Edytuj projekt
                           </DropdownMenuItem>
 
@@ -298,7 +295,6 @@ const Projects = ({ projects, children, taskState }: any) => {
                               setOpenConfirm(true);
                             }}
                           >
-                    
                             Usuń projekt
                           </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -333,7 +329,7 @@ const Projects = ({ projects, children, taskState }: any) => {
                         <CheckCircle2 className="h-4 w-4" />
 
                         <span>
-                          {project.completed}/{project.tasks} zadań
+                          {project.completedTasks}/{project.totalTasks} zadań
                         </span>
                       </div>
 

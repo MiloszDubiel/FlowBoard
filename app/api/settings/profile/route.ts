@@ -30,10 +30,15 @@ export const PATCH = withAuth(async (user, request, context) => {
   let fileUrl = null;
 
   if (img) {
-    await fs.rm(
-      path.join(process.cwd(), "public", "uploads", "avatar", String(userID)),
-      { recursive: true },
-    );
+    try {
+      await fs.rm(
+        path.join(process.cwd(), "public", "uploads", "avatar", String(userID)),
+        { recursive: true },
+      );
+    } catch (err) {
+      console.log(err);
+    }
+
     const extension = path.extname(img.name);
 
     const randomFileName = `${crypto.randomUUID()}${extension}`;

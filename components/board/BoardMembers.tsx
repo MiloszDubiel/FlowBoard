@@ -177,14 +177,7 @@ export default function BoardMembersModal({
                       >
                         <div className="flex items-center gap-3">
                           <Avatar className="h-9 w-9">
-                            <AvatarFallback>
-                              {el.name
-                                .split(" ")
-                                .map((name: any) => name[0])
-                                .join("")
-                                .slice(0, 2)
-                                .toUpperCase()}
-                            </AvatarFallback>
+                            
                           </Avatar>
 
                           <div>

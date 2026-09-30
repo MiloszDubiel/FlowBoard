@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { X, LogOut } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
@@ -39,6 +39,7 @@ function MembersList({
                     .slice(0, 2)
                     .toUpperCase()}
                 </AvatarFallback>
+                <AvatarImage src={member.user.avatarUrl ?? undefined} />
               </Avatar>
 
               <div>

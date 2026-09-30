@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import BoardMembersModal from "./BoardMembers";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DragDropProvider } from "@dnd-kit/react";
 import { move } from "@dnd-kit/helpers";
 import { TaskCard } from "./TaskCard";
@@ -91,14 +91,11 @@ export default function Board({ board, members }: any) {
         <div className="flex items-center gap-2">
           {members.map((member: any) => (
             <div key={member.id} className="group relative">
-              <Avatar className="h-9 w-9">
+              <Avatar className="h-9 w-9 shrink-0">
+                <AvatarImage src={member.user.avatarUrl ?? undefined} />
+
                 <AvatarFallback>
-                  {member.user.name
-                    .split(" ")
-                    .map((name: string) => name[0])
-                    .join("")
-                    .slice(0, 2)
-                    .toUpperCase()}
+                  {member.user.name.slice(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
 
