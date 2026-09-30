@@ -7,10 +7,9 @@ export const registerShema = z
       .trim()
       .toLowerCase()
       .min(1, "Podaj poprawny email"),
-    name: z.string().min(2, "Podaj imię"),
     password: z
       .string()
-      .min(1, "Hasło musi zawierać minimum 8 znaków.")
+      .min(8, "Hasło musi zawierać minimum 8 znaków.")
       .regex(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
         "Hasło musi składać się ze specjalnego znaku, cyfry i wielkie litery",

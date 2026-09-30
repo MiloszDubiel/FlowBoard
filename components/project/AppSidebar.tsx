@@ -28,6 +28,7 @@ import CreateProject from "./CreateProject";
 import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
 import { useLogout } from "@/mutations/useLogout";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const mainItems = [
   {
@@ -68,6 +69,8 @@ const secondaryItems = [
 
 export default function AppSidebar({ projects = [] }: any) {
   const { user } = useUser();
+
+  console.log(user);
 
   const {
     logout: { mutate: logout },
@@ -174,9 +177,17 @@ export default function AppSidebar({ projects = [] }: any) {
 
       <SidebarFooter>
         <div className="flex items-center gap-3 rounded-lg border p-3">
-          <div className="flex size-8 items-center justify-center rounded-full bg-muted text-sm font-medium">
-            M
-          </div>
+          <Avatar className="size-9">
+            <AvatarImage
+              src={user?.avatarUrl ?? ""}
+              alt={user?.name ?? "Zdjęcie profilowe"}
+              className="object-cover"
+            />
+
+            <AvatarFallback className="bg-primary/10 text-xl text-primary">
+              {user?.name?.slice(0, 2).toUpperCase() ?? "U"}
+            </AvatarFallback>
+          </Avatar>
 
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium">{user?.name}</p>

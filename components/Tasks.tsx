@@ -54,7 +54,6 @@ export default function Tasks({ cards }: any) {
     <div className="mx-auto w-full max-w-7xl space-y-8 px-6 py-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Moje zadania</h1>
-
         <p className="mt-2 text-muted-foreground">
           Wszystkie zadania z kart, do których jesteś przypisany.
         </p>

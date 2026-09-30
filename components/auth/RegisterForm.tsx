@@ -58,16 +58,7 @@ export default function RegisterForm() {
           />
           <FieldError errors={[errors.email]} />
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="name">Imię</Label>
-          <Input
-            id="name"
-            type="text"
-            placeholder="Imię"
-            {...register("name")}
-          />
-          <FieldError errors={[errors.email]} />
-        </div>
+
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Hasło</Label>

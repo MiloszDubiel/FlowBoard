@@ -49,5 +49,6 @@ export const config = {
     "/board/:path*",
     "/login/:path*",
     "/register/:path*",
+    "/settings/:path*",
   ],
 };
