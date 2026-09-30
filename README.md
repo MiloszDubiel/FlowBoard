@@ -1,5 +1,4 @@
-# Task Board
-
+# FlowBoard
 Aplikacja do organizowania pracy i zarządzania zadaniami w formie
 tablic. Umożliwia porządkowanie kart w kolumnach, przypisywanie etykiet
 i priorytetów oraz współpracę użytkowników.
