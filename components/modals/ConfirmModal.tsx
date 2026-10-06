@@ -25,14 +25,14 @@ type ConfirmModalProps = {
   message: string;
 };
 
-export default function ConfirmModal({
+const ConfirmModal = ({
   open,
   onOpenChange,
   onSubmit,
   onCancel,
   title,
   message,
-}: ConfirmModalProps) {
+}: ConfirmModalProps) => {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
@@ -48,4 +48,6 @@ export default function ConfirmModal({
       </AlertDialogContent>
     </AlertDialog>
   );
-}
+};
+
+export default ConfirmModal;

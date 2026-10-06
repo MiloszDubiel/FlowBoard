@@ -5,13 +5,13 @@ type RouteContext = {
   params: Promise<Record<string, string>>;
 };
 
-export function withAuth(
+export const withAuth = (
   handler: (
     user: any,
     request: Request,
     context: RouteContext,
   ) => Promise<Response>,
-) {
+) => {
   return async (request: Request, context: RouteContext) => {
     try {
       const user = await requireAuth();
@@ -32,4 +32,4 @@ export function withAuth(
       );
     }
   };
-}
+};

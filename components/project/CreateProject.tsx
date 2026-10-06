@@ -15,10 +15,7 @@ type CreateProjectProps = {
   onOpenChange: (open: boolean) => void;
 };
 
-export default function CreateProject({
-  open,
-  onOpenChange,
-}: CreateProjectProps) {
+const CreateProject = ({ open, onOpenChange }: CreateProjectProps) => {
   const router = useRouter();
 
   const {
@@ -70,4 +67,6 @@ export default function CreateProject({
       isPending={isPending}
     />
   );
-}
+};
+
+export default CreateProject;

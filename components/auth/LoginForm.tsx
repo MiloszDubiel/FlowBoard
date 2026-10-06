@@ -12,6 +12,8 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Mail, Lock, Loader2 } from "lucide-react";
+import { FieldError } from "../ui/field";
 
 export default function LoginForm() {
   const {
@@ -23,7 +25,7 @@ export default function LoginForm() {
   });
   const router = useRouter();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async (data: LoginTypes) => {
       const response = await axios.post("/api/auth/login", data);
       return response.data;
@@ -44,19 +46,28 @@ export default function LoginForm() {
   };
 
   return (
-    <CardContent className="w-96">
+    <CardContent className="w-full">
       <form
         className="space-y-5"
         onSubmit={handleSubmit(submit, (err) => console.log(err))}
       >
         <div className="space-y-2">
-          <Label htmlFor="email">email</Label>
-          <Input
-            id="email"
-            type="email"
-            {...register("email")}
-            placeholder="email@example.com"
-          />
+          <Label htmlFor="email">Adres e-mail</Label>
+
+          <div className="relative">
+            <Mail className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+
+            <Input
+              id="email"
+              type="email"
+              placeholder="email@example.com"
+              autoComplete="email"
+              className="h-11 pl-10"
+              {...register("email")}
+            />
+          </div>
+
+          <FieldError errors={[errors.email]} />
         </div>
 
         <div className="space-y-2">
@@ -65,22 +76,37 @@ export default function LoginForm() {
 
             <Link
               href="/forgot-password"
-              className="text-sm text-muted-foreground hover:text-primary"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
             >
               Nie pamiętasz hasła?
             </Link>
           </div>
 
-          <Input
-            id="password"
-            type="password"
-            {...register("password")}
-            placeholder="••••••••"
-          />
+          <div className="relative">
+            <Lock className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+
+            <Input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              autoComplete="current-password"
+              className="h-11 pl-10"
+              {...register("password")}
+            />
+          </div>
+
+          <FieldError errors={[errors.password]} />
         </div>
 
-        <Button type="submit" className="w-full">
-          Zaloguj się
+        <Button type="submit" className="h-11 w-full" disabled={isPending}>
+          {isPending ? (
+            <>
+              <Loader2 className="mr-2 size-4 animate-spin" />
+              Logowanie...
+            </>
+          ) : (
+            "Zaloguj się"
+          )}
         </Button>
       </form>
 
@@ -88,7 +114,7 @@ export default function LoginForm() {
         Nie masz jeszcze konta?{" "}
         <Link
           href="/register"
-          className="font-medium text-primary hover:underline"
+          className="font-medium text-primary transition-colors hover:underline"
         >
           Zarejestruj się
         </Link>

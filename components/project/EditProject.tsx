@@ -28,12 +28,11 @@ type EditProjectProps = {
   onOpenChange: (open: boolean) => void;
   project: Project | undefined;
 };
-
-export default function EditProject({
+const EditProject = ({
   open,
   onOpenChange,
   project = undefined,
-}: EditProjectProps) {
+}: EditProjectProps) => {
   const router = useRouter();
 
   const {
@@ -105,4 +104,6 @@ export default function EditProject({
       type="edit"
     />
   );
-}
+};
+
+export default EditProject;

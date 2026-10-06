@@ -12,10 +12,6 @@ datasource db {
   provider = "mysql"
 }
 
-// =========================
-// USER
-// =========================
-
 enum Colors {
   BLUE   @map("#3B82F6")
   PURPLE @map("#8B5CF6")
@@ -29,37 +25,44 @@ enum Colors {
   SLATE  @map("#64748B")
 }
 
-
-
 model User {
   id           Int     @id @default(autoincrement())
   name         String?
-  lastname      String?
+  lastname     String?
   email        String  @unique
   passwordHash String
   avatarUrl    String?
 
-  bio          String?
+  bio       String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  projects           Project[]
-  boards             Board[]
-  memberships        BoardMember[]
-  cardsCreated       Card[]              @relation("CardCreator")
-  cardMembers        CardMember[]
-  comments           Comment[]
-  attachments        Attachment[]
-  activities         Activity[]
-  boardInvites       BoardInvite[]
-  commentAttachments CommentAttachment[]
+  projects            Project[]
+  boards              Board[]
+  memberships         BoardMember[]
+  cardsCreated        Card[]               @relation("CardCreator")
+  cardMembers         CardMember[]
+  comments            Comment[]
+  attachments         Attachment[]
+  activities          Activity[]
+  boardInvites        BoardInvite[]
+  commentAttachments  CommentAttachment[]
+  passwordResetTokens PasswordResetToken[]
 
   @@map("users")
 }
 
-// =========================
-// PROJECT
-// =========================
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  tokenHash String   @unique
+  userId    Int
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
 
 model Project {
   id          Int     @id @default(autoincrement())
@@ -79,11 +82,6 @@ model Project {
   @@index([ownerId])
   @@map("projects")
 }
-
-
-// =========================
-// BOARD
-// =========================
 
 model Board {
   id          Int     @id @default(autoincrement())
@@ -109,9 +107,6 @@ model Board {
   @@map("boards")
 }
 
-// =========================
-// BOARD MEMBERS
-// =========================
 
 model BoardMember {
   id       Int       @id @default(autoincrement())
@@ -153,10 +148,6 @@ enum InviteStatus {
   REJECTED
 }
 
-// =========================
-// LIST
-// =========================
-
 model List {
   id       Int    @id @default(autoincrement())
   boardId  Int
@@ -172,10 +163,6 @@ model List {
   @@index([boardId])
   @@map("lists")
 }
-
-// =========================
-// CARD
-// =========================
 
 model Card {
   id          Int          @id @default(autoincrement())
@@ -213,10 +200,6 @@ enum CardPriority {
   URGENT
 }
 
-// =========================
-// CARD MEMBERS
-// =========================
-
 model CardMember {
   id     Int @id @default(autoincrement())
   cardId Int
@@ -231,9 +214,6 @@ model CardMember {
   @@map("card_members")
 }
 
-// =========================
-// LABEL
-// =========================
 
 model Label {
   id      Int    @id @default(autoincrement())
@@ -250,10 +230,6 @@ model Label {
   @@map("labels")
 }
 
-// =========================
-// CARD LABEL
-// =========================
-
 model CardLabel {
   cardId  Int
   labelId Int
@@ -265,10 +241,6 @@ model CardLabel {
   @@index([labelId])
   @@map("card_labels")
 }
-
-// =========================
-// COMMENT
-// =========================
 
 model Comment {
   id       Int     @id @default(autoincrement())
@@ -313,10 +285,6 @@ model CommentAttachment {
   @@map("commentattachments")
 }
 
-// =========================
-// ATTACHMENT
-// =========================
-
 model Attachment {
   id     Int @id @default(autoincrement())
   cardId Int
@@ -342,9 +310,7 @@ enum FileType {
   TEXTFILE
 }
 
-// =========================
-// ACTIVITY
-// =========================
+//W trakcie implementacji 
 
 model Activity {
   id      Int  @id @default(autoincrement())

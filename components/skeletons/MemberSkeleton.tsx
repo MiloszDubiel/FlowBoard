@@ -1,6 +1,6 @@
 import { Skeleton } from "../ui/skeleton";
 
-function MembersSkeleton() {
+const MembersSkeleton = () => {
   return (
     <div className="rounded-md border p-2 space-y-2">
       {[1, 2, 3].map((item) => (
@@ -25,5 +25,5 @@ function MembersSkeleton() {
       ))}
     </div>
   );
-}
+};
 export default MembersSkeleton;

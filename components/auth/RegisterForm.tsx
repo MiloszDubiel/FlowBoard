@@ -12,6 +12,7 @@ import { registerShema, type RegisterTypes } from "@/schema/register.schem";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
+import { Loader2, Lock, LockKeyhole, Mail } from "lucide-react";
 
 export default function RegisterForm() {
   const {
@@ -22,7 +23,7 @@ export default function RegisterForm() {
     resolver: zodResolver(registerShema),
   });
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async (data: RegisterTypes) => {
       const response = await axios.post("/api/auth/register", data);
 
@@ -43,50 +44,79 @@ export default function RegisterForm() {
   };
 
   return (
-    <CardContent className="w-96">
+    <CardContent className="w-full">
       <form
         className="space-y-5"
         onSubmit={handleSubmit(submit, (err) => console.log(err))}
       >
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="Email"
-            {...register("email")}
-          />
+          <Label htmlFor="email">Adres e-mail</Label>
+
+          <div className="relative">
+            <Mail className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+
+            <Input
+              id="email"
+              type="email"
+              placeholder="email@example.com"
+              autoComplete="email"
+              className="h-11 pl-10"
+              {...register("email")}
+            />
+          </div>
+
           <FieldError errors={[errors.email]} />
         </div>
 
+        {/* Password */}
         <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="password">Hasło</Label>
+          <Label htmlFor="password">Hasło</Label>
+
+          <div className="relative">
+            <Lock className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+
+            <Input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              autoComplete="new-password"
+              className="h-11 pl-10"
+              {...register("password")}
+            />
           </div>
 
-          <Input
-            id="password"
-            type="password"
-            placeholder="••••••••"
-            {...register("password")}
-          />
-          <FieldError errors={[errors.password]} className="" />
+          <FieldError errors={[errors.password]} />
         </div>
+
+        {/* Confirm password */}
         <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="password">Powtórz hasło</Label>
+          <Label htmlFor="confirmPassword">Powtórz hasło</Label>
+
+          <div className="relative">
+            <LockKeyhole className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+
+            <Input
+              id="confirmPassword"
+              type="password"
+              placeholder="••••••••"
+              autoComplete="new-password"
+              className="h-11 pl-10"
+              {...register("confirmPassword")}
+            />
           </div>
 
-          <Input
-            id="password"
-            type="password"
-            placeholder="••••••••"
-            {...register("confirmPassword")}
-          />
-          <FieldError errors={[errors.confirmPassword]} className="" />
+          <FieldError errors={[errors.confirmPassword]} />
         </div>
-        <Button type="submit" className="w-full">
-          Zarejestruj się
+
+        <Button type="submit" className="h-11 w-full" disabled={isPending}>
+          {isPending ? (
+            <>
+              <Loader2 className="mr-2 size-4 animate-spin" />
+              Rejestrowanie...
+            </>
+          ) : (
+            "Zarejestruj się"
+          )}
         </Button>
       </form>
 
@@ -94,7 +124,7 @@ export default function RegisterForm() {
         Masz już konto?{" "}
         <Link
           href="/login"
-          className="font-medium text-primary hover:underline"
+          className="font-medium text-primary transition-colors hover:underline"
         >
           Zaloguj się
         </Link>

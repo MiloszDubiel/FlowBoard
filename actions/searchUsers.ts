@@ -3,7 +3,7 @@
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { prisma } from "@/lib/prisma";
 
-export async function searchUsers(query: string, boardId: number) {
+export const searchUsers = async (query: string, boardId: number) => {
   const user: any = await getCurrentUser();
 
   const users = await prisma.user.findMany({
@@ -42,4 +42,4 @@ export async function searchUsers(query: string, boardId: number) {
   });
 
   return users;
-}
+};

@@ -29,7 +29,7 @@ const settingsMenu = [
 
 type SettingsTab = (typeof settingsMenu)[number]["id"];
 
-export default function Settings({ user }: any) {
+const Settings = ({ user }: any) => {
   const [activeTab, setActiveTab] = useState<SettingsTab>("profile");
 
   return (
@@ -84,4 +84,5 @@ export default function Settings({ user }: any) {
       </div>
     </div>
   );
-}
+};
+export default Settings;

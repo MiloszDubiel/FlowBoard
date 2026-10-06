@@ -11,7 +11,7 @@ import { Badge } from "../ui/badge";
 
 type InvitesProps = { invites: GetInvitsType[] };
 
-export default function Invites({ invites = [] }: InvitesProps) {
+const Invites = ({ invites = [] }: InvitesProps) => {
   const route = useRouter();
   const { mutate, isPending } = useMutation({
     mutationFn: async (boardId: number) => {
@@ -61,7 +61,6 @@ export default function Invites({ invites = [] }: InvitesProps) {
         </Card>
       </div>
 
-      {/* Lista zaproszeń */}
       <section>
         <div className="mb-5 flex items-center justify-between">
           <div>
@@ -131,7 +130,6 @@ export default function Invites({ invites = [] }: InvitesProps) {
                 </CardHeader>
 
                 <CardContent>
-                  {/* Informacje o zapraszającym */}
                   <div className="mb-5 flex items-center gap-3 rounded-lg bg-muted/50 p-3">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-background">
                       <UserRound className="h-4 w-4 text-muted-foreground" />
@@ -148,7 +146,6 @@ export default function Invites({ invites = [] }: InvitesProps) {
                     </div>
                   </div>
 
-                  {/* Przyciski */}
                   <div className="flex flex-col gap-2 border-t pt-4 sm:flex-row">
                     <Button
                       variant="outline"
@@ -181,4 +178,6 @@ export default function Invites({ invites = [] }: InvitesProps) {
       </section>
     </div>
   );
-}
+};
+
+export default Invites;

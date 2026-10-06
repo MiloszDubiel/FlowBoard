@@ -67,7 +67,7 @@ const secondaryItems = [
   },
 ];
 
-export default function AppSidebar({ projects = [] }: any) {
+const AppSidebar = ({ projects = [] }: any) => {
   const { user } = useUser();
 
   console.log(user);
@@ -201,4 +201,6 @@ export default function AppSidebar({ projects = [] }: any) {
       <CreateProject open={open} onOpenChange={setOpen} />
     </Sidebar>
   );
-}
+};
+
+export default AppSidebar;
