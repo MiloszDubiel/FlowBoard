@@ -39,7 +39,7 @@ export const PATCH = withAuth(async (user, request, context) => {
       console.log(err);
     }
 
-    const extension = path.extname(img.name);
+    const extension = path.extname((img as File).name);
 
     const randomFileName = `${crypto.randomUUID()}${extension}`;
 
@@ -55,7 +55,7 @@ export const PATCH = withAuth(async (user, request, context) => {
 
     const filePath = path.join(uploadDir, randomFileName);
 
-    const arrayBuffer = await img.arrayBuffer();
+    const arrayBuffer = await (img as File).arrayBuffer();
     const buffer = new Uint8Array(arrayBuffer);
 
     await fs.writeFile(filePath, buffer);

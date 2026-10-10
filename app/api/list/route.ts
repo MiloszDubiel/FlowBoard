@@ -57,7 +57,7 @@ export const POST = withAuth(async (user, request, context) => {
 
   const list = await prisma.list.create({
     data: {
-      boardId: board.id,
+      boardId: (board as any).id,
       name,
       position: lastList ? lastList.position + 1 : 0,
     },

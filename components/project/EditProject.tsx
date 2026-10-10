@@ -22,7 +22,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Project } from "@/types/project.type";
 import { ProjectForm } from "../ProjectForm";
-import { colorRecord } from "@/lib/colors";
+
 type EditProjectProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -45,7 +45,7 @@ const EditProject = ({
     defaultValues: {
       name: project?.name,
       description: project?.description,
-      color: project?.color || "ORANGE",
+      color: (project?.color as AddProjectType["color"]) || "ORANGE",
     },
   });
 
@@ -54,7 +54,7 @@ const EditProject = ({
       reset({
         name: project.name,
         description: project.description ?? "",
-        color: project.color ?? "ORANGE",
+        color: (project?.color as AddProjectType["color"]) || "ORANGE",
       });
     }
   }, [project, reset]);
