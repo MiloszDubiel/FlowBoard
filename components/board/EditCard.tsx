@@ -38,7 +38,7 @@ export default function EditCard({ cardMemebrs = [], card, labels }: any) {
   };
 
   const {
-    editCard: { mutate: editCard },
+    editCard: { mutate: editCard, isPending },
     addFile: { mutate: addFile },
     removeFile: { mutate: removeFiles },
   } = useCard();
@@ -72,8 +72,6 @@ export default function EditCard({ cardMemebrs = [], card, labels }: any) {
   };
 
   const onSubmit = async (data: any) => {
-
-
     editCard(
       {
         body: { ...data, tasks },
@@ -126,6 +124,7 @@ export default function EditCard({ cardMemebrs = [], card, labels }: any) {
           card,
         }}
         labels={labels}
+        isPending={isPending}
         selectedLabels={card?.labels?.map((el: any) => el.labelId)}
         attachemnts={card?.attachments}
         members={cardMemebrs?.map((el: any) => ({

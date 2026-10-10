@@ -3,6 +3,7 @@ import { withAuth } from "@/lib/withAuth";
 import { createCardSchema } from "@/schema/addcard.schema";
 import { NextResponse } from "next/server";
 import { Label } from "@/generated/prisma/client";
+import { cardChangeLimiter } from "@/lib/ratelimits/ratelimits";
 
 const createLabels = async (
   label: Pick<Label, "color" | "name">,
@@ -24,6 +25,26 @@ export const PATCH = withAuth(async (user, request, context) => {
   const { cardId } = await context.params;
 
   const result = createCardSchema.safeParse(body);
+
+  const { success, reset } = await cardChangeLimiter.limit(
+    `${user.userID}:${cardId}`,
+  );
+
+  if (!success) {
+    return NextResponse.json(
+      {
+        message: "Zbyt wiele prób edycji. Spróbuj ponownie później.",
+      },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(
+            Math.max(1, Math.ceil((reset - Date.now()) / 1000)),
+          ),
+        },
+      },
+    );
+  }
 
   if (!result.success) {
     return NextResponse.json({ message: "Niepoprawne dane" }, { status: 400 });

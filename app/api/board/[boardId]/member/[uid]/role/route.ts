@@ -1,4 +1,4 @@
-import { checkBoardMembership } from "@/lib/auth/checkMembership";
+import { roleChangeLimiter } from "@/lib/ratelimits/ratelimits";
 import { prisma } from "@/lib/prisma";
 import { withAuth } from "@/lib/withAuth";
 import { NextResponse } from "next/server";
@@ -9,6 +9,40 @@ export const PATCH = withAuth(async (user, request, context) => {
 
   if (!role) {
     return NextResponse.json({ message: "Nie podano roli" }, { status: 400 });
+  }
+
+  const { success, reset } = await roleChangeLimiter.limit(
+    `${user.userID}:${boardId}`,
+  );
+
+  if (!success) {
+    return NextResponse.json(
+      {
+        message: "Zbyt wiele prób zmiany roli. Spróbuj ponownie później.",
+      },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(
+            Math.max(1, Math.ceil((reset - Date.now()) / 1000)),
+          ),
+        },
+      },
+    );
+  }
+
+  const boardMemeber = await prisma.boardMember.findFirst({
+    where: {
+      userId: Number(uid),
+      boardId: Number(boardId),
+    },
+  });
+
+  if (boardMemeber?.role === role) {
+    return NextResponse.json(
+      { message: "Użytkownik ma już tę rolę" },
+      { status: 409 },
+    );
   }
 
   const board = await prisma.board.findFirst({

@@ -176,9 +176,7 @@ export default function BoardMembersModal({
                         key={el.id}
                       >
                         <div className="flex items-center gap-3">
-                          <Avatar className="h-9 w-9">
-                            
-                          </Avatar>
+                          <Avatar className="h-9 w-9"></Avatar>
 
                           <div>
                             <p className="text-sm font-medium">{el.name}</p>

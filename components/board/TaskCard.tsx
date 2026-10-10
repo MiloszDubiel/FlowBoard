@@ -92,7 +92,6 @@ export function TaskCard({ id, index, column, card, role }: any) {
 
           {card?.labels?.map((item: any) => (
             <Label
-              key={item.label.id}
               color={colorRecord[item.label.color]}
               name={item.label.name}
             />

@@ -63,6 +63,7 @@ export default function CardForm({
   labels,
   onFileDelete,
   selectedLabels,
+  isPending = false,
 }: any) {
   const {
     currentTasks,
@@ -97,7 +98,7 @@ export default function CardForm({
     control,
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<CreateCardForm>({
     resolver: zodResolver(createCardSchema),
     defaultValues: defaults,
@@ -132,7 +133,6 @@ export default function CardForm({
         </div>
 
         <div className="space-y-6 p-6">
-     
           <div className="space-y-2">
             <Label htmlFor="title">Tytuł</Label>
 
@@ -146,7 +146,6 @@ export default function CardForm({
             <FieldError errors={[errors.title]} />
           </div>
 
-    
           <div className="space-y-2">
             <Label htmlFor="description">Opis</Label>
 
@@ -160,7 +159,6 @@ export default function CardForm({
             <FieldError errors={[errors.description]} />
           </div>
 
-       
           <div className="space-y-2">
             <Label>Priorytet</Label>
 
@@ -211,7 +209,6 @@ export default function CardForm({
             <FieldError errors={[errors.priority]} />
           </div>
 
-     
           <div className="space-y-3">
             <div>
               <Label className="flex items-center gap-2">
@@ -330,7 +327,6 @@ export default function CardForm({
               </PopoverContent>
             </Popover>
           </div>
-
 
           {!isCreatingLabel ? (
             <Button
@@ -824,7 +820,6 @@ export default function CardForm({
             </PopoverContent>
           </Popover>
 
-  
           {selectedUsersData.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-2">
               {selectedUsersData.map((member: any) => (
@@ -890,13 +885,13 @@ export default function CardForm({
             type="button"
             variant="outline"
             onClick={() => {}}
-            disabled={isSubmitting}
+            disabled={isPending}
           >
             Anuluj
           </Button>
 
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting
+          <Button type="submit" disabled={isPending}>
+            {isPending
               ? "Zapisywanie..."
               : type === "edit"
                 ? "Zapisz zmiany"
