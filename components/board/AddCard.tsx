@@ -55,9 +55,7 @@ export default function AddCard({
     });
   };
 
-
   const onSubmit = async (data: CreateCardForm) => {
-
     addCard(
       { ...data, tasks, listId },
       {
@@ -104,6 +102,7 @@ export default function AddCard({
           setImgFiles,
           setTextFiles,
         }}
+        boardId={boardId}
         members={members
           .filter((el: BoardMember) => el.role === "MEMBER")
           .map((el: any) => ({ id: el.userId, name: el.user.name }))}

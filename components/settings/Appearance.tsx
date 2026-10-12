@@ -6,10 +6,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
+import { useTheme } from "next-themes";
 import { Label } from "@/components/ui/label";
+import { useState } from "react";
 
 export const Appirance = () => {
+  const { setTheme, theme } = useTheme();
+
   return (
     <Card>
       <CardHeader>
@@ -30,12 +33,12 @@ export const Appirance = () => {
           ].map((item) => (
             <button
               key={item.id}
-            //   onClick={() => setTheme(item.id)}
-            //   className={`rounded-xl border-2 p-3 text-left transition ${
-            //     theme === item.id
-            //       ? "border-primary bg-accent"
-            //       : "border-border hover:border-muted-foreground/40"
-            //   }`}
+              onClick={() => setTheme(item.id)}
+              className={`rounded-xl border-2 p-3 text-left transition ${
+                theme === item.id
+                  ? "border-primary bg-accent"
+                  : "border-border hover:border-muted-foreground/40"
+              }`}
             >
               <div
                 className={`mb-3 flex h-24 items-center justify-center rounded-lg ${

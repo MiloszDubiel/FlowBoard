@@ -46,6 +46,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { type CreateCardForm, createCardSchema } from "@/schema/addcard.schema";
 import { toast } from "sonner";
 import { projectColors } from "@/lib/colors";
+import { useRouter } from "next/navigation";
 
 type LabelType = {
   id: number;
@@ -64,6 +65,7 @@ export default function CardForm({
   onFileDelete,
   selectedLabels,
   isPending = false,
+  boardId,
 }: any) {
   const {
     currentTasks,
@@ -79,6 +81,9 @@ export default function CardForm({
   const [selectedLabel, setSelectedLabel] = useState<number[]>(
     selectedLabels || [],
   );
+  const router = useRouter();
+
+  console.log(boardId);
 
   const [isCreatingLabel, setIsCreatingLabel] = useState(false);
   const [newLabelName, setNewLabelName] = useState("");
@@ -884,7 +889,9 @@ export default function CardForm({
           <Button
             type="button"
             variant="outline"
-            onClick={() => {}}
+            onClick={() => {
+              router.replace(`/projects/board/${boardId}`);
+            }}
             disabled={isPending}
           >
             Anuluj

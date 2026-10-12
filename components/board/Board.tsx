@@ -20,6 +20,7 @@ import { move } from "@dnd-kit/helpers";
 import { TaskCard } from "./TaskCard";
 import { useUser } from "@/hooks/useUser";
 import { type MembershipRole, ROLES } from "@/lib/roles";
+import { List } from "@/generated/prisma/client";
 
 export default function Board({ board, members }: any) {
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -167,6 +168,14 @@ export default function Board({ board, members }: any) {
                     index={columnIndex}
                     members={members}
                     role={role}
+                    onEdit={(column: List) => {
+                      setEditedList(column);
+                      setOpenEdit(true);
+                    }}
+                    onDelete={(column: List) => {
+                      setEditedList(column);
+                      setDeleteList(true);
+                    }}
                   >
                     {items[column].map((card: any, index: number) => (
                       <TaskCard
@@ -183,15 +192,16 @@ export default function Board({ board, members }: any) {
               })}
             </div>
           </DragDropProvider>
-
-          <Button
-            variant="outline"
-            className="w-80 shrink-0 cursor-pointer justify-start"
-            onClick={() => setOpen(true)}
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            Dodaj listę
-          </Button>
+          {["OWNER", "ADMIN"].includes(me?.role) && (
+            <Button
+              variant="outline"
+              className="w-80 shrink-0 cursor-pointer justify-start"
+              onClick={() => setOpen(true)}
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Dodaj listę
+            </Button>
+          )}
         </div>
       </div>
       <AddList open={isOpen} onOpenChange={setOpen} boardID={board.id} />

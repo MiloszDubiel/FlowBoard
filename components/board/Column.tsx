@@ -11,12 +11,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { CollisionPriority } from "@dnd-kit/abstract";
-import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 
-export const Column = ({ children, id, column, index, role }: any) => {
-  const { ref, handleRef, isDropTarget } = useSortable({
+export const Column = ({
+  children,
+  id,
+  column,
+  index,
+  role,
+  onEdit,
+  onDelete,
+}: any) => {
+  const { ref, handleRef } = useSortable({
     id,
     index,
     type: "column",
@@ -32,35 +39,41 @@ export const Column = ({ children, id, column, index, role }: any) => {
         className="flex w-80 shrink-0  bg-muted  max-h-full flex-col"
       >
         <CardHeader className="group flex flex-row items-center justify-between space-y-0 ">
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
+          {role === "MEMBER" && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
+            ></Button>
+          )}
+          {["OWNER", "ADMIN"].includes(role) && (
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
+                  >
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                }
+              />
+
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => onEdit(column)}>
+                  Edytuj listę
+                </DropdownMenuItem>
+
+                <DropdownMenuItem
+                  onClick={() => onDelete(column)}
+                  className="text-destructive"
                 >
-                  <MoreHorizontal className="h-4 w-4" />
-                </Button>
-              }
-            />
-
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
-
-              // onClick={() => onEdit(column)}
-              >
-                Edytuj listę
-              </DropdownMenuItem>
-
-              <DropdownMenuItem
-                // onClick={() => onDelete(column)}
-                className="text-destructive"
-              >
-                Usuń listę
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                  Usuń listę
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
           <h3 className="truncate font-semibold text-foreground">
             {column?.name}
           </h3>

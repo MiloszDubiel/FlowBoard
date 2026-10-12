@@ -1,3 +1,4 @@
+import { Board } from "@/generated/prisma/client";
 import { checkBoardMembership } from "@/lib/auth/checkMembership";
 import { checkBoardRole } from "@/lib/auth/checkRole";
 import { prisma } from "@/lib/prisma";
@@ -14,7 +15,23 @@ export const POST = withAuth(async (user, request, context) => {
     return NextResponse.json({ message: "Niepoprawne dane" }, { status: 400 });
   }
 
-  const board = await checkBoardMembership(Number(user.userID), Number(id));
+  const board = await prisma.board.findFirst({
+    where: {
+      id: id,
+      members: {
+        some: {
+          userId: user.userID,
+        },
+      },
+    },
+    include: {
+      members: {
+        where: {
+          userId: user.userID,
+        },
+      },
+    },
+  });
 
   if (!board) {
     return NextResponse.json(
@@ -46,10 +63,16 @@ export const POST = withAuth(async (user, request, context) => {
     },
   });
 
-  if (!checkBoardRole(board, Number(user.userID))) {
+  const role = await prisma.boardMember.findFirst({
+    where: {
+      userId: Number(user.userID),
+    },
+  });
+
+  if (!["OWNER", "ADMIN"].includes(role?.role || "MEMBER")) {
     return NextResponse.json(
       {
-        message: "Nie masz upranień",
+        message: "Brak uprawnień",
       },
       { status: 403 },
     );
@@ -57,7 +80,11 @@ export const POST = withAuth(async (user, request, context) => {
 
   const list = await prisma.list.create({
     data: {
-      boardId: (board as any).id,
+      board: {
+        connect: {
+          id: (board as any).id,
+        },
+      },
       name,
       position: lastList ? lastList.position + 1 : 0,
     },

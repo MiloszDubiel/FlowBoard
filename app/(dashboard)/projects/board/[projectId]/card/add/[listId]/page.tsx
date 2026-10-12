@@ -39,6 +39,8 @@ export default async function AddCardPage({
     },
   });
 
+
+
   return (
     <AddCard
       listId={Number(listId)}

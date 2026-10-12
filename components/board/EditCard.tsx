@@ -109,7 +109,7 @@ export default function EditCard({ cardMemebrs = [], card, labels }: any) {
   return (
     <div className="w-full p-2">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold">Utwórz kartę</h1>
+        <h1 className="text-2xl font-semibold">Edytuj tę kartę</h1>
         <p className="mt-1 text-sm text-muted-foreground">Edytuj kartę</p>
       </div>
       <CardForm
@@ -141,6 +141,7 @@ export default function EditCard({ cardMemebrs = [], card, labels }: any) {
           priority: card?.priority,
           userIds: card.members.map((el: any) => el.userId),
         }}
+        boardId={card.list.boardId}
       />
     </div>
   );
