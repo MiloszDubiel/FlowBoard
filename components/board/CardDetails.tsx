@@ -13,6 +13,8 @@ import {
   File,
   Download,
   ArrowLeft,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 import CountdownTimer from "../CalculateTimeLeft";
 import { Button } from "@/components/ui/button";
@@ -518,7 +520,9 @@ export default function CardDetails({ card, boardId, role }: any) {
                         className="flex items-center gap-3"
                       >
                         <Avatar className="h-8 w-8">
-                          <AvatarImage src={member.user.avatarUrl ?? undefined} />
+                          <AvatarImage
+                            src={member.user.avatarUrl ?? undefined}
+                          />
 
                           <AvatarFallback>
                             {member.user?.name?.slice(0, 2).toUpperCase()}
@@ -714,22 +718,25 @@ export default function CardDetails({ card, boardId, role }: any) {
               </section>
             </div>
             {["ADMIN", "OWNER"].includes(role) && (
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-3 mt-3">
                 <Button
-                  className="w- mt-2"
+                  className="h-11 rounded-xl"
                   onClick={() =>
                     router.replace(
                       `/projects/board/${boardId}/card/edit/${card.id}`,
                     )
                   }
                 >
+                  <Pencil className="mr-2 h-4 w-4" />
                   Edytuj
                 </Button>
+
                 <Button
                   variant="destructive"
-                  className="w- mt-2"
+                  className="h-11 rounded-xl"
                   onClick={() => setDeleteModalOpen(true)}
                 >
+                  <Trash2 className="mr-2 h-4 w-4" />
                   Usuń kartę
                 </Button>
               </div>
