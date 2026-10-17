@@ -37,6 +37,7 @@ export default function EditCard({ cardMemebrs = [], card, labels }: any) {
     setTasks((prev) => prev.filter((_, i) => i !== index));
   };
 
+  console.log(tasks);
   const {
     editCard: { mutate: editCard, isPending },
     addFile: { mutate: addFile },
@@ -120,9 +121,10 @@ export default function EditCard({ cardMemebrs = [], card, labels }: any) {
           tasks,
           setImgFiles,
           setTextFiles,
-          removeTask,
+
           card,
         }}
+        removeTask={removeTask}
         labels={labels}
         isPending={isPending}
         selectedLabels={card?.labels?.map((el: any) => el.labelId)}

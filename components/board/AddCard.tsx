@@ -55,6 +55,13 @@ export default function AddCard({
     });
   };
 
+  const removeTask = (id: number) => {
+    setTasks((prevTasks) => {
+      const filtered = prevTasks.filter((_, index) => index !== id);
+      return [...filtered];
+    });
+  };
+
   const onSubmit = async (data: CreateCardForm) => {
     addCard(
       { ...data, tasks, listId },
@@ -103,6 +110,7 @@ export default function AddCard({
           setTextFiles,
         }}
         boardId={boardId}
+        removeTask={removeTask}
         members={members
           .filter((el: BoardMember) => el.role === "MEMBER")
           .map((el: any) => ({ id: el.userId, name: el.user.name }))}

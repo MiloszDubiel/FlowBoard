@@ -26,18 +26,13 @@ function MembersList({
       {members.length > 0 ? (
         members.map((member: any) => (
           <div
-            key={member.id}
+            key={`memebr-list-member-${member.id}`}
             className="flex items-center justify-between rounded-md p-2 hover:bg-muted"
           >
             <div className="flex items-center gap-3">
               <Avatar className="h-9 w-9">
                 <AvatarFallback>
-                  {member.user.name
-                    .split(" ")
-                    .map((name: string[0]) => name[0])
-                    .join("")
-                    .slice(0, 2)
-                    .toUpperCase()}
+                  {member.user.email.slice(0, 2).toUpperCase()}
                 </AvatarFallback>
                 <AvatarImage src={member.user.avatarUrl ?? undefined} />
               </Avatar>

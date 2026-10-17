@@ -96,7 +96,7 @@ export default function Board({ board, members }: any) {
                 <AvatarImage src={member.user.avatarUrl ?? undefined} />
 
                 <AvatarFallback>
-                  {member.user.name.slice(0, 2).toUpperCase()}
+                  {member.user.email?.slice(0, 2)?.toUpperCase()}
                 </AvatarFallback>
               </Avatar>
 

@@ -29,6 +29,7 @@ import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
 import { useLogout } from "@/mutations/useLogout";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { undefined } from "zod";
 
 const mainItems = [
   {
@@ -180,12 +181,12 @@ const AppSidebar = ({ projects = [] }: any) => {
           <Avatar className="size-9">
             <AvatarImage
               src={user?.avatarUrl ?? ""}
-              alt={user?.name ?? "Zdjęcie profilowe"}
+              alt={user?.email ?? "Zdjęcie profilowe"}
               className="object-cover"
             />
 
-            <AvatarFallback className="bg-primary/10 text-xl text-primary">
-              {user?.name?.slice(0, 2).toUpperCase() ?? "U"}
+            <AvatarFallback>
+              {user?.email?.slice(0, 2).toUpperCase() ?? ""}
             </AvatarFallback>
           </Avatar>
 

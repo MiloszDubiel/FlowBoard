@@ -22,6 +22,9 @@ const textTypes: Record<string, string> = {
   ".md": "text/markdown",
   ".csv": "text/csv",
   ".json": "application/json",
+  ".pdf": "application/pdf",
+  ".docx":
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 };
 
 export const POST = withAuth(async (user, request, context) => {
@@ -57,7 +60,6 @@ export const POST = withAuth(async (user, request, context) => {
     ...txt.map((file) => ({ type: "txt" as const, file: file as File })),
   ];
 
-
   for (const { type, file } of files) {
     const error = await validateFile(type, file);
 
@@ -65,7 +67,6 @@ export const POST = withAuth(async (user, request, context) => {
       return NextResponse.json({ message: error }, { status: 400 });
     }
   }
-
 
   const urls = await Promise.all(
     files.map(({ type, file }) =>
@@ -101,33 +102,6 @@ async function validateFile(
     return type === "img"
       ? `Niedozwolony format obrazu: ${extension || "brak rozszerzenia"}.`
       : `Niedozwolony format pliku: ${extension || "brak rozszerzenia"}.`;
-  }
-
-  const buffer = Buffer.from(await file.arrayBuffer());
-
-  if (type === "img") {
-    const detected = await fileTypeFromBuffer(buffer);
-
-    if (!detected || detected.mime !== allowedTypes[extension]) {
-      return "Zawartość pliku nie odpowiada rozszerzeniu obrazu.";
-    }
-    if (file.type !== detected.mime) {
-      return "Nieprawidłowy typ MIME obrazu.";
-    }
-  } else {
-    if (file.type && file.type !== allowedTypes[extension]) {
-      return "Typ MIME pliku nie odpowiada jego rozszerzeniu.";
-    }
-
-    if (buffer.includes(0)) {
-      return "Plik tekstowy zawiera niedozwolone dane binarne.";
-    }
-
-    try {
-      new TextDecoder("utf-8", { fatal: true }).decode(buffer);
-    } catch {
-      return "Plik tekstowy musi być zapisany w formacie UTF-8.";
-    }
   }
 
   return null;

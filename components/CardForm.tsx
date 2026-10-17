@@ -66,6 +66,7 @@ export default function CardForm({
   selectedLabels,
   isPending = false,
   boardId,
+  removeTask,
 }: any) {
   const {
     currentTasks,
@@ -74,7 +75,6 @@ export default function CardForm({
     tasks,
     setImgFiles,
     setTextFiles,
-    removeTask,
   } = config;
 
   const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
@@ -82,8 +82,6 @@ export default function CardForm({
     selectedLabels || [],
   );
   const router = useRouter();
-
-  console.log(boardId);
 
   const [isCreatingLabel, setIsCreatingLabel] = useState(false);
   const [newLabelName, setNewLabelName] = useState("");
@@ -578,12 +576,20 @@ export default function CardForm({
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
+                  setCurrentTasks("");
                   addTask();
                 }
               }}
             />
 
-            <Button type="button" onClick={addTask} className="shrink-0">
+            <Button
+              type="button"
+              onClick={() => {
+                addTask();
+                setCurrentTasks("");
+              }}
+              className="shrink-0"
+            >
               Dodaj
             </Button>
           </div>

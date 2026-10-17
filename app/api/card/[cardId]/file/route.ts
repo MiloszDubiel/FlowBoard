@@ -8,6 +8,8 @@ export const POST = withAuth(async (user, request, context) => {
   const { cardId } = await context.params;
   const { files } = await request.json();
 
+  console.log(cardId);
+
   const uID = Number(user.userID);
   const parsedCardId = Number(cardId);
 
