@@ -29,7 +29,6 @@ import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
 import { useLogout } from "@/mutations/useLogout";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { undefined } from "zod";
 
 const mainItems = [
   {
@@ -162,7 +161,7 @@ const AppSidebar = ({ projects = [] }: any) => {
               ))}
               <SidebarMenuItem>
                 <SidebarMenuButton
-                  className="flex  items-center gap-4 cursor-pointer"
+                  className="flex items-center gap-4 cursor-pointer"
                   onClick={() => {
                     logout();
                   }}
