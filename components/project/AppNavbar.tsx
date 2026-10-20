@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -81,21 +82,19 @@ const AppNavbar = ({ projects = [] }: AppNavbarProps) => {
 
   return (
     <>
-      <nav className="mx-auto flex h-16 w-full items-center gap-4 px-4 md:px-6 ">
+      <nav className="mx-auto flex h-16 w-full items-center gap-4 px-4 md:px-6 justify-between">
         <Link href="/projects" className="flex shrink-0 items-center gap-2">
           <div className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <FolderKanban className="size-5" />
           </div>
 
-          <span className="hidden text-lg font-semibold sm:inline">
-            FlowBoard
-          </span>
+          <span className=" text-lg font-semibold ">FlowBoard</span>
         </Link>
 
-        <div className="min-w-0 flex-1 items-center gap-1 hidden md:flex">
+        <div className="min-w-0 flex-1 items-center gap-1 hidden md:flex justify-center w-full">
           {mainItems.map((item) => (
             <Button key={item.title} variant="ghost" className="gap-2">
-              <Link href={item.url}>
+              <Link href={item.url} className="flex gap-2 items-center">
                 <item.icon className="size-4" />
                 {item.title}
               </Link>
@@ -112,18 +111,20 @@ const AppNavbar = ({ projects = [] }: AppNavbarProps) => {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="start" className="w-64">
-              <DropdownMenuLabel className="flex items-center justify-between">
-                Projekty
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="size-7"
-                  onClick={() => setCreateProjectOpen(true)}
-                  aria-label="Utwórz projekt"
-                >
-                  <Plus className="size-4" />
-                </Button>
-              </DropdownMenuLabel>
+              <DropdownMenuGroup>
+                <DropdownMenuLabel className="flex items-center justify-between">
+                  Projekty
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-7"
+                    onClick={() => setCreateProjectOpen(true)}
+                    aria-label="Utwórz projekt"
+                  >
+                    <Plus className="size-4" />
+                  </Button>
+                </DropdownMenuLabel>
+              </DropdownMenuGroup>
 
               <DropdownMenuSeparator />
 
@@ -147,13 +148,6 @@ const AppNavbar = ({ projects = [] }: AppNavbarProps) => {
               ) : (
                 <DropdownMenuItem disabled>Brak projektów</DropdownMenuItem>
               )}
-
-              <DropdownMenuSeparator />
-
-              <DropdownMenuItem onSelect={() => setCreateProjectOpen(true)}>
-                <Plus className="size-4" />
-                Utwórz projekt
-              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -195,12 +189,14 @@ const AppNavbar = ({ projects = [] }: AppNavbarProps) => {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>
-                <p>{user?.name}</p>
-                <p className="font-normal text-muted-foreground">
-                  {user?.email}
-                </p>
-              </DropdownMenuLabel>
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>
+                  <p>{user?.name}</p>
+                  <p className="font-normal text-muted-foreground">
+                    {user?.email}
+                  </p>
+                </DropdownMenuLabel>
+              </DropdownMenuGroup>
 
               <DropdownMenuSeparator />
 
@@ -222,136 +218,133 @@ const AppNavbar = ({ projects = [] }: AppNavbarProps) => {
           </DropdownMenu>
         </div>
 
-        <div className="ml-auto md:hidden absolute">
-          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-            <SheetTrigger>
-              <Button variant="outline" size="icon" aria-label="Otwórz menu">
-                <Menu className="size-5" />
-              </Button>
-            </SheetTrigger>
+        <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+          <SheetTrigger>
+            <Button variant="outline" size="icon" aria-label="Otwórz menu">
+              <Menu className="size-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="flex w-full flex-col">
+            <SheetHeader>
+              <SheetTitle className="flex items-center gap-2">
+                <FolderKanban className="size-5" />
+                FlowBoard
+              </SheetTitle>
+            </SheetHeader>
 
-            <SheetContent side="right" className="flex w-80 flex-col">
-              <SheetHeader>
-                <SheetTitle className="flex items-center gap-2">
-                  <FolderKanban className="size-5" />
-                  FlowBoard
-                </SheetTitle>
-              </SheetHeader>
+            <div className="flex flex-1 flex-col gap-6 overflow-y-auto py-4">
+              <div className="space-y-1">
+                <p className="px-3 pb-2 text-xs font-medium text-muted-foreground">
+                  Workspace
+                </p>
 
-              <div className="flex flex-1 flex-col gap-6 overflow-y-auto py-4">
-                <div className="space-y-1">
-                  <p className="px-3 pb-2 text-xs font-medium text-muted-foreground">
-                    Workspace
+                {mainItems.map((item) => (
+                  <Button
+                    key={item.title}
+                    variant="ghost"
+                    className="w-full justify-start gap-3"
+                    onClick={closeMobileMenu}
+                  >
+                    <Link href={item.url} className="flex gap-2 items-center">
+                      <item.icon className="size-4" />
+                      {item.title}
+                    </Link>
+                  </Button>
+                ))}
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex items-center justify-between px-3 pb-2">
+                  <p className="text-xs font-medium text-muted-foreground">
+                    Projekty
                   </p>
 
-                  {mainItems.map((item) => (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-7 flex"
+                    aria-label="Utwórz projekt"
+                    onClick={() => {
+                      closeMobileMenu();
+                      setCreateProjectOpen(true);
+                    }}
+                  >
+                    <Plus className="size-4" />
+                  </Button>
+                </div>
+
+                {projects.map((project) => {
+                  const boardId = project.boards?.[0]?.id;
+
+                  return (
                     <Button
-                      key={item.title}
+                      key={project.id}
                       variant="ghost"
-                      className="w-full justify-start gap-3"
+                      disabled={!boardId}
+                      className="w-full justify-start gap-3 "
                       onClick={closeMobileMenu}
                     >
-                      <Link href={item.url} className="flex gap-2 items-center">
-                        <item.icon className="size-4" />
-                        {item.title}
-                      </Link>
+                      {boardId ? (
+                        <Link href={`/projects/board/${boardId}`}>
+                          <span className="size-2 shrink-0 rounded-full bg-blue-500" />
+                          <span className="truncate">{project.name}</span>
+                        </Link>
+                      ) : (
+                        <span>{project.name}</span>
+                      )}
                     </Button>
-                  ))}
-                </div>
-
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between px-3 pb-2">
-                    <p className="text-xs font-medium text-muted-foreground">
-                      Projekty
-                    </p>
-
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="size-7 flex"
-                      aria-label="Utwórz projekt"
-                      onClick={() => {
-                        closeMobileMenu();
-                        setCreateProjectOpen(true);
-                      }}
-                    >
-                      <Plus className="size-4" />
-                    </Button>
-                  </div>
-
-                  {projects.map((project) => {
-                    const boardId = project.boards?.[0]?.id;
-
-                    return (
-                      <Button
-                        key={project.id}
-                        variant="ghost"
-                        disabled={!boardId}
-                        className="w-full justify-start gap-3 "
-                        onClick={closeMobileMenu}
-                      >
-                        {boardId ? (
-                          <Link href={`/projects/board/${boardId}`}>
-                            <span className="size-2 shrink-0 rounded-full bg-blue-500" />
-                            <span className="truncate">{project.name}</span>
-                          </Link>
-                        ) : (
-                          <span>{project.name}</span>
-                        )}
-                      </Button>
-                    );
-                  })}
-                </div>
-
-                <div className="space-y-1"></div>
+                  );
+                })}
               </div>
 
-              <div className="space-y-3 p-2">
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start gap-3"
-                  onClick={() => logout()}
-                >
-                  <LogOut className="size-4" />
-                  Wyloguj
-                </Button>
+              <div className="space-y-1"></div>
+            </div>
 
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start gap-3"
-                  onClick={closeMobileMenu}
-                >
-                  <Link href="/settings" className="flex gap-2 items-center">
-                    <Settings className="size-4" />
-                    Ustawienia
-                  </Link>
-                </Button>
+            <div className="space-y-3 p-2">
+              <Button
+                variant="ghost"
+                className="w-full justify-start gap-3"
+                onClick={() => logout()}
+              >
+                <LogOut className="size-4" />
+                Wyloguj
+              </Button>
 
-                <div className="flex items-center gap-3 rounded-lg border p-3">
-                  <Avatar className="size-9">
-                    <AvatarImage
-                      src={user?.avatarUrl ?? ""}
-                      alt={user?.email ?? "Zdjęcie profilowe"}
-                      className="object-cover"
-                    />
+              <Button
+                variant="ghost"
+                className="w-full justify-start gap-3"
+                onClick={closeMobileMenu}
+              >
+                <Link href="/settings" className="flex gap-2 items-center">
+                  <Settings className="size-4" />
+                  Ustawienia
+                </Link>
+              </Button>
 
-                    <AvatarFallback>
-                      {user?.email?.slice(0, 2).toUpperCase() ?? ""}
-                    </AvatarFallback>
-                  </Avatar>
+              <div className="flex items-center gap-3 rounded-lg border p-3">
+                <Avatar className="size-9">
+                  <AvatarImage
+                    src={user?.avatarUrl ?? ""}
+                    alt={user?.email ?? "Zdjęcie profilowe"}
+                    className="object-cover"
+                  />
 
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium">{user?.name}</p>
+                  <AvatarFallback>
+                    {user?.email?.slice(0, 2).toUpperCase() ?? ""}
+                  </AvatarFallback>
+                </Avatar>
 
-                    <p className="truncate text-xs text-muted-foreground">
-                      {user?.email}
-                    </p>
-                  </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium">{user?.name}</p>
+
+                  <p className="truncate text-xs text-muted-foreground">
+                    {user?.email}
+                  </p>
                 </div>
               </div>
-            </SheetContent>
-          </Sheet>
-        </div>
+            </div>
+          </SheetContent>
+        </Sheet>
       </nav>
 
       <CreateProject
