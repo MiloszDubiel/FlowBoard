@@ -511,7 +511,19 @@ export type CardLabelSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   label?: boolean | Prisma.LabelDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cardLabel"]>
 
+export type CardLabelSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  cardId?: boolean
+  labelId?: boolean
+  card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
+  label?: boolean | Prisma.LabelDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["cardLabel"]>
 
+export type CardLabelSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  cardId?: boolean
+  labelId?: boolean
+  card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
+  label?: boolean | Prisma.LabelDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["cardLabel"]>
 
 export type CardLabelSelectScalar = {
   cardId?: boolean
@@ -520,6 +532,14 @@ export type CardLabelSelectScalar = {
 
 export type CardLabelOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"cardId" | "labelId", ExtArgs["result"]["cardLabel"]>
 export type CardLabelInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
+  label?: boolean | Prisma.LabelDefaultArgs<ExtArgs>
+}
+export type CardLabelIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
+  label?: boolean | Prisma.LabelDefaultArgs<ExtArgs>
+}
+export type CardLabelIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
   label?: boolean | Prisma.LabelDefaultArgs<ExtArgs>
 }
@@ -651,6 +671,30 @@ export interface CardLabelDelegate<ExtArgs extends runtime.Types.Extensions.Inte
   createMany<T extends CardLabelCreateManyArgs>(args?: Prisma.SelectSubset<T, CardLabelCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many CardLabels and returns the data saved in the database.
+   * @param {CardLabelCreateManyAndReturnArgs} args - Arguments to create many CardLabels.
+   * @example
+   * // Create many CardLabels
+   * const cardLabel = await prisma.cardLabel.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many CardLabels and only return the `cardId`
+   * const cardLabelWithCardIdOnly = await prisma.cardLabel.createManyAndReturn({
+   *   select: { cardId: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends CardLabelCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, CardLabelCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CardLabelPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a CardLabel.
    * @param {CardLabelDeleteArgs} args - Arguments to delete one CardLabel.
    * @example
@@ -713,6 +757,36 @@ export interface CardLabelDelegate<ExtArgs extends runtime.Types.Extensions.Inte
    * 
    */
   updateMany<T extends CardLabelUpdateManyArgs>(args: Prisma.SelectSubset<T, CardLabelUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more CardLabels and returns the data updated in the database.
+   * @param {CardLabelUpdateManyAndReturnArgs} args - Arguments to update many CardLabels.
+   * @example
+   * // Update many CardLabels
+   * const cardLabel = await prisma.cardLabel.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more CardLabels and only return the `cardId`
+   * const cardLabelWithCardIdOnly = await prisma.cardLabel.updateManyAndReturn({
+   *   select: { cardId: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends CardLabelUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, CardLabelUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CardLabelPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one CardLabel.
@@ -1144,6 +1218,29 @@ export type CardLabelCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
+ * CardLabel createManyAndReturn
+ */
+export type CardLabelCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CardLabel
+   */
+  select?: Prisma.CardLabelSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the CardLabel
+   */
+  omit?: Prisma.CardLabelOmit<ExtArgs> | null
+  /**
+   * The data used to create many CardLabels.
+   */
+  data: Prisma.CardLabelCreateManyInput | Prisma.CardLabelCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CardLabelIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * CardLabel update
  */
 export type CardLabelUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1185,6 +1282,36 @@ export type CardLabelUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Limit how many CardLabels to update.
    */
   limit?: number
+}
+
+/**
+ * CardLabel updateManyAndReturn
+ */
+export type CardLabelUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CardLabel
+   */
+  select?: Prisma.CardLabelSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the CardLabel
+   */
+  omit?: Prisma.CardLabelOmit<ExtArgs> | null
+  /**
+   * The data used to update CardLabels.
+   */
+  data: Prisma.XOR<Prisma.CardLabelUpdateManyMutationInput, Prisma.CardLabelUncheckedUpdateManyInput>
+  /**
+   * Filter which CardLabels to update
+   */
+  where?: Prisma.CardLabelWhereInput
+  /**
+   * Limit how many CardLabels to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CardLabelIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

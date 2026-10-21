@@ -302,7 +302,6 @@ export type CardOrderByWithRelationInput = {
   attachments?: Prisma.AttachmentOrderByRelationAggregateInput
   activities?: Prisma.ActivityOrderByRelationAggregateInput
   commentAttachments?: Prisma.CommentAttachmentOrderByRelationAggregateInput
-  _relevance?: Prisma.CardOrderByRelevanceInput
 }
 
 export type CardWhereUniqueInput = Prisma.AtLeast<{
@@ -491,12 +490,6 @@ export type CardListRelationFilter = {
 
 export type CardOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type CardOrderByRelevanceInput = {
-  fields: Prisma.CardOrderByRelevanceFieldEnum | Prisma.CardOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type CardCountOrderByAggregateInput = {
@@ -1649,7 +1642,37 @@ export type CardSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   _count?: boolean | Prisma.CardCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["card"]>
 
+export type CardSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  listId?: boolean
+  title?: boolean
+  description?: boolean
+  position?: boolean
+  dueDate?: boolean
+  priority?: boolean
+  tasks?: boolean
+  createdById?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  list?: boolean | Prisma.ListDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["card"]>
 
+export type CardSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  listId?: boolean
+  title?: boolean
+  description?: boolean
+  position?: boolean
+  dueDate?: boolean
+  priority?: boolean
+  tasks?: boolean
+  createdById?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  list?: boolean | Prisma.ListDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["card"]>
 
 export type CardSelectScalar = {
   id?: boolean
@@ -1676,6 +1699,14 @@ export type CardInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   activities?: boolean | Prisma.Card$activitiesArgs<ExtArgs>
   commentAttachments?: boolean | Prisma.Card$commentAttachmentsArgs<ExtArgs>
   _count?: boolean | Prisma.CardCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type CardIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  list?: boolean | Prisma.ListDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type CardIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  list?: boolean | Prisma.ListDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $CardPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1820,6 +1851,30 @@ export interface CardDelegate<ExtArgs extends runtime.Types.Extensions.InternalA
   createMany<T extends CardCreateManyArgs>(args?: Prisma.SelectSubset<T, CardCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many Cards and returns the data saved in the database.
+   * @param {CardCreateManyAndReturnArgs} args - Arguments to create many Cards.
+   * @example
+   * // Create many Cards
+   * const card = await prisma.card.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many Cards and only return the `id`
+   * const cardWithIdOnly = await prisma.card.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends CardCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, CardCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CardPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a Card.
    * @param {CardDeleteArgs} args - Arguments to delete one Card.
    * @example
@@ -1882,6 +1937,36 @@ export interface CardDelegate<ExtArgs extends runtime.Types.Extensions.InternalA
    * 
    */
   updateMany<T extends CardUpdateManyArgs>(args: Prisma.SelectSubset<T, CardUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more Cards and returns the data updated in the database.
+   * @param {CardUpdateManyAndReturnArgs} args - Arguments to update many Cards.
+   * @example
+   * // Update many Cards
+   * const card = await prisma.card.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more Cards and only return the `id`
+   * const cardWithIdOnly = await prisma.card.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends CardUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, CardUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CardPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Card.
@@ -2328,6 +2413,29 @@ export type CardCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
+ * Card createManyAndReturn
+ */
+export type CardCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Card
+   */
+  select?: Prisma.CardSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Card
+   */
+  omit?: Prisma.CardOmit<ExtArgs> | null
+  /**
+   * The data used to create many Cards.
+   */
+  data: Prisma.CardCreateManyInput | Prisma.CardCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CardIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * Card update
  */
 export type CardUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2369,6 +2477,36 @@ export type CardUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Cards to update.
    */
   limit?: number
+}
+
+/**
+ * Card updateManyAndReturn
+ */
+export type CardUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Card
+   */
+  select?: Prisma.CardSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Card
+   */
+  omit?: Prisma.CardOmit<ExtArgs> | null
+  /**
+   * The data used to update Cards.
+   */
+  data: Prisma.XOR<Prisma.CardUpdateManyMutationInput, Prisma.CardUncheckedUpdateManyInput>
+  /**
+   * Filter which Cards to update
+   */
+  where?: Prisma.CardWhereInput
+  /**
+   * Limit how many Cards to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CardIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

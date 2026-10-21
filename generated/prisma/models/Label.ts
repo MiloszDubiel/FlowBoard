@@ -232,7 +232,6 @@ export type LabelOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   board?: Prisma.BoardOrderByWithRelationInput
   cards?: Prisma.CardLabelOrderByRelationAggregateInput
-  _relevance?: Prisma.LabelOrderByRelevanceInput
 }
 
 export type LabelWhereUniqueInput = Prisma.AtLeast<{
@@ -336,12 +335,6 @@ export type LabelListRelationFilter = {
 
 export type LabelOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type LabelOrderByRelevanceInput = {
-  fields: Prisma.LabelOrderByRelevanceFieldEnum | Prisma.LabelOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type LabelCountOrderByAggregateInput = {
@@ -608,7 +601,23 @@ export type LabelSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   _count?: boolean | Prisma.LabelCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["label"]>
 
+export type LabelSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  boardId?: boolean
+  name?: boolean
+  color?: boolean
+  createdAt?: boolean
+  board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["label"]>
 
+export type LabelSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  boardId?: boolean
+  name?: boolean
+  color?: boolean
+  createdAt?: boolean
+  board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["label"]>
 
 export type LabelSelectScalar = {
   id?: boolean
@@ -623,6 +632,12 @@ export type LabelInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
   cards?: boolean | Prisma.Label$cardsArgs<ExtArgs>
   _count?: boolean | Prisma.LabelCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type LabelIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
+}
+export type LabelIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
 }
 
 export type $LabelPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -755,6 +770,30 @@ export interface LabelDelegate<ExtArgs extends runtime.Types.Extensions.Internal
   createMany<T extends LabelCreateManyArgs>(args?: Prisma.SelectSubset<T, LabelCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many Labels and returns the data saved in the database.
+   * @param {LabelCreateManyAndReturnArgs} args - Arguments to create many Labels.
+   * @example
+   * // Create many Labels
+   * const label = await prisma.label.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many Labels and only return the `id`
+   * const labelWithIdOnly = await prisma.label.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends LabelCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, LabelCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LabelPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a Label.
    * @param {LabelDeleteArgs} args - Arguments to delete one Label.
    * @example
@@ -817,6 +856,36 @@ export interface LabelDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    * 
    */
   updateMany<T extends LabelUpdateManyArgs>(args: Prisma.SelectSubset<T, LabelUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more Labels and returns the data updated in the database.
+   * @param {LabelUpdateManyAndReturnArgs} args - Arguments to update many Labels.
+   * @example
+   * // Update many Labels
+   * const label = await prisma.label.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more Labels and only return the `id`
+   * const labelWithIdOnly = await prisma.label.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends LabelUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, LabelUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LabelPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Label.
@@ -1251,6 +1320,29 @@ export type LabelCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
+ * Label createManyAndReturn
+ */
+export type LabelCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Label
+   */
+  select?: Prisma.LabelSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Label
+   */
+  omit?: Prisma.LabelOmit<ExtArgs> | null
+  /**
+   * The data used to create many Labels.
+   */
+  data: Prisma.LabelCreateManyInput | Prisma.LabelCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LabelIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * Label update
  */
 export type LabelUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1292,6 +1384,36 @@ export type LabelUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Labels to update.
    */
   limit?: number
+}
+
+/**
+ * Label updateManyAndReturn
+ */
+export type LabelUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Label
+   */
+  select?: Prisma.LabelSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Label
+   */
+  omit?: Prisma.LabelOmit<ExtArgs> | null
+  /**
+   * The data used to update Labels.
+   */
+  data: Prisma.XOR<Prisma.LabelUpdateManyMutationInput, Prisma.LabelUncheckedUpdateManyInput>
+  /**
+   * Filter which Labels to update
+   */
+  where?: Prisma.LabelWhereInput
+  /**
+   * Limit how many Labels to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LabelIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

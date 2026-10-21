@@ -621,7 +621,25 @@ export type BoardMemberSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["boardMember"]>
 
+export type BoardMemberSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  boardId?: boolean
+  userId?: boolean
+  role?: boolean
+  joinedAt?: boolean
+  board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["boardMember"]>
 
+export type BoardMemberSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  boardId?: boolean
+  userId?: boolean
+  role?: boolean
+  joinedAt?: boolean
+  board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["boardMember"]>
 
 export type BoardMemberSelectScalar = {
   id?: boolean
@@ -633,6 +651,14 @@ export type BoardMemberSelectScalar = {
 
 export type BoardMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "boardId" | "userId" | "role" | "joinedAt", ExtArgs["result"]["boardMember"]>
 export type BoardMemberInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type BoardMemberIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type BoardMemberIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -767,6 +793,30 @@ export interface BoardMemberDelegate<ExtArgs extends runtime.Types.Extensions.In
   createMany<T extends BoardMemberCreateManyArgs>(args?: Prisma.SelectSubset<T, BoardMemberCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many BoardMembers and returns the data saved in the database.
+   * @param {BoardMemberCreateManyAndReturnArgs} args - Arguments to create many BoardMembers.
+   * @example
+   * // Create many BoardMembers
+   * const boardMember = await prisma.boardMember.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many BoardMembers and only return the `id`
+   * const boardMemberWithIdOnly = await prisma.boardMember.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends BoardMemberCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, BoardMemberCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardMemberPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a BoardMember.
    * @param {BoardMemberDeleteArgs} args - Arguments to delete one BoardMember.
    * @example
@@ -829,6 +879,36 @@ export interface BoardMemberDelegate<ExtArgs extends runtime.Types.Extensions.In
    * 
    */
   updateMany<T extends BoardMemberUpdateManyArgs>(args: Prisma.SelectSubset<T, BoardMemberUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more BoardMembers and returns the data updated in the database.
+   * @param {BoardMemberUpdateManyAndReturnArgs} args - Arguments to update many BoardMembers.
+   * @example
+   * // Update many BoardMembers
+   * const boardMember = await prisma.boardMember.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more BoardMembers and only return the `id`
+   * const boardMemberWithIdOnly = await prisma.boardMember.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends BoardMemberUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, BoardMemberUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardMemberPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one BoardMember.
@@ -1263,6 +1343,29 @@ export type BoardMemberCreateManyArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 /**
+ * BoardMember createManyAndReturn
+ */
+export type BoardMemberCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BoardMember
+   */
+  select?: Prisma.BoardMemberSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the BoardMember
+   */
+  omit?: Prisma.BoardMemberOmit<ExtArgs> | null
+  /**
+   * The data used to create many BoardMembers.
+   */
+  data: Prisma.BoardMemberCreateManyInput | Prisma.BoardMemberCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BoardMemberIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * BoardMember update
  */
 export type BoardMemberUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1304,6 +1407,36 @@ export type BoardMemberUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many BoardMembers to update.
    */
   limit?: number
+}
+
+/**
+ * BoardMember updateManyAndReturn
+ */
+export type BoardMemberUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BoardMember
+   */
+  select?: Prisma.BoardMemberSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the BoardMember
+   */
+  omit?: Prisma.BoardMemberOmit<ExtArgs> | null
+  /**
+   * The data used to update BoardMembers.
+   */
+  data: Prisma.XOR<Prisma.BoardMemberUpdateManyMutationInput, Prisma.BoardMemberUncheckedUpdateManyInput>
+  /**
+   * Filter which BoardMembers to update
+   */
+  where?: Prisma.BoardMemberWhereInput
+  /**
+   * Limit how many BoardMembers to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BoardMemberIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

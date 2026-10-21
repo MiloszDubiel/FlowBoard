@@ -282,7 +282,6 @@ export type CommentAttachmentOrderByWithRelationInput = {
   card?: Prisma.CardOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
   comment?: Prisma.CommentOrderByWithRelationInput
-  _relevance?: Prisma.CommentAttachmentOrderByRelevanceInput
 }
 
 export type CommentAttachmentWhereUniqueInput = Prisma.AtLeast<{
@@ -421,12 +420,6 @@ export type CommentAttachmentListRelationFilter = {
 
 export type CommentAttachmentOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type CommentAttachmentOrderByRelevanceInput = {
-  fields: Prisma.CommentAttachmentOrderByRelevanceFieldEnum | Prisma.CommentAttachmentOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type CommentAttachmentCountOrderByAggregateInput = {
@@ -921,7 +914,35 @@ export type CommentAttachmentSelect<ExtArgs extends runtime.Types.Extensions.Int
   comment?: boolean | Prisma.CommentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["commentAttachment"]>
 
+export type CommentAttachmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  cardId?: boolean
+  userId?: boolean
+  commentId?: boolean
+  fileName?: boolean
+  fileUrl?: boolean
+  fileSize?: boolean
+  fileType?: boolean
+  createdAt?: boolean
+  card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  comment?: boolean | Prisma.CommentDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["commentAttachment"]>
 
+export type CommentAttachmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  cardId?: boolean
+  userId?: boolean
+  commentId?: boolean
+  fileName?: boolean
+  fileUrl?: boolean
+  fileSize?: boolean
+  fileType?: boolean
+  createdAt?: boolean
+  card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  comment?: boolean | Prisma.CommentDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["commentAttachment"]>
 
 export type CommentAttachmentSelectScalar = {
   id?: boolean
@@ -937,6 +958,16 @@ export type CommentAttachmentSelectScalar = {
 
 export type CommentAttachmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "cardId" | "userId" | "commentId" | "fileName" | "fileUrl" | "fileSize" | "fileType" | "createdAt", ExtArgs["result"]["commentAttachment"]>
 export type CommentAttachmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  comment?: boolean | Prisma.CommentDefaultArgs<ExtArgs>
+}
+export type CommentAttachmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  comment?: boolean | Prisma.CommentDefaultArgs<ExtArgs>
+}
+export type CommentAttachmentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   comment?: boolean | Prisma.CommentDefaultArgs<ExtArgs>
@@ -1077,6 +1108,30 @@ export interface CommentAttachmentDelegate<ExtArgs extends runtime.Types.Extensi
   createMany<T extends CommentAttachmentCreateManyArgs>(args?: Prisma.SelectSubset<T, CommentAttachmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many CommentAttachments and returns the data saved in the database.
+   * @param {CommentAttachmentCreateManyAndReturnArgs} args - Arguments to create many CommentAttachments.
+   * @example
+   * // Create many CommentAttachments
+   * const commentAttachment = await prisma.commentAttachment.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many CommentAttachments and only return the `id`
+   * const commentAttachmentWithIdOnly = await prisma.commentAttachment.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends CommentAttachmentCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, CommentAttachmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentAttachmentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a CommentAttachment.
    * @param {CommentAttachmentDeleteArgs} args - Arguments to delete one CommentAttachment.
    * @example
@@ -1139,6 +1194,36 @@ export interface CommentAttachmentDelegate<ExtArgs extends runtime.Types.Extensi
    * 
    */
   updateMany<T extends CommentAttachmentUpdateManyArgs>(args: Prisma.SelectSubset<T, CommentAttachmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more CommentAttachments and returns the data updated in the database.
+   * @param {CommentAttachmentUpdateManyAndReturnArgs} args - Arguments to update many CommentAttachments.
+   * @example
+   * // Update many CommentAttachments
+   * const commentAttachment = await prisma.commentAttachment.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more CommentAttachments and only return the `id`
+   * const commentAttachmentWithIdOnly = await prisma.commentAttachment.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends CommentAttachmentUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, CommentAttachmentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentAttachmentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one CommentAttachment.
@@ -1578,6 +1663,29 @@ export type CommentAttachmentCreateManyArgs<ExtArgs extends runtime.Types.Extens
 }
 
 /**
+ * CommentAttachment createManyAndReturn
+ */
+export type CommentAttachmentCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CommentAttachment
+   */
+  select?: Prisma.CommentAttachmentSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the CommentAttachment
+   */
+  omit?: Prisma.CommentAttachmentOmit<ExtArgs> | null
+  /**
+   * The data used to create many CommentAttachments.
+   */
+  data: Prisma.CommentAttachmentCreateManyInput | Prisma.CommentAttachmentCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CommentAttachmentIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * CommentAttachment update
  */
 export type CommentAttachmentUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1619,6 +1727,36 @@ export type CommentAttachmentUpdateManyArgs<ExtArgs extends runtime.Types.Extens
    * Limit how many CommentAttachments to update.
    */
   limit?: number
+}
+
+/**
+ * CommentAttachment updateManyAndReturn
+ */
+export type CommentAttachmentUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CommentAttachment
+   */
+  select?: Prisma.CommentAttachmentSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the CommentAttachment
+   */
+  omit?: Prisma.CommentAttachmentOmit<ExtArgs> | null
+  /**
+   * The data used to update CommentAttachments.
+   */
+  data: Prisma.XOR<Prisma.CommentAttachmentUpdateManyMutationInput, Prisma.CommentAttachmentUncheckedUpdateManyInput>
+  /**
+   * Filter which CommentAttachments to update
+   */
+  where?: Prisma.CommentAttachmentWhereInput
+  /**
+   * Limit how many CommentAttachments to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CommentAttachmentIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

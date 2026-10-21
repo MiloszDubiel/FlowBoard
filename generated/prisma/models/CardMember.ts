@@ -546,7 +546,21 @@ export type CardMemberSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cardMember"]>
 
+export type CardMemberSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  cardId?: boolean
+  userId?: boolean
+  card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["cardMember"]>
 
+export type CardMemberSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  cardId?: boolean
+  userId?: boolean
+  card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["cardMember"]>
 
 export type CardMemberSelectScalar = {
   id?: boolean
@@ -556,6 +570,14 @@ export type CardMemberSelectScalar = {
 
 export type CardMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "cardId" | "userId", ExtArgs["result"]["cardMember"]>
 export type CardMemberInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type CardMemberIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type CardMemberIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   card?: boolean | Prisma.CardDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -688,6 +710,30 @@ export interface CardMemberDelegate<ExtArgs extends runtime.Types.Extensions.Int
   createMany<T extends CardMemberCreateManyArgs>(args?: Prisma.SelectSubset<T, CardMemberCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many CardMembers and returns the data saved in the database.
+   * @param {CardMemberCreateManyAndReturnArgs} args - Arguments to create many CardMembers.
+   * @example
+   * // Create many CardMembers
+   * const cardMember = await prisma.cardMember.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many CardMembers and only return the `id`
+   * const cardMemberWithIdOnly = await prisma.cardMember.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends CardMemberCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, CardMemberCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CardMemberPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a CardMember.
    * @param {CardMemberDeleteArgs} args - Arguments to delete one CardMember.
    * @example
@@ -750,6 +796,36 @@ export interface CardMemberDelegate<ExtArgs extends runtime.Types.Extensions.Int
    * 
    */
   updateMany<T extends CardMemberUpdateManyArgs>(args: Prisma.SelectSubset<T, CardMemberUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more CardMembers and returns the data updated in the database.
+   * @param {CardMemberUpdateManyAndReturnArgs} args - Arguments to update many CardMembers.
+   * @example
+   * // Update many CardMembers
+   * const cardMember = await prisma.cardMember.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more CardMembers and only return the `id`
+   * const cardMemberWithIdOnly = await prisma.cardMember.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends CardMemberUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, CardMemberUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CardMemberPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one CardMember.
@@ -1182,6 +1258,29 @@ export type CardMemberCreateManyArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
+ * CardMember createManyAndReturn
+ */
+export type CardMemberCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CardMember
+   */
+  select?: Prisma.CardMemberSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the CardMember
+   */
+  omit?: Prisma.CardMemberOmit<ExtArgs> | null
+  /**
+   * The data used to create many CardMembers.
+   */
+  data: Prisma.CardMemberCreateManyInput | Prisma.CardMemberCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CardMemberIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * CardMember update
  */
 export type CardMemberUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1223,6 +1322,36 @@ export type CardMemberUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Limit how many CardMembers to update.
    */
   limit?: number
+}
+
+/**
+ * CardMember updateManyAndReturn
+ */
+export type CardMemberUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CardMember
+   */
+  select?: Prisma.CardMemberSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the CardMember
+   */
+  omit?: Prisma.CardMemberOmit<ExtArgs> | null
+  /**
+   * The data used to update CardMembers.
+   */
+  data: Prisma.XOR<Prisma.CardMemberUpdateManyMutationInput, Prisma.CardMemberUncheckedUpdateManyInput>
+  /**
+   * Filter which CardMembers to update
+   */
+  where?: Prisma.CardMemberWhereInput
+  /**
+   * Limit how many CardMembers to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CardMemberIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

@@ -264,7 +264,6 @@ export type BoardOrderByWithRelationInput = {
   labels?: Prisma.LabelOrderByRelationAggregateInput
   activities?: Prisma.ActivityOrderByRelationAggregateInput
   boardInvites?: Prisma.BoardInviteOrderByRelationAggregateInput
-  _relevance?: Prisma.BoardOrderByRelevanceInput
 }
 
 export type BoardWhereUniqueInput = Prisma.AtLeast<{
@@ -408,12 +407,6 @@ export type BoardListRelationFilter = {
 
 export type BoardOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type BoardOrderByRelevanceInput = {
-  fields: Prisma.BoardOrderByRelevanceFieldEnum | Prisma.BoardOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type BoardCountOrderByAggregateInput = {
@@ -1261,7 +1254,29 @@ export type BoardSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   _count?: boolean | Prisma.BoardCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["board"]>
 
+export type BoardSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  projectId?: boolean
+  ownerId?: boolean
+  name?: boolean
+  description?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["board"]>
 
+export type BoardSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  projectId?: boolean
+  ownerId?: boolean
+  name?: boolean
+  description?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["board"]>
 
 export type BoardSelectScalar = {
   id?: boolean
@@ -1283,6 +1298,14 @@ export type BoardInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   activities?: boolean | Prisma.Board$activitiesArgs<ExtArgs>
   boardInvites?: boolean | Prisma.Board$boardInvitesArgs<ExtArgs>
   _count?: boolean | Prisma.BoardCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type BoardIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type BoardIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $BoardPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1422,6 +1445,30 @@ export interface BoardDelegate<ExtArgs extends runtime.Types.Extensions.Internal
   createMany<T extends BoardCreateManyArgs>(args?: Prisma.SelectSubset<T, BoardCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many Boards and returns the data saved in the database.
+   * @param {BoardCreateManyAndReturnArgs} args - Arguments to create many Boards.
+   * @example
+   * // Create many Boards
+   * const board = await prisma.board.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many Boards and only return the `id`
+   * const boardWithIdOnly = await prisma.board.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends BoardCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, BoardCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a Board.
    * @param {BoardDeleteArgs} args - Arguments to delete one Board.
    * @example
@@ -1484,6 +1531,36 @@ export interface BoardDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    * 
    */
   updateMany<T extends BoardUpdateManyArgs>(args: Prisma.SelectSubset<T, BoardUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more Boards and returns the data updated in the database.
+   * @param {BoardUpdateManyAndReturnArgs} args - Arguments to update many Boards.
+   * @example
+   * // Update many Boards
+   * const board = await prisma.board.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more Boards and only return the `id`
+   * const boardWithIdOnly = await prisma.board.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends BoardUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, BoardUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Board.
@@ -1925,6 +2002,29 @@ export type BoardCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
+ * Board createManyAndReturn
+ */
+export type BoardCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Board
+   */
+  select?: Prisma.BoardSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Board
+   */
+  omit?: Prisma.BoardOmit<ExtArgs> | null
+  /**
+   * The data used to create many Boards.
+   */
+  data: Prisma.BoardCreateManyInput | Prisma.BoardCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BoardIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * Board update
  */
 export type BoardUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1966,6 +2066,36 @@ export type BoardUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Boards to update.
    */
   limit?: number
+}
+
+/**
+ * Board updateManyAndReturn
+ */
+export type BoardUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Board
+   */
+  select?: Prisma.BoardSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Board
+   */
+  omit?: Prisma.BoardOmit<ExtArgs> | null
+  /**
+   * The data used to update Boards.
+   */
+  data: Prisma.XOR<Prisma.BoardUpdateManyMutationInput, Prisma.BoardUncheckedUpdateManyInput>
+  /**
+   * Filter which Boards to update
+   */
+  where?: Prisma.BoardWhereInput
+  /**
+   * Limit how many Boards to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BoardIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

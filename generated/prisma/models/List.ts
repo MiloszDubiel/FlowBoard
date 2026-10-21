@@ -245,7 +245,6 @@ export type ListOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   board?: Prisma.BoardOrderByWithRelationInput
   cards?: Prisma.CardOrderByRelationAggregateInput
-  _relevance?: Prisma.ListOrderByRelevanceInput
 }
 
 export type ListWhereUniqueInput = Prisma.AtLeast<{
@@ -359,12 +358,6 @@ export type ListListRelationFilter = {
 
 export type ListOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type ListOrderByRelevanceInput = {
-  fields: Prisma.ListOrderByRelevanceFieldEnum | Prisma.ListOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type ListCountOrderByAggregateInput = {
@@ -648,7 +641,25 @@ export type ListSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   _count?: boolean | Prisma.ListCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["list"]>
 
+export type ListSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  boardId?: boolean
+  name?: boolean
+  position?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["list"]>
 
+export type ListSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  boardId?: boolean
+  name?: boolean
+  position?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["list"]>
 
 export type ListSelectScalar = {
   id?: boolean
@@ -664,6 +675,12 @@ export type ListInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
   cards?: boolean | Prisma.List$cardsArgs<ExtArgs>
   _count?: boolean | Prisma.ListCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type ListIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
+}
+export type ListIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
 }
 
 export type $ListPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -797,6 +814,30 @@ export interface ListDelegate<ExtArgs extends runtime.Types.Extensions.InternalA
   createMany<T extends ListCreateManyArgs>(args?: Prisma.SelectSubset<T, ListCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many Lists and returns the data saved in the database.
+   * @param {ListCreateManyAndReturnArgs} args - Arguments to create many Lists.
+   * @example
+   * // Create many Lists
+   * const list = await prisma.list.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many Lists and only return the `id`
+   * const listWithIdOnly = await prisma.list.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends ListCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, ListCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ListPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a List.
    * @param {ListDeleteArgs} args - Arguments to delete one List.
    * @example
@@ -859,6 +900,36 @@ export interface ListDelegate<ExtArgs extends runtime.Types.Extensions.InternalA
    * 
    */
   updateMany<T extends ListUpdateManyArgs>(args: Prisma.SelectSubset<T, ListUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more Lists and returns the data updated in the database.
+   * @param {ListUpdateManyAndReturnArgs} args - Arguments to update many Lists.
+   * @example
+   * // Update many Lists
+   * const list = await prisma.list.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more Lists and only return the `id`
+   * const listWithIdOnly = await prisma.list.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends ListUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, ListUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ListPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one List.
@@ -1294,6 +1365,29 @@ export type ListCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
+ * List createManyAndReturn
+ */
+export type ListCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the List
+   */
+  select?: Prisma.ListSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the List
+   */
+  omit?: Prisma.ListOmit<ExtArgs> | null
+  /**
+   * The data used to create many Lists.
+   */
+  data: Prisma.ListCreateManyInput | Prisma.ListCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ListIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * List update
  */
 export type ListUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1335,6 +1429,36 @@ export type ListUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Lists to update.
    */
   limit?: number
+}
+
+/**
+ * List updateManyAndReturn
+ */
+export type ListUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the List
+   */
+  select?: Prisma.ListSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the List
+   */
+  omit?: Prisma.ListOmit<ExtArgs> | null
+  /**
+   * The data used to update Lists.
+   */
+  data: Prisma.XOR<Prisma.ListUpdateManyMutationInput, Prisma.ListUncheckedUpdateManyInput>
+  /**
+   * Filter which Lists to update
+   */
+  where?: Prisma.ListWhereInput
+  /**
+   * Limit how many Lists to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ListIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

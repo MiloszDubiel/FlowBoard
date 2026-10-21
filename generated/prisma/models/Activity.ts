@@ -256,7 +256,6 @@ export type ActivityOrderByWithRelationInput = {
   board?: Prisma.BoardOrderByWithRelationInput
   card?: Prisma.CardOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
-  _relevance?: Prisma.ActivityOrderByRelevanceInput
 }
 
 export type ActivityWhereUniqueInput = Prisma.AtLeast<{
@@ -375,12 +374,6 @@ export type ActivityListRelationFilter = {
 
 export type ActivityOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type ActivityOrderByRelevanceInput = {
-  fields: Prisma.ActivityOrderByRelevanceFieldEnum | Prisma.ActivityOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type ActivityCountOrderByAggregateInput = {
@@ -813,7 +806,31 @@ export type ActivitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["activity"]>
 
+export type ActivitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  boardId?: boolean
+  cardId?: boolean
+  userId?: boolean
+  type?: boolean
+  metadata?: boolean
+  createdAt?: boolean
+  board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
+  card?: boolean | Prisma.Activity$cardArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["activity"]>
 
+export type ActivitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  boardId?: boolean
+  cardId?: boolean
+  userId?: boolean
+  type?: boolean
+  metadata?: boolean
+  createdAt?: boolean
+  board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
+  card?: boolean | Prisma.Activity$cardArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["activity"]>
 
 export type ActivitySelectScalar = {
   id?: boolean
@@ -827,6 +844,16 @@ export type ActivitySelectScalar = {
 
 export type ActivityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "boardId" | "cardId" | "userId" | "type" | "metadata" | "createdAt", ExtArgs["result"]["activity"]>
 export type ActivityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
+  card?: boolean | Prisma.Activity$cardArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type ActivityIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
+  card?: boolean | Prisma.Activity$cardArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type ActivityIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
   card?: boolean | Prisma.Activity$cardArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -965,6 +992,30 @@ export interface ActivityDelegate<ExtArgs extends runtime.Types.Extensions.Inter
   createMany<T extends ActivityCreateManyArgs>(args?: Prisma.SelectSubset<T, ActivityCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many Activities and returns the data saved in the database.
+   * @param {ActivityCreateManyAndReturnArgs} args - Arguments to create many Activities.
+   * @example
+   * // Create many Activities
+   * const activity = await prisma.activity.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many Activities and only return the `id`
+   * const activityWithIdOnly = await prisma.activity.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends ActivityCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, ActivityCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a Activity.
    * @param {ActivityDeleteArgs} args - Arguments to delete one Activity.
    * @example
@@ -1027,6 +1078,36 @@ export interface ActivityDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * 
    */
   updateMany<T extends ActivityUpdateManyArgs>(args: Prisma.SelectSubset<T, ActivityUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more Activities and returns the data updated in the database.
+   * @param {ActivityUpdateManyAndReturnArgs} args - Arguments to update many Activities.
+   * @example
+   * // Update many Activities
+   * const activity = await prisma.activity.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more Activities and only return the `id`
+   * const activityWithIdOnly = await prisma.activity.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends ActivityUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, ActivityUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Activity.
@@ -1464,6 +1545,29 @@ export type ActivityCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
+ * Activity createManyAndReturn
+ */
+export type ActivityCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Activity
+   */
+  select?: Prisma.ActivitySelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Activity
+   */
+  omit?: Prisma.ActivityOmit<ExtArgs> | null
+  /**
+   * The data used to create many Activities.
+   */
+  data: Prisma.ActivityCreateManyInput | Prisma.ActivityCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActivityIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * Activity update
  */
 export type ActivityUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1505,6 +1609,36 @@ export type ActivityUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Activities to update.
    */
   limit?: number
+}
+
+/**
+ * Activity updateManyAndReturn
+ */
+export type ActivityUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Activity
+   */
+  select?: Prisma.ActivitySelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Activity
+   */
+  omit?: Prisma.ActivityOmit<ExtArgs> | null
+  /**
+   * The data used to update Activities.
+   */
+  data: Prisma.XOR<Prisma.ActivityUpdateManyMutationInput, Prisma.ActivityUncheckedUpdateManyInput>
+  /**
+   * Filter which Activities to update
+   */
+  where?: Prisma.ActivityWhereInput
+  /**
+   * Limit how many Activities to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActivityIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
