@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import fs from "fs/promises";
 import path from "path";
 import crypto from "crypto";
-import { fileTypeFromBuffer } from "file-type";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 import { prisma } from "@/lib/prisma";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -118,37 +118,34 @@ const createFile = async (
 
   const folder = type === "img" ? "images" : "textfiles";
 
-  const uploadDir = path.join(
-    process.cwd(),
-    "public",
-    "uploads",
-    folder,
-    String(cardId),
-  );
-
-  await fs.mkdir(uploadDir, { recursive: true });
-
-  const filePath = path.join(uploadDir, randomFileName);
-  const buffer = Buffer.from(await file.arrayBuffer());
-
-  await fs.writeFile(filePath, buffer, { flag: "wx" });
-
-  const fileUrl = `/uploads/${folder}/${cardId}/${randomFileName}`;
+  const uploadDir = path.join(folder, String(cardId));
 
   try {
+    const { data, error } = await supabaseAdmin.storage
+      .from("FlowBOard")
+      .upload(uploadDir, Buffer.from(await file.arrayBuffer()), {
+        contentType: file.type,
+        upsert: false,
+      });
+
+    if (error) {
+      console.error("Supabase upload error:", error.message);
+      return NextResponse.json(
+        { error: "Nie udało się zapisać pliku." },
+        { status: 500 },
+      );
+    }
+
     await prisma.attachment.create({
       data: {
         cardId,
-        fileUrl,
+        fileUrl: ` ${process.env.SUPABASE_URL}/${data.path} `,
         fileName: randomFileName,
         userId: id,
         fileType: type === "img" ? "IMG" : "TEXTFILE",
       },
     });
-  } catch (error) {
-    await fs.unlink(filePath).catch(() => {});
-    throw error;
+  } catch (err) {
+    console.log(err);
   }
-
-  return fileUrl;
 };
