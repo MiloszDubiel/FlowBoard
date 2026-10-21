@@ -68,11 +68,22 @@ export const POST = withAuth(async (user, request, context) => {
     }
   }
 
-  const urls = await Promise.all(
-    files.map(({ type, file }) =>
-      createFile(type, file, Number(cardId), user.userID),
-    ),
-  );
+  let urls;
+
+  try {
+    urls = await Promise.all(
+      files.map(({ type, file }) =>
+        createFile(type, file, Number(cardId), user.userID),
+      ),
+    );
+  } catch (error) {
+    console.error("Upload error:", error);
+
+    return NextResponse.json(
+      { message: "Nie udało się zapisać wszystkich plików." },
+      { status: 500 },
+    );
+  }
 
   revalidatePath("/");
 
@@ -117,35 +128,40 @@ const createFile = async (
   const randomFileName = `${crypto.randomUUID()}${extension}`;
 
   const folder = type === "img" ? "images" : "textfiles";
+  const storagePath = `${folder}/${cardId}/${randomFileName}`;
 
-  const uploadDir = path.join(folder, String(cardId));
+  const allowedTypes = type === "img" ? imageTypes : textTypes;
+  const contentType = allowedTypes[extension];
+
+  
+  const { data, error } = await supabaseAdmin.storage
+    .from("FlowBOard")
+    .upload(storagePath, Buffer.from(await file.arrayBuffer()), {
+      contentType,
+      upsert: false,
+    });
+
+  if (error) {
+    throw new Error(`Błąd uploadu: ${error.message}`);
+  }
+
+  const {
+    data: { publicUrl },
+  } = supabaseAdmin.storage.from("FlowBOard").getPublicUrl(data.path);
 
   try {
-    const { data, error } = await supabaseAdmin.storage
-      .from("FlowBOard")
-      .upload(uploadDir, Buffer.from(await file.arrayBuffer()), {
-        contentType: file.type,
-        upsert: false,
-      });
-
-    if (error) {
-      console.error("Supabase upload error:", error.message);
-      return NextResponse.json(
-        { error: "Nie udało się zapisać pliku." },
-        { status: 500 },
-      );
-    }
-
-    await prisma.attachment.create({
+    const attachment = await prisma.attachment.create({
       data: {
         cardId,
-        fileUrl: ` ${process.env.SUPABASE_URL}/${data.path} `,
+        fileUrl: publicUrl,
         fileName: randomFileName,
         userId: id,
         fileType: type === "img" ? "IMG" : "TEXTFILE",
       },
     });
+    return attachment;
   } catch (err) {
-    console.log(err);
+    await supabaseAdmin.storage.from("FlowBOard").remove([data.path]);
+    throw err;
   }
 };
