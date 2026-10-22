@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { projectColors } from "@/lib/colors";
+import { Spinner } from "./Spinner";
 
 export const ProjectForm = ({
   open,
@@ -107,7 +108,7 @@ export const ProjectForm = ({
               disabled={isPending || isSuccess}
               className="cursor-pointer"
             >
-              Zapisz
+              {isPending ? <Spinner text="Zapisywanie..." /> : "Zapisz"}
             </Button>
           </div>
         </form>

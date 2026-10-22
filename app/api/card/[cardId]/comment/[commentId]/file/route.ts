@@ -8,7 +8,7 @@ import { prisma } from "@/lib/prisma";
 export const POST = withAuth(async (user, request, context) => {
   const formData = await request.formData();
 
-  const file = formData.getAll("files");
+  const file = formData.getAll("files") as File[];
 
   const { cardId } = await context.params;
   const { commentId } = await context.params;
@@ -17,7 +17,7 @@ export const POST = withAuth(async (user, request, context) => {
     return NextResponse.json({ message: "Brak cardId" }, { status: 400 });
   }
 
-  if (file.some((file) => !(file instanceof File))) {
+  if (file.some((file: File) => !(file instanceof File))) {
     return NextResponse.json(
       { message: "Nieprawidłowy plik" },
       { status: 400 },
@@ -25,7 +25,7 @@ export const POST = withAuth(async (user, request, context) => {
   }
 
   const urls = file?.map(
-    async (file) =>
+    async (file: File) =>
       await createFile(
         "txt",
         file,
@@ -45,7 +45,7 @@ export const POST = withAuth(async (user, request, context) => {
 
 const createFile = async (
   type: "img" | "txt",
-  file: any,
+  file: File,
   cardId: number,
   id: number,
   commentId: number,

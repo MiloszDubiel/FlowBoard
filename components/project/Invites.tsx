@@ -1,15 +1,16 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GetInvitsType } from "@/lib/data/inivts";
+import { IniviteType } from "@/app/(dashboard)/projects/invits/page";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { Check, Mail, UserRound, X, FolderKanban } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Badge } from "../ui/badge";
+import { Spinner } from "../Spinner";
 
-type InvitesProps = { invites: GetInvitsType[] };
+type InvitesProps = { invites: IniviteType[] | null };
 
 const Invites = ({ invites = [] }: InvitesProps) => {
   const route = useRouter();
@@ -55,7 +56,7 @@ const Invites = ({ invites = [] }: InvitesProps) => {
                 Oczekujące zaproszenia
               </p>
 
-              <p className="text-2xl font-bold">{invites.length}</p>
+              <p className="text-2xl font-bold">{invites?.length}</p>
             </div>
           </CardContent>
         </Card>
@@ -72,11 +73,11 @@ const Invites = ({ invites = [] }: InvitesProps) => {
           </div>
 
           <span className="rounded-full bg-muted px-3 py-1 text-sm font-medium">
-            {invites.length}
+            {invites?.length}
           </span>
         </div>
 
-        {invites.length === 0 ? (
+        {invites?.length === 0 ? (
           <Card className="border-dashed">
             <CardContent className="flex min-h-72 flex-col items-center justify-center p-8 text-center">
               <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-muted">
@@ -94,7 +95,7 @@ const Invites = ({ invites = [] }: InvitesProps) => {
           </Card>
         ) : (
           <div className="grid gap-5 md:grid-cols-2">
-            {invites.map((invite: any) => (
+            {invites?.map((invite: any) => (
               <Card
                 key={invite.id}
                 className="group overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-md"
@@ -152,7 +153,7 @@ const Invites = ({ invites = [] }: InvitesProps) => {
                       className="flex-1 cursor-pointer"
                       disabled={isPending}
                       onClick={() => {
-                        // Tutaj podepnij mutację odrzucania zaproszenia
+                        //TUTAJ DODAC ODRZUCENIE
                       }}
                     >
                       <X className="mr-2 h-4 w-4" />
@@ -167,7 +168,11 @@ const Invites = ({ invites = [] }: InvitesProps) => {
                       }}
                     >
                       <Check className="mr-2 h-4 w-4" />
-                      Akceptuj
+                      {isPending ? (
+                        <Spinner text="Akceptuje..." />
+                      ) : (
+                        "Zaakcpetuj"
+                      )}
                     </Button>
                   </div>
                 </CardContent>

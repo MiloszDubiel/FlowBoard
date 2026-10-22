@@ -29,5 +29,3 @@ export const getInvits = async () => {
   });
 };
 
-export type GetInvitsType = Awaited<ReturnType<typeof getInvits>>;
-export type GetInvitType = GetInvitsType[];

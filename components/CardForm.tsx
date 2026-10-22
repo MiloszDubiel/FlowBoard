@@ -48,6 +48,7 @@ import { toast } from "sonner";
 import { projectColors } from "@/lib/colors";
 import { useRouter } from "next/navigation";
 import { useLockStore } from "@/stores/lockButton.store";
+import { Spinner } from "./Spinner";
 
 type LabelType = {
   id: number;
@@ -910,11 +911,13 @@ export default function CardForm({
           </Button>
 
           <Button type="submit" disabled={isPending || isSuccess}>
-            {isPending
-              ? "Zapisywanie..."
-              : type === "edit"
-                ? "Zapisz zmiany"
-                : "Utwórz kartę"}
+            {isPending ? (
+              <Spinner text={"Trwa zapisywanie"} />
+            ) : type === "edit" ? (
+              "Zapisz zmiany"
+            ) : (
+              "Utwórz kartę"
+            )}
           </Button>
         </div>
       </div>

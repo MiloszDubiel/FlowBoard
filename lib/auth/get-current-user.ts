@@ -1,5 +1,5 @@
 "use server";
-
+import { cacheLife } from "next/cache";
 import { cookies } from "next/headers";
 import { verifyToken } from "../auth";
 import { prisma } from "../prisma";
@@ -7,7 +7,6 @@ import { prisma } from "../prisma";
 export const getCurrentUser = async () => {
   const cookiesStore = await cookies();
   const token = cookiesStore.get("token")?.value;
-
   if (!token) {
     return console.log("Brak tokena");
   }

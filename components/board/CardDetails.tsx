@@ -434,7 +434,7 @@ export default function CardDetails({ card, boardId, role }: any) {
                         />
 
                         <AvatarFallback>
-                          {comment.user.name.slice(0, 2).toUpperCase()}
+                          {comment.user.email.slice(0, 2).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
 

@@ -1,6 +1,7 @@
 import Dashboard from "@/components/project/Projects";
 import { getProjects } from "@/lib/data/projects";
 import { prisma } from "@/lib/prisma";
+import { Suspense } from "react";
 
 export default async function DashboardPage() {
   const projects = await getProjects();

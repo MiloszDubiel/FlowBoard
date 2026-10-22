@@ -16,6 +16,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useLockStore } from "@/stores/lockButton.store";
+import { Spinner } from "../Spinner";
 
 type ConfirmModalProps = {
   open: boolean;
@@ -55,8 +56,11 @@ const ConfirmModal = ({
           >
             Anuluj
           </AlertDialogCancel>
-          <AlertDialogAction onClick={onSubmit} disabled={isPending}>
-            Zatwierdź
+          <AlertDialogAction
+            onClick={onSubmit}
+            disabled={isPending || isSuccess}
+          >
+            {isPending ? <Spinner text="Zatwierdź...." /> : "Zatwierdź"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

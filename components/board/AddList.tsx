@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { addListSchema, AddListType } from "@/schema/addlist.schema";
+import { Spinner } from "../Spinner";
 
 type AddListProps = {
   open: boolean;
@@ -103,7 +104,7 @@ export default function AddList({ open, onOpenChange, boardID }: AddListProps) {
               disabled={isPending || isSuccess}
               className="cursor-pointer"
             >
-              {isPending ? "Tworzenie..." : "Utwórz listę"}
+              {isPending ? <Spinner text="Tworzenie" /> : "Utwórz listę"}
             </Button>
           </div>
         </form>

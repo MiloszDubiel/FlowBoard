@@ -13,15 +13,19 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
 import { Loader2, Lock, LockKeyhole, Mail } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<RegisterTypes>({
     resolver: zodResolver(registerShema),
   });
+
+  const router = useRouter();
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: RegisterTypes) => {
@@ -31,6 +35,8 @@ export default function RegisterForm() {
     },
     onSuccess: (data) => {
       toast.success(data.message);
+      reset();
+      router.replace("/login");
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {

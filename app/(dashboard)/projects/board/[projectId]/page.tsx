@@ -2,6 +2,7 @@ import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { getBoard, getBoardMembers } from "@/lib/data/board";
 import Forbidden from "@/components/Forbbiden";
 import Board from "@/components/board/Board";
+import { Suspense } from "react";
 
 export default async function BoardPage({
   params,

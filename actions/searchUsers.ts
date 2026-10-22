@@ -2,6 +2,7 @@
 
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { prisma } from "@/lib/prisma";
+import { type JWTPayload } from "jose";
 
 export const searchUsers = async (query: string, boardId: number) => {
   const user: any = await getCurrentUser();

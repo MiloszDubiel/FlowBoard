@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { object } from "zod";
 
 export async function PATCH(request: Request) {
   try {

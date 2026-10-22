@@ -108,7 +108,11 @@ export default function BoardMembersModal({
     },
   });
 
-  const { mutate: changeRole } = useMutation({
+  const {
+    mutate: changeRole,
+    isPending,
+    isSuccess,
+  } = useMutation({
     mutationFn: async ({ id, role }: any) => {
       const { data } = await axios.patch(
         `/api/board/${boardId}/member/${id}/role`,
@@ -176,7 +180,11 @@ export default function BoardMembersModal({
                         key={el.id}
                       >
                         <div className="flex items-center gap-3">
-                          <Avatar className="h-9 w-9"></Avatar>
+                          <Avatar className="h-9 w-9">
+                            <AvatarFallback>
+                              {el.email?.slice(0, 2)?.toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
 
                           <div>
                             <p className="text-sm font-medium">{el.name}</p>
@@ -240,7 +248,9 @@ export default function BoardMembersModal({
         open={isOpen}
         onOpenChange={setIsOpen}
         title="Dodać?"
+        isSuccess={isSuccess}
         message={message}
+        isPending={isPending}
         onCancel={() => {
           setIsOpen(false);
         }}

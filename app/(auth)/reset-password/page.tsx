@@ -16,7 +16,7 @@ export default async function ResetPasswordPage({
   _,
   searchParams,
 }: {
-  _: any;
+  _: unknown;
   searchParams?: Promise<{ token: string }>;
 }) {
   const token = (await searchParams)?.token;

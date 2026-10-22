@@ -33,7 +33,7 @@ import { useRouter } from "next/navigation";
 import { Progress } from "../ui/progress";
 import { colorRecord } from "@/lib/colors";
 
-const Projects = ({ projects, children, taskState }: any) => {
+const Projects = ({ projects, taskState }: any) => {
   const route = useRouter();
   const [openConfirm, setOpenConfirm] = useState(false);
   const [open, setOpen] = useState(false);
@@ -61,7 +61,7 @@ const Projects = ({ projects, children, taskState }: any) => {
   });
 
   const {
-    deleteProject: { mutate },
+    deleteProject: { mutate, isPending, isSuccess, reset },
   } = useDashboard(editedProject?.id);
 
   return (
@@ -165,7 +165,6 @@ const Projects = ({ projects, children, taskState }: any) => {
         </div>
       </div>
 
- 
       <section>
         <div className="mb-5 flex items-center justify-between">
           <div>
@@ -374,11 +373,14 @@ const Projects = ({ projects, children, taskState }: any) => {
         title="Usunąć projekt?"
         message={`Czy na pewno chcesz usunąć projekt: ${editedProject?.name}?`}
         onOpenChange={setOpenConfirm}
+        isPending={isPending}
+        isSuccess={isSuccess}
         onSubmit={() => {
           mutate(undefined, {
             onSuccess: (data) => {
               route.refresh();
               toast.success(data.message);
+              reset();
             },
           });
 

@@ -20,6 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { addListSchema, AddListType } from "@/schema/addlist.schema";
 import { List } from "@/generated/prisma/client";
+import { Spinner } from "../Spinner";
 
 type EditListProps = {
   open: boolean;
@@ -125,7 +126,7 @@ export default function EditList({
               disabled={isPending || isSuccess}
               className="cursor-pointer"
             >
-              {isPending ? "Edytowanie..." : "Edituj listę"}
+              {isPending ? <Spinner text="Edytowanie..." /> : "Edytuj listę"}
             </Button>
           </div>
         </form>
