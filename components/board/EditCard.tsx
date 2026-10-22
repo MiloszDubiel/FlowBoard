@@ -37,9 +37,8 @@ export default function EditCard({ cardMemebrs = [], card, labels }: any) {
     setTasks((prev) => prev.filter((_, i) => i !== index));
   };
 
-  console.log(tasks);
   const {
-    editCard: { mutate: editCard, isPending },
+    editCard: { mutate: editCard, isPending, isSuccess },
     addFile: { mutate: addFile },
     removeFile: { mutate: removeFiles },
   } = useCard();
@@ -81,6 +80,8 @@ export default function EditCard({ cardMemebrs = [], card, labels }: any) {
       {
         onSuccess: (data) => {
           const formData = new FormData();
+
+          route.replace(`/projects/board/${card.list.boardId}`);
 
           imgFiles?.forEach((file) => {
             formData.append("img", file);
@@ -126,6 +127,7 @@ export default function EditCard({ cardMemebrs = [], card, labels }: any) {
         }}
         removeTask={removeTask}
         labels={labels}
+        isSuccess={isSuccess}
         isPending={isPending}
         selectedLabels={card?.labels?.map((el: any) => el.labelId)}
         attachemnts={card?.attachments}

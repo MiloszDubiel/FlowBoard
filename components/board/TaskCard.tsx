@@ -92,6 +92,7 @@ export function TaskCard({ id, index, column, card, role }: any) {
 
           {card?.labels?.map((item: any) => (
             <Label
+              key={`label-${item.label.id}`}
               color={colorRecord[item.label.color]}
               name={item.label.name}
             />
@@ -155,7 +156,7 @@ export function TaskCard({ id, index, column, card, role }: any) {
             <div className="ml-auto flex -space-x-1.5">
               {card.members.slice(0, 3).map((member: any) => (
                 <Avatar
-                  key={member.userId}
+                  key={`member-${member.userId}`}
                   className="h-6 w-6 border-2 border-card"
                 >
                   <AvatarImage

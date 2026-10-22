@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { withAuth } from "@/lib/withAuth";
 import { addListSchema } from "@/schema/addlist.schema";
 import { NextResponse } from "next/server";
-
+import { revalidatePath } from "next/cache";
 export const PATCH = withAuth(async (user, request, context) => {
   const { name } = await request.json();
   const { listId } = await context.params;
@@ -75,7 +75,7 @@ export const DELETE = withAuth(async (user, request, context) => {
       id: listIdNumber,
     },
   });
-
+  revalidatePath("/");
   return NextResponse.json(
     {
       message: "Usunięto listę",

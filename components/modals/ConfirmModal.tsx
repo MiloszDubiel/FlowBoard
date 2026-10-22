@@ -15,6 +15,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useLockStore } from "@/stores/lockButton.store";
 
 type ConfirmModalProps = {
   open: boolean;
@@ -23,6 +24,8 @@ type ConfirmModalProps = {
   onCancel: () => void;
   title: string;
   message: string;
+  isPending?: boolean;
+  isSuccess?: boolean;
 };
 
 const ConfirmModal = ({
@@ -32,7 +35,11 @@ const ConfirmModal = ({
   onCancel,
   title,
   message,
+  isPending,
+  isSuccess,
 }: ConfirmModalProps) => {
+  const lock = useLockStore((store) => store.lock);
+
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
@@ -42,8 +49,15 @@ const ConfirmModal = ({
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={onCancel}>Anuluj</AlertDialogCancel>
-          <AlertDialogAction onClick={onSubmit}>Zatwierdź</AlertDialogAction>
+          <AlertDialogCancel
+            onClick={onCancel}
+            disabled={isPending || isSuccess}
+          >
+            Anuluj
+          </AlertDialogCancel>
+          <AlertDialogAction onClick={onSubmit} disabled={isPending}>
+            Zatwierdź
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

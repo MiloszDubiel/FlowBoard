@@ -59,9 +59,12 @@ const EditProject = ({
     }
   }, [project, reset]);
 
-  const queryClient = useQueryClient();
-
-  const { mutate, isPending } = useMutation({
+  const {
+    mutate,
+    isPending,
+    isSuccess,
+    reset: resetCache,
+  } = useMutation({
     mutationFn: async (data: AddProjectType) => {
       const response = await axios.patch(
         `/api/projects/${project?.id}`,
@@ -79,7 +82,7 @@ const EditProject = ({
       onOpenChange(false);
       router.refresh();
       toast.success(data.message);
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      resetCache();
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
@@ -101,6 +104,7 @@ const EditProject = ({
       register={register}
       errors={errors}
       isPending={isPending}
+      isSuccess={isSuccess}
       type="edit"
     />
   );

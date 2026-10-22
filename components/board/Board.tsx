@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Users, X } from "lucide-react";
 import { useRef, useState, useMemo } from "react";
 import { Plus } from "lucide-react";
-import { Column } from "./Column";
+import { Column } from "./List";
 import AddList from "./AddList";
 import EditList from "./EditList";
 import ConfirmModal from "../modals/ConfirmModal";
@@ -29,7 +29,7 @@ export default function Board({ board, members }: any) {
   const [deletedList, setDeleteList] = useState<boolean>(false);
   const [showMembers, setShowMembers] = useState<boolean>(false);
   const {
-    deleteList: { mutate },
+    deleteList: { mutate, isSuccess, isPending },
   } = useList(editedList?.id);
 
   const route = useRouter();
@@ -216,10 +216,11 @@ export default function Board({ board, members }: any) {
         onOpenChange={setDeleteList}
         title="Usunąć"
         message={`Czy na pewno chcesz usunąć listę o nazwie: ${editedList?.name} ?`}
+        isPending={isPending}
+        isSuccess={isSuccess}
         onSubmit={() => {
           mutate(undefined, {
             onSuccess: (data) => {
-              route.refresh();
               toast.success(data.message);
             },
           });

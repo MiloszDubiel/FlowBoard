@@ -35,6 +35,7 @@ import { DragDrop } from "../DragDropFile";
 import { colorRecord } from "@/lib/colors";
 import { Label } from "./Label";
 import { setStyle, priorityRecord } from "@/lib/priorityStyles";
+import { useLockStore } from "@/stores/lockButton.store";
 
 const safeParseTasks = (tasks: any): any[] => {
   if (!tasks) return [];
@@ -54,10 +55,14 @@ export default function CardDetails({ card, boardId, role }: any) {
   const router = useRouter();
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [files, setFiles] = useState<File[] | null>(null);
-  const [edit, setEdit] = useState<boolean>(false);
+  const setLock = useLockStore((store) => store.setLock);
 
-  const { addComment, changeChecklist, deleteCard, addFileToComment } =
-    useCard();
+  const {
+    addComment,
+    changeChecklist,
+    deleteCard: { isPending, mutate: deleteCardMutate, isSuccess },
+    addFileToComment,
+  } = useCard();
 
   const findRole = (userId: number) => {
     return card?.list?.board.members.find((el: any) => el.userId === userId)
@@ -72,8 +77,6 @@ export default function CardDetails({ card, boardId, role }: any) {
       attachments.filter((attachment: any) => attachment.fileType === "IMG"),
     [attachments],
   );
-
-  console.log(parsedTasks);
 
   const textFiles = useMemo(
     () =>
@@ -747,11 +750,13 @@ export default function CardDetails({ card, boardId, role }: any) {
             onCancel={() => {
               setDeleteModalOpen(false);
             }}
+            isPending={isPending}
+            isSuccess={isSuccess}
             onSubmit={() => {
-              deleteCard.mutate(Number(card.id), {
+              deleteCardMutate(Number(card.id), {
                 onSuccess: (data) => {
-                  toast.success(data.message);
                   router.replace(`/projects/board/${boardId}`);
+                  toast.success(data.message);
                 },
                 onError: (error) => {
                   if (axios.isAxiosError(error)) {

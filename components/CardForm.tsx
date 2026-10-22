@@ -34,7 +34,7 @@ import {
   FileText,
   X,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -47,6 +47,7 @@ import { type CreateCardForm, createCardSchema } from "@/schema/addcard.schema";
 import { toast } from "sonner";
 import { projectColors } from "@/lib/colors";
 import { useRouter } from "next/navigation";
+import { useLockStore } from "@/stores/lockButton.store";
 
 type LabelType = {
   id: number;
@@ -64,9 +65,10 @@ export default function CardForm({
   labels,
   onFileDelete,
   selectedLabels,
-  isPending = false,
+  isPending,
   boardId,
   removeTask,
+  isSuccess,
 }: any) {
   const {
     currentTasks,
@@ -81,6 +83,9 @@ export default function CardForm({
   const [selectedLabel, setSelectedLabel] = useState<number[]>(
     selectedLabels || [],
   );
+  const lock = useLockStore((store) => store.lock);
+  const setLock = useLockStore((store) => store.setLock);
+
   const router = useRouter();
 
   const [isCreatingLabel, setIsCreatingLabel] = useState(false);
@@ -95,6 +100,7 @@ export default function CardForm({
 
   useEffect(() => {
     setSelectedUsers(defaults?.userIds || []);
+    return () => setLock(false);
   }, [defaults?.userIds]);
 
   const {
@@ -116,14 +122,14 @@ export default function CardForm({
 
   return (
     <form
-      onSubmit={handleSubmit((data) =>
+      onSubmit={handleSubmit((data) => {
         onSubmit({
           ...data,
           userIds: selectedUsers,
           newLabels,
           selectedLabels: selectedLabel,
-        }),
-      )}
+        });
+      })}
       className="mx-auto w-full max-w-4xl space-y-6 pb-24"
     >
       <section className="overflow-hidden rounded-xl border bg-card shadow-sm">
@@ -622,8 +628,8 @@ export default function CardForm({
                       flex size-8 shrink-0 items-center
                       justify-center rounded-md
                       text-muted-foreground
-                      opacity-0 transition-all
-                      group-hover:opacity-100
+                      transition-all
+                   
                       hover:bg-destructive/10
                       hover:text-destructive
                     "
@@ -898,12 +904,12 @@ export default function CardForm({
             onClick={() => {
               router.replace(`/projects/board/${boardId}`);
             }}
-            disabled={isPending}
+            disabled={isPending || isSuccess}
           >
             Anuluj
           </Button>
 
-          <Button type="submit" disabled={isPending}>
+          <Button type="submit" disabled={isPending || isSuccess}>
             {isPending
               ? "Zapisywanie..."
               : type === "edit"

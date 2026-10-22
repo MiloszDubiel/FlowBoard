@@ -1,9 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import { type CreateCardForm, createCardSchema } from "@/schema/addcard.schema";
+import { type CreateCardForm } from "@/schema/addcard.schema";
 
 interface CreateCardModalProps {
   listId: number;
@@ -18,9 +15,10 @@ type Task = {
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useCard } from "@/mutations/dashboard/useCard";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import CardForm from "../CardForm";
 import { BoardMember, CardMember } from "@/generated/prisma/client";
+import { useLockStore } from "@/stores/lockButton.store";
 
 export default function AddCard({
   listId,
@@ -37,7 +35,7 @@ export default function AddCard({
 
   const {
     addFile: { mutate: addFile },
-    addCard: { mutate: addCard },
+    addCard: { mutate: addCard, isPending, isSuccess },
   } = useCard();
 
   const addTask = () => {
@@ -67,6 +65,7 @@ export default function AddCard({
       { ...data, tasks, listId },
       {
         onSuccess: (data) => {
+          route.replace(`/projects/board/${boardId}`);
           const formData = new FormData();
 
           imgFiles?.forEach((file) => {
@@ -77,11 +76,8 @@ export default function AddCard({
           });
 
           formData.append("cardId", data.cardId);
-
           addFile(formData);
           toast.success(data.message);
-
-          route.replace(`/projects/board/${boardId}`);
         },
       },
     );
@@ -124,6 +120,8 @@ export default function AddCard({
           priority: "MEDIUM",
           userIds: [],
         }}
+        isPending={isPending}
+        isSuccess={isSuccess}
       />
     </div>
   );

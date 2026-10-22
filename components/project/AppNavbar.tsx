@@ -102,13 +102,15 @@ const AppNavbar = ({ projects = [] }: AppNavbarProps) => {
           ))}
 
           <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button variant="ghost" className="gap-2">
-                <LayoutGrid className="size-4" />
-                Moje projekty
-                <ChevronDown className="size-4" />
-              </Button>
-            </DropdownMenuTrigger>
+            <DropdownMenuTrigger
+              render={
+                <Button variant="ghost" className="gap-2">
+                  <LayoutGrid className="size-4" />
+                  Moje projekty
+                  <ChevronDown className="size-4" />
+                </Button>
+              }
+            ></DropdownMenuTrigger>
 
             <DropdownMenuContent align="start" className="w-64">
               <DropdownMenuGroup>
@@ -162,31 +164,33 @@ const AppNavbar = ({ projects = [] }: AppNavbarProps) => {
           ))}
 
           <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button
-                variant="ghost"
-                className="flex h-auto items-center gap-2 px-2 py-1"
-              >
-                <Avatar className="size-9">
-                  <AvatarImage
-                    src={user?.avatarUrl ?? ""}
-                    alt={user?.email ?? "Zdjęcie profilowe"}
-                  />
-                  <AvatarFallback>
-                    {user?.email?.slice(0, 2).toUpperCase() ?? "U"}
-                  </AvatarFallback>
-                </Avatar>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  className="flex h-auto items-center gap-2 px-2 py-1"
+                >
+                  <Avatar className="size-9">
+                    <AvatarImage
+                      src={user?.avatarUrl ?? ""}
+                      alt={user?.email ?? "Zdjęcie profilowe"}
+                    />
+                    <AvatarFallback>
+                      {user?.email?.slice(0, 2).toUpperCase() ?? "U"}
+                    </AvatarFallback>
+                  </Avatar>
 
-                <div className="hidden max-w-36 text-left xl:block">
-                  <p className="truncate text-sm font-medium">{user?.name}</p>
-                  <p className="truncate text-xs text-muted-foreground">
-                    {user?.email}
-                  </p>
-                </div>
+                  <div className="hidden max-w-36 text-left xl:block">
+                    <p className="truncate text-sm font-medium">{user?.name}</p>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {user?.email}
+                    </p>
+                  </div>
 
-                <ChevronDown className="size-4" />
-              </Button>
-            </DropdownMenuTrigger>
+                  <ChevronDown className="size-4" />
+                </Button>
+              }
+            ></DropdownMenuTrigger>
 
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuGroup>
@@ -219,11 +223,13 @@ const AppNavbar = ({ projects = [] }: AppNavbarProps) => {
         </div>
 
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-          <SheetTrigger>
-            <Button variant="outline" size="icon" aria-label="Otwórz menu">
-              <Menu className="size-5" />
-            </Button>
-          </SheetTrigger>
+          <SheetTrigger
+            render={
+              <Button variant="outline" size="icon" aria-label="Otwórz menu">
+                <Menu className="size-5" />
+              </Button>
+            }
+          ></SheetTrigger>
           <SheetContent side="left" className="flex w-full flex-col">
             <SheetHeader>
               <SheetTitle className="flex items-center gap-2">

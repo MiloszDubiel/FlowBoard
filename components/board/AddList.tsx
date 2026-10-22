@@ -37,7 +37,7 @@ export default function AddList({ open, onOpenChange, boardID }: AddListProps) {
     resolver: zodResolver(addListSchema),
   });
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: async (name: AddListType) => {
       const { data } = await axios.post(`/api/list/`, {
         ...name,
@@ -92,7 +92,7 @@ export default function AddList({ open, onOpenChange, boardID }: AddListProps) {
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              disabled={isPending}
+              disabled={isPending || isSuccess}
               className="cursor-pointer"
             >
               Anuluj
@@ -100,7 +100,7 @@ export default function AddList({ open, onOpenChange, boardID }: AddListProps) {
 
             <Button
               type="submit"
-              disabled={isPending}
+              disabled={isPending || isSuccess}
               className="cursor-pointer"
             >
               {isPending ? "Tworzenie..." : "Utwórz listę"}

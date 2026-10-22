@@ -48,7 +48,6 @@ export default function EditList({
     },
   });
 
-  //Defualt values tylko przy pierwszym renderze
   useEffect(() => {
     if (list) {
       reset({
@@ -57,7 +56,12 @@ export default function EditList({
     }
   }, [list, reset]);
 
-  const { mutate, isPending } = useMutation({
+  const {
+    mutate,
+    isPending,
+    isSuccess,
+    reset: resetMutation,
+  } = useMutation({
     mutationFn: async (name: AddListType) => {
       const { data } = await axios.patch(`/api/list/${list?.id}`, {
         ...name,
@@ -70,6 +74,7 @@ export default function EditList({
       toast.success(data.message);
       onOpenChange(false);
       reset();
+      resetMutation();
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
@@ -109,7 +114,7 @@ export default function EditList({
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              disabled={isPending}
+              disabled={isPending || isSuccess}
               className="cursor-pointer"
             >
               Anuluj
@@ -117,7 +122,7 @@ export default function EditList({
 
             <Button
               type="submit"
-              disabled={isPending}
+              disabled={isPending || isSuccess}
               className="cursor-pointer"
             >
               {isPending ? "Edytowanie..." : "Edituj listę"}

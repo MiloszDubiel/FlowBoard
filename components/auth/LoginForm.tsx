@@ -25,7 +25,7 @@ export default function LoginForm() {
   });
   const router = useRouter();
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: async (data: LoginTypes) => {
       const response = await axios.post("/api/auth/login", data);
       return response.data;
@@ -98,7 +98,11 @@ export default function LoginForm() {
           <FieldError errors={[errors.password]} />
         </div>
 
-        <Button type="submit" className="h-11 w-full" disabled={isPending}>
+        <Button
+          type="submit"
+          className="h-11 w-full"
+          disabled={isPending || isSuccess}
+        >
           {isPending ? (
             <>
               <Loader2 className="mr-2 size-4 animate-spin" />

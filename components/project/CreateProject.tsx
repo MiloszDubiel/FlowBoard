@@ -29,7 +29,12 @@ const CreateProject = ({ open, onOpenChange }: CreateProjectProps) => {
 
   const queryClient = useQueryClient();
 
-  const { mutate, isPending } = useMutation({
+  const {
+    mutate,
+    isPending,
+    isSuccess,
+    reset: resetCache,
+  } = useMutation({
     mutationFn: async (data: AddProjectType) => {
       const response = await axios.post("/api/projects", data, {
         withCredentials: true,
@@ -44,6 +49,7 @@ const CreateProject = ({ open, onOpenChange }: CreateProjectProps) => {
       router.refresh();
       toast.success(data.message);
       queryClient.invalidateQueries({ queryKey: ["projects"] });
+      resetCache();
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
@@ -65,6 +71,7 @@ const CreateProject = ({ open, onOpenChange }: CreateProjectProps) => {
       register={register}
       errors={errors}
       isPending={isPending}
+      isSuccess={isSuccess}
     />
   );
 };

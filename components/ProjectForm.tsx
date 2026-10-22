@@ -20,6 +20,7 @@ export const ProjectForm = ({
   register,
   errors,
   isPending,
+  isSuccess,
   type,
 }: any) => {
   return (
@@ -103,7 +104,7 @@ export const ProjectForm = ({
 
             <Button
               type="submit"
-              disabled={isPending}
+              disabled={isPending || isSuccess}
               className="cursor-pointer"
             >
               Zapisz
