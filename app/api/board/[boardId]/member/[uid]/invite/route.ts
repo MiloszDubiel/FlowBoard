@@ -58,6 +58,21 @@ export const PUT = withAuth(async (user, request, context) => {
     },
   });
 
+  const projectName = await prisma.project.findFirst({
+    where: {
+      id: board.projectId,
+    },
+  });
+
+  await prisma.notification.create({
+    data: {
+      type: "BOARD_INVITATION",
+      message: `Otrzymałeś zaproszenie do projektu: ${projectName?.name}`,
+      userId: Number(uid),
+      link: `/projects/${board.projectId}`,
+    },
+  });
+
   return NextResponse.json({
     message: "Wysłano zaproszenie.",
   });

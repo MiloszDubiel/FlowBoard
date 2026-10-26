@@ -48,8 +48,33 @@ model User {
   boardInvites        BoardInvite[]
   commentAttachments  CommentAttachment[]
   passwordResetTokens PasswordResetToken[]
+  notifications       Notification[]
 
   @@map("users")
+}
+
+
+model Notification {
+   id        Int              @id @default(autoincrement())
+  userId    Int
+  type      NotificationType
+  message   String
+  link      String?
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+enum NotificationType {
+  BOARD_INVITATION
+  CARD_ASSIGNED
+  CARD_COMMENT
+  CARD_UPDATED
+  LIST_UPDATED
+  MEMBER_ADDED
 }
 
 model PasswordResetToken {
@@ -106,7 +131,6 @@ model Board {
   @@index([ownerId])
   @@map("boards")
 }
-
 
 model BoardMember {
   id       Int       @id @default(autoincrement())
@@ -213,7 +237,6 @@ model CardMember {
   @@index([cardId])
   @@map("card_members")
 }
-
 
 model Label {
   id      Int    @id @default(autoincrement())

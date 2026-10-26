@@ -25,6 +25,18 @@ export const Colors = {
 export type Colors = (typeof Colors)[keyof typeof Colors]
 
 
+export const NotificationType = {
+  BOARD_INVITATION: 'BOARD_INVITATION',
+  CARD_ASSIGNED: 'CARD_ASSIGNED',
+  CARD_COMMENT: 'CARD_COMMENT',
+  CARD_UPDATED: 'CARD_UPDATED',
+  LIST_UPDATED: 'LIST_UPDATED',
+  MEMBER_ADDED: 'MEMBER_ADDED'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
 export const BoardRole = {
   OWNER: 'OWNER',
   ADMIN: 'ADMIN',

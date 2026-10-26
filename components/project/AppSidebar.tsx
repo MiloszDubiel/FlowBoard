@@ -1,14 +1,12 @@
 "use client";
 
 import {
-  Calendar,
   CheckSquare,
   FolderKanban,
-  HelpCircle,
+  Bell,
   UserPlus,
   Plus,
   Settings,
-  Users,
   LogOut,
 } from "lucide-react";
 
@@ -29,6 +27,7 @@ import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
 import { useLogout } from "@/mutations/useLogout";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Notifications } from "./Notifications";
 
 const mainItems = [
   {
@@ -41,17 +40,6 @@ const mainItems = [
     url: "/projects/tasks",
     icon: CheckSquare,
   },
-  //DO IMPLEMENTACJI
-  // {
-  //   title: "Kalendarz",
-  //   url: "/projects/calendar",
-  //   icon: Calendar,
-  // },
-  // {
-  //   title: "Zespół",
-  //   url: "/projects/team",
-  //   icon: Users,
-  // },
   {
     title: "Zaproszenia",
     url: "/projects/invits",
@@ -69,9 +57,6 @@ const secondaryItems = [
 
 const AppSidebar = ({ projects = [] }: any) => {
   const { user } = useUser();
-
-  console.log(user);
-
   const {
     logout: { mutate: logout },
   } = useLogout();
@@ -109,6 +94,19 @@ const AppSidebar = ({ projects = [] }: any) => {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <SidebarMenuItem>
+                <Notifications
+                  side="right"
+                  trigger={
+                    <SidebarMenuButton>
+                      <div className="flex justify-center items-center gap-4">
+                        <Bell />
+                        <span>Powiadomienia</span>
+                      </div>
+                    </SidebarMenuButton>
+                  }
+                />
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

@@ -15,7 +15,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useLockStore } from "@/stores/lockButton.store";
 import { Spinner } from "../Spinner";
 
 type ConfirmModalProps = {
@@ -39,7 +38,7 @@ const ConfirmModal = ({
   isPending,
   isSuccess,
 }: ConfirmModalProps) => {
-  const lock = useLockStore((store) => store.lock);
+ 
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
