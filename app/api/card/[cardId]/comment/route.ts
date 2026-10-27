@@ -31,12 +31,43 @@ export const POST = withAuth(async (user, request, context) => {
     );
   }
 
+  const cardMembers = await prisma.cardMember.findMany({
+    where: {
+      cardId: Number(cardId),
+    },
+  });
+
   const addedComment = await prisma.comment.create({
     data: {
       cardId: Number(cardId),
       userId: uID,
       content: comment,
     },
+  });
+
+  const card = await prisma.card.findFirst({
+    where: {
+      id: Number(cardId),
+    },
+    include: {
+      list: {
+        include: {
+          board: {
+            include: {
+              project: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  await prisma.notification.createMany({
+    data: cardMembers.map((el) => ({
+      type: "CARD_COMMENT",
+      message: `Dodano komentarz w karcie ${card?.title} w projekcie ${card?.list.board.project.name} `,
+      userId: el.userId,
+    })),
   });
 
   return NextResponse.json({

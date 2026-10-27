@@ -35,7 +35,7 @@ import { DragDrop } from "../DragDropFile";
 import { colorRecord } from "@/lib/colors";
 import { Label } from "./Label";
 import { setStyle, priorityRecord } from "@/lib/priorityStyles";
-import { useLockStore } from "@/stores/lockButton.store";
+
 
 const safeParseTasks = (tasks: any): any[] => {
   if (!tasks) return [];
@@ -55,7 +55,7 @@ export default function CardDetails({ card, boardId, role }: any) {
   const router = useRouter();
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [files, setFiles] = useState<File[] | null>(null);
-  const setLock = useLockStore((store) => store.setLock);
+ 
 
   const {
     addComment,

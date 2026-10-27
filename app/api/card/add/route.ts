@@ -38,6 +38,7 @@ export const POST = withAuth(async (user, request, context) => {
       board: {
         include: {
           members: true,
+          project: true,
         },
       },
     },
@@ -151,6 +152,14 @@ export const POST = withAuth(async (user, request, context) => {
     data: cardMembers.map((userId) => ({
       cardId: card.id,
       userId,
+    })),
+  });
+
+  await prisma.notification.createMany({
+    data: cardMembers.map((userId) => ({
+      type: "CARD_ASSIGNED",
+      message: `Dodano cię do karty ${card?.title} w projekcie ${list.board.project.name} `,
+      userId: userId,
     })),
   });
 

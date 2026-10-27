@@ -59,7 +59,9 @@ export const PATCH = withAuth(async (user, request, context) => {
       id: Number(cardId),
     },
     include: {
-      list: true,
+      list: {
+        include: { board: { include: { project: true } } },
+      },
     },
   });
 
@@ -186,6 +188,14 @@ export const PATCH = withAuth(async (user, request, context) => {
         userId,
       })),
       skipDuplicates: true,
+    });
+
+    await tx.notification.createMany({
+      data: finalUserIds.map((el) => ({
+        type: "CARD_UPDATED",
+        message: `Zaaktualizowano dane w karcie ${card?.title} w projekcie ${card?.list.board.project.name} `,
+        userId: el,
+      })),
     });
   });
 

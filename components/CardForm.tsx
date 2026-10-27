@@ -47,7 +47,7 @@ import { type CreateCardForm, createCardSchema } from "@/schema/addcard.schema";
 import { toast } from "sonner";
 import { projectColors } from "@/lib/colors";
 import { useRouter } from "next/navigation";
-import { useLockStore } from "@/stores/lockButton.store";
+
 import { Spinner } from "./Spinner";
 
 type LabelType = {
@@ -84,8 +84,6 @@ export default function CardForm({
   const [selectedLabel, setSelectedLabel] = useState<number[]>(
     selectedLabels || [],
   );
-  const lock = useLockStore((store) => store.lock);
-  const setLock = useLockStore((store) => store.setLock);
 
   const router = useRouter();
 
@@ -101,7 +99,6 @@ export default function CardForm({
 
   useEffect(() => {
     setSelectedUsers(defaults?.userIds || []);
-    return () => setLock(false);
   }, [defaults?.userIds]);
 
   const {

@@ -19,10 +19,14 @@ type Props = {
 };
 
 export const Notifications = ({ side, trigger }: Props) => {
-  const { notifications, refetch } = useNotification();
+  const { notifications, refetch, setNotifications } = useNotification();
 
   const { mutate } = useMutation({
     mutationFn: async (id: number) => {
+      setNotifications((prev) => {
+        return prev.filter((el) => el.id !== id);
+      });
+
       const { data } = await axios.delete(`/api/notification/${id}`);
 
       return data;

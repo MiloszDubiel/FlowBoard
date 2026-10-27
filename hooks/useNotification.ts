@@ -23,5 +23,6 @@ export const useNotification = () => {
   return {
     notifications,
     refetch,
+    setNotifications,
   };
 };

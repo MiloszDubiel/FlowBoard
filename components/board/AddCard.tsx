@@ -18,7 +18,7 @@ import { useCard } from "@/mutations/dashboard/useCard";
 import { useState, useRef } from "react";
 import CardForm from "../CardForm";
 import { BoardMember, CardMember } from "@/generated/prisma/client";
-import { useLockStore } from "@/stores/lockButton.store";
+
 
 export default function AddCard({
   listId,
