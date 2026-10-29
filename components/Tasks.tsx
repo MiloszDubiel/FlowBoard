@@ -39,6 +39,8 @@ export default function Tasks({ cards }: any) {
     const tasks = card.tasks ?? [];
     const completed = tasks.filter((task: Task) => task.isCompleted).length;
 
+    if (tasks.length === 0) return false;
+
     if (activeFilter === "completed") {
       return tasks.length > 0 && completed === tasks.length;
     }

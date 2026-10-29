@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Users, X } from "lucide-react";
 import { useRef, useState, useMemo } from "react";
 import { Plus } from "lucide-react";
-import { Column } from "./List";
+import { List } from "./List";
 import AddList from "./AddList";
 import EditList from "./EditList";
 import ConfirmModal from "../modals/ConfirmModal";
@@ -20,7 +20,7 @@ import { move } from "@dnd-kit/helpers";
 import { TaskCard } from "./TaskCard";
 import { useUser } from "@/hooks/useUser";
 import { type MembershipRole, ROLES } from "@/lib/roles";
-import { List } from "@/generated/prisma/client";
+import {type  List as ListType } from "@/generated/prisma/client";
 
 export default function Board({ board, members }: any) {
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -32,7 +32,6 @@ export default function Board({ board, members }: any) {
     deleteList: { mutate, isSuccess, isPending },
   } = useList(editedList?.id);
 
-  const route = useRouter();
   const { user } = useUser();
 
   const lists = [...board.lists].sort(
@@ -80,39 +79,72 @@ export default function Board({ board, members }: any) {
     },
   });
 
+  const { mutate: changeName } = useMutation({
+    mutationFn: async (name: string) => {
+      const { data } = await axios.post(`/api/board/${board.id}`, {
+        name,
+      });
+
+      return data;
+    },
+    onSuccess: (data) => {
+      toast.success(data.message);
+    },
+  });
   return (
     <>
       <header className="flex h-16 shrink-0 items-center justify-between border-b px-6">
         <div className="min-w-0">
-          <h1 className="truncate text-lg font-semibold">{board?.name}</h1>
+          <h1
+            className="truncate text-lg font-semibold"
+            contentEditable={true}
+            onBlur={(e) => {
+              if (
+                typeof e.target.textContent !== "string" ||
+                e.target.textContent.trim() == "" ||
+                e.target.textContent.length === 0
+              ) {
+                e.target.textContent = board?.name;
+                return toast.error("Niepoprawna nazwa tablicy");
+              }
 
-          <p className="text-sm text-muted-foreground">Tablica projektu</p>
+              changeName(e.target.textContent.trim());
+            }}
+          >
+            {board?.name}
+          </h1>
+
+          <p className="text-sm text-muted-foreground truncate ">
+            Tablica projektu
+          </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          {members.map((member: any) => (
-            <div key={member.id} className="group relative">
-              <Avatar className="h-9 w-9 shrink-0">
-                <AvatarImage src={member.user.avatarUrl ?? undefined} />
+        <div className="items-center gap-2 flex">
+          <div className="hidden items-center gap-2 md:flex">
+            {members.map((member: any) => (
+              <div key={member.id} className="group relative">
+                <Avatar className="h-9 w-9 shrink-0">
+                  <AvatarImage src={member.user.avatarUrl ?? undefined} />
 
-                <AvatarFallback>
-                  {member.user.email?.slice(0, 2)?.toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
+                  <AvatarFallback>
+                    {member.user.email?.slice(0, 2)?.toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
 
-              <div className="pointer-events-none absolute right-0 top-11 z-50 hidden w-max rounded-md bg-popover px-3 py-2 text-sm shadow-md group-hover:block">
-                <p className="font-medium">{member.user.name}</p>
+                <div className="pointer-events-none absolute right-0 top-11 z-50 hidden w-max rounded-md bg-popover px-3 py-2 text-sm shadow-md group-hover:block">
+                  <p className="font-medium">{member.user.name}</p>
 
-                <p className="text-xs text-muted-foreground">
-                  {member.user.email}
-                </p>
+                  <p className="text-xs text-muted-foreground">
+                    {member.user.email}
+                  </p>
 
-                <p className="mt-1 text-xs text-muted-foreground">
-                  {ROLES[member.role as MembershipRole]}
-                </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {ROLES[member.role as MembershipRole]}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
 
           {["OWNER", "ADMIN"].includes(me?.role) && (
             <Button
@@ -161,18 +193,18 @@ export default function Board({ board, members }: any) {
                   (list: any) => String(list.id) === column,
                 );
                 return (
-                  <Column
+                  <List
                     key={column}
                     id={column}
                     column={currentList}
                     index={columnIndex}
                     members={members}
                     role={role}
-                    onEdit={(column: List) => {
+                    onEdit={(column: ListType) => {
                       setEditedList(column);
                       setOpenEdit(true);
                     }}
-                    onDelete={(column: List) => {
+                    onDelete={(column: ListType) => {
                       setEditedList(column);
                       setDeleteList(true);
                     }}
@@ -187,7 +219,7 @@ export default function Board({ board, members }: any) {
                         role={role}
                       />
                     ))}
-                  </Column>
+                  </List>
                 );
               })}
             </div>

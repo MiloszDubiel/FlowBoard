@@ -29,7 +29,7 @@ export const PUT = withAuth(async (user, request, context) => {
   if (include) {
     return NextResponse.json(
       {
-        message: "Uzytkownik jest już przypisany do tablicy.",
+        message: "Uzytkownik jest już przypisany do tablicy",
       },
       { status: 409 },
     );
@@ -45,7 +45,7 @@ export const PUT = withAuth(async (user, request, context) => {
   if (invitation?.status === "PENDING") {
     return NextResponse.json(
       {
-        message: "Zaproszenie zostało już wysłane.",
+        message: "Zaproszenie zostało już wysłane",
       },
       { status: 409 },
     );
@@ -74,6 +74,6 @@ export const PUT = withAuth(async (user, request, context) => {
   });
 
   return NextResponse.json({
-    message: "Wysłano zaproszenie.",
+    message: "Wysłano zaproszenie",
   });
 });

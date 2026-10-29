@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import AppSidebar from "@/components/project/AppSidebar";
+import AppSidebar from "@/components/project/Sidebar";
 
 interface BoardLayoutProps {
   children: ReactNode;

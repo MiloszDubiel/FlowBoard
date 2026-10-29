@@ -12,6 +12,7 @@ import { Notification } from "@/generated/prisma/client";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
+import { useEffect } from "react";
 
 type Props = {
   side?: "right" | undefined;
@@ -36,6 +37,14 @@ export const Notifications = ({ side, trigger }: Props) => {
       refetch();
     },
   });
+
+  useEffect(() => {
+    const interval = setInterval(() => refetch(), 5000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   return (
     <Popover>

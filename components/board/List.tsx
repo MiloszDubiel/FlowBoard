@@ -14,7 +14,7 @@ import { CollisionPriority } from "@dnd-kit/abstract";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 
-export const Column = ({
+export const List = ({
   children,
   id,
   column,

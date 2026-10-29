@@ -1,5 +1,5 @@
-import AppNavbar from "@/components/project/AppNavbar";
-import AppSidebar from "@/components/project/AppSidebar";
+import AppNavbar from "@/components/project/Navbar";
+import AppSidebar from "@/components/project/Sidebar";
 import { getProjects } from "@/lib/data/projects";
 
 export default async function DashboardLayout({
