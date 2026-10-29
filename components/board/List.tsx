@@ -27,7 +27,7 @@ export const List = ({
     id,
     index,
     type: "column",
-    collisionPriority: CollisionPriority.Low,
+    collisionPriority: CollisionPriority.Lowest,
     accept: ["item", "column"],
   });
   const path = usePathname();

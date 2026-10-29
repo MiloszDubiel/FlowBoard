@@ -17,10 +17,10 @@ import BoardMembersModal from "./BoardMembers";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DragDropProvider } from "@dnd-kit/react";
 import { move } from "@dnd-kit/helpers";
-import { TaskCard } from "./TaskCard";
+import { TaskCard } from "./Card";
 import { useUser } from "@/hooks/useUser";
 import { type MembershipRole, ROLES } from "@/lib/roles";
-import {type  List as ListType } from "@/generated/prisma/client";
+import { type List as ListType } from "@/generated/prisma/client";
 
 export default function Board({ board, members }: any) {
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -107,6 +107,7 @@ export default function Board({ board, members }: any) {
                 e.target.textContent = board?.name;
                 return toast.error("Niepoprawna nazwa tablicy");
               }
+              if (e.target.textContent === board?.name) return;
 
               changeName(e.target.textContent.trim());
             }}

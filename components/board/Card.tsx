@@ -25,7 +25,7 @@ export function TaskCard({ id, index, column, card, role }: any) {
     index,
     type: "item",
     accept: ["item"],
-    collisionPriority: CollisionPriority.High,
+    collisionPriority: CollisionPriority.Highest,
   });
   const path = usePathname();
   const route = useRouter();

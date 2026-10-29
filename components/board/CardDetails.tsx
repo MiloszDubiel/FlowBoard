@@ -36,7 +36,6 @@ import { colorRecord } from "@/lib/colors";
 import { Label } from "./Label";
 import { setStyle, priorityRecord } from "@/lib/priorityStyles";
 
-
 const safeParseTasks = (tasks: any): any[] => {
   if (!tasks) return [];
 
@@ -55,7 +54,6 @@ export default function CardDetails({ card, boardId, role }: any) {
   const router = useRouter();
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [files, setFiles] = useState<File[] | null>(null);
- 
 
   const {
     addComment,
@@ -567,19 +565,15 @@ export default function CardDetails({ card, boardId, role }: any) {
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  {card.labels?.length > 0 ? (
-                    card.labels.map((item: any) => (
-                      <Label
-                        key={item.label.id}
-                        color={colorRecord[item.label.color]}
-                        name={item.label.name}
-                      />
-                    ))
-                  ) : (
-                    <span className="text-sm text-muted-foreground">
-                      Brak etykiet
-                    </span>
-                  )}
+                  {card.labels?.length > 0
+                    ? card.labels.map((item: any) => (
+                        <Label
+                          key={item.label.id}
+                          color={colorRecord[item.label.color]}
+                          name={item.label.name}
+                        />
+                      ))
+                    : null}
                   <Label
                     name={priorityRecord[card?.priority] ?? card?.priority}
                     color={colorRecord[setStyle(card?.priority)]}
