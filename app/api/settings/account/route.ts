@@ -2,8 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { withAuth } from "@/lib/withAuth";
 import { accountSchema, profileSchema } from "@/schema/editUser.schema";
 import { NextResponse } from "next/server";
-import fs from "fs/promises";
-import path from "path";
+
 
 export const PATCH = withAuth(async (user, request, context) => {
   const { body } = await request.json();

@@ -1,8 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { withAuth } from "@/lib/withAuth";
 import { NextResponse } from "next/server";
-import fs from "fs/promises";
-import path from "path";
 
 export const DELETE = withAuth(async (user, request, context) => {
   const { userId } = await context.params;
@@ -35,15 +33,15 @@ export const DELETE = withAuth(async (user, request, context) => {
     },
   });
 
-  if (userData.avatarUrl) {
-    const filePath = path.join(process.cwd(), "public", userData.avatarUrl);
+  // if (userData.avatarUrl) {
+  //   const filePath = path.join(process.cwd(), "public", userData.avatarUrl);
 
-    try {
-      await fs.unlink(filePath);
-    } catch (error) {
-      console.error("Nie udało się usunąć zdjęcia:", error);
-    }
-  }
+  //   try {
+  //     await fs.unlink(filePath);
+  //   } catch (error) {
+  //     console.error("Nie udało się usunąć zdjęcia:", error);
+  //   }
+  // }
 
   const response = NextResponse.redirect(new URL("/", request.url));
 

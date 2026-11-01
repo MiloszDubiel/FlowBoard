@@ -33,7 +33,7 @@ export function TaskCard({ id, index, column, card, role }: any) {
   return (
     <Card
       ref={["OWNER", "ADMIN"].includes(role) ? ref : null}
-      className="group relative cursor-pointer overflow-hidden border-border/60 bg-card transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-md"
+      className=" relative cursor-pointer overflow-hidden transition-all hover:shadow-md"
       data-dragging={["OWNER", "ADMIN"].includes(role) ? isDragging : null}
       onClick={() => route.replace(path + `/card/get/${card.id}`)}
     >
@@ -41,7 +41,7 @@ export function TaskCard({ id, index, column, card, role }: any) {
         <Button
           variant="ghost"
           size="icon"
-          className="absolute right-2 top-2 z-10 h-7 w-7 cursor-grab text-muted-foreground opacity-0 transition-all hover:bg-muted hover:text-foreground active:cursor-grabbing group-hover:opacity-100"
+          className="absolute right-2 top-2 z-10 h-7 w-7 cursor-grab text-muted-foreground  transition-all hover:bg-muted hover:text-foreground active:cursor-grabbing "
           title="Przenieś kartę"
           ref={handleRef}
         >

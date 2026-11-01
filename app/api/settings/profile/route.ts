@@ -4,7 +4,15 @@ import { profileSchema } from "@/schema/editUser.schema";
 import { NextResponse } from "next/server";
 import fs from "fs/promises";
 import path from "path";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 
+const imageTypes: Record<string, string> = {
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".png": "image/png",
+  ".webp": "image/webp",
+  ".gif": "image/gif",
+};
 export const PATCH = withAuth(async (user, request, context) => {
   const formData = await request.formData();
 
@@ -27,40 +35,33 @@ export const PATCH = withAuth(async (user, request, context) => {
     );
   }
 
-  let fileUrl = null;
+  let fileUrl: string | null = null;
 
   if (img) {
-    try {
-      await fs.rm(
-        path.join(process.cwd(), "public", "uploads", "avatar", String(userID)),
-        { recursive: true },
-      );
-    } catch (err) {
-      console.log(err);
-    }
-
-    const extension = path.extname((img as File).name);
-
+    const extension = path.extname((img as File).name).toLowerCase();
     const randomFileName = `${crypto.randomUUID()}${extension}`;
 
-    const uploadDir = path.join(
-      process.cwd(),
-      "public",
-      "uploads",
-      "avatar",
-      String(userID),
-    );
+    const storagePath = `avatar/${userID}/${randomFileName}`;
 
-    await fs.mkdir(uploadDir, { recursive: true });
+    const allowedTypes = imageTypes;
+    const contentType = allowedTypes[extension];
 
-    const filePath = path.join(uploadDir, randomFileName);
+    const { data, error } = await supabaseAdmin.storage
+      .from("FlowBOard")
+      .upload(storagePath, Buffer.from(await (img as File).arrayBuffer()), {
+        contentType,
+        upsert: false,
+      });
 
-    const arrayBuffer = await (img as File).arrayBuffer();
-    const buffer = new Uint8Array(arrayBuffer);
+    if (error) {
+      throw new Error(`Błąd uploadu: ${error.message}`);
+    }
 
-    await fs.writeFile(filePath, buffer);
+    const {
+      data: { publicUrl },
+    } = supabaseAdmin.storage.from("FlowBOard").getPublicUrl(data.path);
 
-    fileUrl = `/uploads/avatar/${userID}/${randomFileName}`;
+    fileUrl = publicUrl ? publicUrl : null;
   }
 
   await prisma.user.update({
@@ -71,7 +72,7 @@ export const PATCH = withAuth(async (user, request, context) => {
       name: body.firstName as string,
       lastname: body.lastName as string,
       bio: body.bio as string,
-      avatarUrl: fileUrl ? fileUrl : null,
+      avatarUrl: fileUrl,
     },
   });
 
