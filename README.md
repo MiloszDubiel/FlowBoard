@@ -208,3 +208,117 @@ Aplikacja będzie dostępna pod adresem:
 
 http://localhost:3000
 
+## Zmienne środowiskowe
+
+Utwórz plik `.env` w głównym katalogu projektu i uzupełnij go wymaganymi zmiennymi:
+
+| Zmienna | Opis |
+|---|---|
+| `DATABASE_URL` | Adres URL połączenia z bazą danych |
+| `DATABASE_USER` | Nazwa użytkownika bazy danych |
+| `DATABASE_HOST` | Adres hosta bazy danych |
+| `DATABASE_PASSWORD` | Hasło użytkownika bazy danych |
+| `DATABASE_NAME` | Nazwa bazy danych |
+| `DATABASE_PORT` | Port, na którym działa baza danych |
+| `SUPABASE_URL` | Adres URL projektu Supabase wykorzystywanego do przechowywania plików |
+| `SUPABASE_SECRET_KEY` | Tajny klucz API wykorzystywany do autoryzacji operacji w Supabase |
+| `JWT_SECRET` | Tajny klucz wykorzystywany do podpisywania i weryfikacji tokenów JWT |
+| `NODE_ENV` | Środowisko uruchomieniowe aplikacji (np. `development`, `production`, `test`) |
+| `EMAIL_USER` | Adres e-mail konta wykorzystywanego do wysyłania wiadomości |
+| `EMAIL_PASSWORD` | Hasło lub klucz dostępu do konta pocztowego |
+| `UPSTASH_REDIS_REST_URL` | Adres URL instancji Redis w usłudze Upstash |
+| `UPSTASH_REDIS_REST_TOKEN` | Token autoryzacyjny umożliwiający dostęp do Redis w usłudze Upstash |
+
+
+**Uwaga:**
+- SUPABASE_SECRET_KEY – upewnij się, że używasz właściwej nazwy klucza zgodnej z konfiguracją Supabase
+- EMAIL_PASSWORD – jest to hasło aplikacji, a nie standardowe hasło do konta
+- DATABASE_URL -  może być wystarczające do połączenia z bazą danych, jeśli zawiera już host, użytkownika, hasło, nazwę bazy i port
+
+## API Documentation
+
+API aplikacji zostało zaimplementowane przy użyciu Next.js API Routes. Endpointy odpowiadają za obsługę żądań HTTP, walidację danych oraz wykonywanie operacji na bazie danych
+
+### Authentication
+
+| Metoda | Endpoint | Opis | Autoryzacja |
+|---|---|---|---|
+| POST | `/api/auth/register` | Rejestracja użytkownika | Nie |
+| POST | `/api/auth/login` | Logowanie użytkownika | Nie |
+| POST | `/api/auth/logout` | Wylogowanie użytkownika | Nie |
+| POST | `/api/auth/forgot-password` | Rozpoczęcie procesu resetowania hasła | Nie |
+| POST | `/api/auth/reset-password` | Ustawienie nowego hasła | Nie |
+
+### Projects
+
+| Metoda | Endpoint | Opis | Autoryzacja |
+|---|---|---|---|
+| GET | `/api/projects` | Pobieranie projektów użytkownika | Tak |
+| POST | `/api/projects` | Tworzenie projektu | Tak |
+| PATCH | `/api/projects/:id` | Aktualizacja projektu | Tak |
+| DELETE | `/api/projects/:id` | Usuwanie projektu | Tak |
+
+### Boards
+
+| Metoda | Endpoint | Opis | Autoryzacja |
+|---|---|---|---|
+| POST | `/api/board/:id` | Zmiana nazwy tablicy | Tak |
+| POST | `/api/board/member/:uid/delete` | Usunięcie użytkownika z tablicy | Tak |
+| PUT | `/api/board/member/:uid/invite` | Wysłanie użytkownikowi zaproszenia do tablicy | Tak |
+| PATCH | `/api/board/member/:uid/role` | Zmiana roli członka tablicy | Tak |
+
+
+### Lists
+
+| Metoda | Endpoint | Opis | Autoryzacja |
+|---|---|---|---|
+| GET | `/api/list` | Pobieranie list | Tak |
+| POST | `/api/list` | Tworzenie listy | Tak |
+| PATCH | `/api/list/:id` | Aktualizacja listy | Tak |
+| DELETE | `/api/list/:id` | Usuwanie listy | Tak |
+
+### Cards
+
+| Metoda | Endpoint | Opis | Autoryzacja |
+|---|---|---|---|
+| PATCH | `/api/card/:cardId/checklist` | Edycja listy zadań w tablicy | Tak |
+| POST | `/api/card/:cardId/comment` | Utworzenie komentarza w tablicy | Tak |
+| POST | `/api/card/:cardId/comment/:commentId/file` | Dodanie pliku do komenarza | Tak |
+| POST | `/api/card/:cardId/comment/:commentId/file` | Dodanie pliku do komenarza | Tak |
+| DELETE | `/api/card/:cardId/delete` | Usunięcie karty | Tak |
+| PATCH | `/api/card/:cardId/edit` | Edycja karty | Tak |
+| PATCH | `/api/card/:cardId/file` | Dodanie plików do tablicy | Tak |
+
+### Invitations
+
+| Metoda | Endpoint | Opis | Autoryzacja |
+|---|---|---|---|
+| GET | `/api/invits` | Pobieranie zaproszeń | Tak |
+| POST | `/api/invits` | Wysyłanie zaproszenia | Tak |
+| PATCH | `/api/invits/:id` | Aktualizacja statusu zaproszenia | Tak |
+| DELETE | `/api/invits/:id` | Usuwanie zaproszenia | Tak |
+
+### Notifications
+
+| Metoda | Endpoint | Opis | Autoryzacja |
+|---|---|---|---|
+| GET | `/api/notification` | Pobieranie powiadomień | Tak |
+| PATCH | `/api/notification/:id` | Aktualizacja statusu powiadomienia | Tak |
+
+### Settings
+
+| Metoda | Endpoint | Opis | Autoryzacja |
+|---|---|---|---|
+| GET | `/api/settings` | Pobieranie ustawień użytkownika | Tak |
+| PATCH | `/api/settings` | Aktualizacja ustawień użytkownika | Tak |
+
+### Tasks
+
+| Metoda | Endpoint | Opis | Autoryzacja |
+|---|---|---|---|
+| GET | `/api/tasks` | Pobieranie zadań | Tak |
+| POST | `/api/tasks` | Tworzenie zadania | Tak |
+| PATCH | `/api/tasks/:id` | Aktualizacja zadania | Tak |
+| DELETE | `/api/tasks/:id` | Usuwanie zadania | Tak |
+
+
