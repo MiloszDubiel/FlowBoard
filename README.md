@@ -235,15 +235,15 @@ Utwórz plik `.env` w głównym katalogu projektu i uzupełnij go wymaganymi zmi
 - EMAIL_PASSWORD – jest to hasło aplikacji, a nie standardowe hasło do konta
 - DATABASE_URL -  może być wystarczające do połączenia z bazą danych, jeśli zawiera już host, użytkownika, hasło, nazwę bazy i port
 
-## API Documentation
+## Dokumentacja API
 
-API aplikacji zostało zaimplementowane przy użyciu Next.js API Routes. Endpointy odpowiadają za obsługę żądań HTTP, walidację danych oraz wykonywanie operacji na bazie danych
+API aplikacji FlowBoard zostało zaimplementowane przy użyciu Next.js API Routes. Endpointy odpowiadają za obsługę żądań HTTP, walidację danych wejściowych oraz wykonywanie operacji na bazie danych.
 
 ### Authentication
 
 | Metoda | Endpoint | Opis | Autoryzacja |
 |---|---|---|---|
-| POST | `/api/auth/register` | Rejestracja użytkownika | Nie |
+| POST | `/api/auth/register` | Rejestracja nowego użytkownika | Nie |
 | POST | `/api/auth/login` | Logowanie użytkownika | Nie |
 | POST | `/api/auth/logout` | Wylogowanie użytkownika | Nie |
 | POST | `/api/auth/forgot-password` | Rozpoczęcie procesu resetowania hasła | Nie |
@@ -254,8 +254,8 @@ API aplikacji zostało zaimplementowane przy użyciu Next.js API Routes. Endpoin
 | Metoda | Endpoint | Opis | Autoryzacja |
 |---|---|---|---|
 | GET | `/api/projects` | Pobieranie projektów użytkownika | Tak |
-| POST | `/api/projects` | Tworzenie projektu | Tak |
-| PATCH | `/api/projects/:id` | Aktualizacja projektu | Tak |
+| POST | `/api/projects` | Tworzenie nowego projektu | Tak |
+| PATCH | `/api/projects/:id` | Aktualizacja danych projektu | Tak |
 | DELETE | `/api/projects/:id` | Usuwanie projektu | Tak |
 
 ### Boards
@@ -263,62 +263,54 @@ API aplikacji zostało zaimplementowane przy użyciu Next.js API Routes. Endpoin
 | Metoda | Endpoint | Opis | Autoryzacja |
 |---|---|---|---|
 | POST | `/api/board/:id` | Zmiana nazwy tablicy | Tak |
-| POST | `/api/board/member/:uid/delete` | Usunięcie użytkownika z tablicy | Tak |
-| PUT | `/api/board/member/:uid/invite` | Wysłanie użytkownikowi zaproszenia do tablicy | Tak |
+| POST | `/api/board/member/:uid/delete` | Usuwanie użytkownika z tablicy | Tak |
+| PUT | `/api/board/member/:uid/invite` | Wysyłanie zaproszenia do tablicy | Tak |
 | PATCH | `/api/board/member/:uid/role` | Zmiana roli członka tablicy | Tak |
-
 
 ### Lists
 
 | Metoda | Endpoint | Opis | Autoryzacja |
 |---|---|---|---|
-| GET | `/api/list` | Pobieranie list | Tak |
-| POST | `/api/list` | Tworzenie listy | Tak |
-| PATCH | `/api/list/:id` | Aktualizacja listy | Tak |
-| DELETE | `/api/list/:id` | Usuwanie listy | Tak |
+| POST | `/api/list` | Tworzenie nowej listy | Tak |
+| PATCH | `/api/list/:listId` | Aktualizacja danych listy | Tak |
+| DELETE | `/api/list/:listId` | Usuwanie listy | Tak |
+| PATCH | `/api/list/reorder` | Zmiana kolejności list w tablicy | Tak |
 
 ### Cards
 
 | Metoda | Endpoint | Opis | Autoryzacja |
 |---|---|---|---|
-| PATCH | `/api/card/:cardId/checklist` | Edycja listy zadań w tablicy | Tak |
-| POST | `/api/card/:cardId/comment` | Utworzenie komentarza w tablicy | Tak |
-| POST | `/api/card/:cardId/comment/:commentId/file` | Dodanie pliku do komenarza | Tak |
-| POST | `/api/card/:cardId/comment/:commentId/file` | Dodanie pliku do komenarza | Tak |
-| DELETE | `/api/card/:cardId/delete` | Usunięcie karty | Tak |
-| PATCH | `/api/card/:cardId/edit` | Edycja karty | Tak |
-| PATCH | `/api/card/:cardId/file` | Dodanie plików do tablicy | Tak |
+| POST | `/api/card/add` | Tworzenie nowej karty | Tak |
+| PATCH | `/api/card/:cardId/edit` | Edycja danych karty | Tak |
+| DELETE | `/api/card/:cardId/delete` | Usuwanie karty | Tak |
+| PATCH | `/api/card/switch` | Przenoszenie kart między listami | Tak |
+| PATCH | `/api/card/:cardId/checklist` | Aktualizacja listy kontrolnej karty | Tak |
+| POST | `/api/card/:cardId/comment` | Dodawanie komentarza do karty | Tak |
+| POST | `/api/card/:cardId/comment/:commentId/file` | Dodawanie załącznika do komentarza | Tak |
+| POST | `/api/card/:cardId/file` | Dodawanie plików do istniejącej karty | Tak |
+| POST | `/api/card/file` | Dodawanie plików do nowej karty | Tak |
 
 ### Invitations
 
 | Metoda | Endpoint | Opis | Autoryzacja |
 |---|---|---|---|
-| GET | `/api/invits` | Pobieranie zaproszeń | Tak |
-| POST | `/api/invits` | Wysyłanie zaproszenia | Tak |
-| PATCH | `/api/invits/:id` | Aktualizacja statusu zaproszenia | Tak |
-| DELETE | `/api/invits/:id` | Usuwanie zaproszenia | Tak |
+| POST | `/api/invits/accept` | Akceptowanie zaproszenia | Tak |
 
 ### Notifications
 
 | Metoda | Endpoint | Opis | Autoryzacja |
 |---|---|---|---|
-| GET | `/api/notification` | Pobieranie powiadomień | Tak |
-| PATCH | `/api/notification/:id` | Aktualizacja statusu powiadomienia | Tak |
+| DELETE | `/api/notification/:id` | Usuwanie powiadomienia | Tak |
 
 ### Settings
 
 | Metoda | Endpoint | Opis | Autoryzacja |
 |---|---|---|---|
-| GET | `/api/settings` | Pobieranie ustawień użytkownika | Tak |
-| PATCH | `/api/settings` | Aktualizacja ustawień użytkownika | Tak |
+| PATCH | `/api/settings/account` | Zmiana adresu e-mail użytkownika | Tak |
+| DELETE | `/api/settings/:userId` | Usuwanie konta użytkownika | Tak |
+| PATCH | `/api/settings/profile` | Aktualizacja danych profilu (imię, nazwisko, biografia i avatar) | Tak |
+| PATCH | `/api/settings/security` | Zmiana hasła użytkownika | Tak |
 
-### Tasks
 
-| Metoda | Endpoint | Opis | Autoryzacja |
-|---|---|---|---|
-| GET | `/api/tasks` | Pobieranie zadań | Tak |
-| POST | `/api/tasks` | Tworzenie zadania | Tak |
-| PATCH | `/api/tasks/:id` | Aktualizacja zadania | Tak |
-| DELETE | `/api/tasks/:id` | Usuwanie zadania | Tak |
 
 
