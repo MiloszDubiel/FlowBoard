@@ -25,7 +25,7 @@ Umożliwia tworzenie tablic projektowych, organizowanie zadań w kolumnach, przy
 <img width="1918" height="911" alt="image" src="https://github.com/user-attachments/assets/530e1bfd-eac4-4646-90c0-124092b388ca" />
 <br />
   
-## Tech Stack
+## Stos technologiczny 
 
 ### Frontend
 - Next.js
@@ -43,7 +43,7 @@ Umożliwia tworzenie tablic projektowych, organizowanie zadań w kolumnach, przy
 - PostgreSQL
 
 ### Authentication
-- NextAuth.js
+- JWT Tokens (HTTP Only cookies)
 
 
 ## Architektura
@@ -60,6 +60,69 @@ opartą na frameworku Next.js.
 Frontend komunikuje się z endpointami backendu,
 które przetwarzają żądania i wykonują operacje na bazie danych
 za pośrednictwem Prisma ORM.
+
+
+## Funkcjonalności aplikacji 
+
+Aplikacja FlowBoard jest wyposażona w szereg różnych funkcjonalności. Do nich należą m.in.:
+
+### Uwierzytelnianie
+- Rejestracja użytkowników
+- Logowanie i wylogowywanie użytkowników
+- Resetowanie hasła
+- Zarządzanie danymi konta
+
+### Zarządzanie projektami
+- Tworzenie i edycja tablic projektowych
+- Usuwanie tablic projektowych
+- Zarządzanie członkami tablic
+- Zapraszanie użytkowników do projektów
+
+### Zarządzanie zadaniami
+- Tworzenie, edycja i usuwanie list
+- Tworzenie, edycja i usuwanie kart zadań
+- Przypisywanie użytkowników do zadań
+- Zarządzanie zadaniami
+
+### Zaproszenia
+- Wysyłanie zaproszeń do projektów
+- Akceptowanie i odrzucanie zaproszeń
+
+### Powiadomienia
+- Otrzymywanie powiadomień o aktywności w projektach
+- Powiadomienia o otrzymanych zaproszeniach
+
+### Zarządzanie użytkownikami
+- Edycja danych konta
+- Zarządzanie uczestnikami projektów
+
+## Role i uprawnienia
+
+FlowBoard wykorzystuje system ról i uprawnień, który pozwala kontrolować dostęp użytkowników do tablic oraz zarządzać ich możliwościami
+
+### Dostępne role
+
+- **Owner** – posiada pełną kontrolę nad tablicą, może zarządzać jej ustawieniami, członkami, uprawnieniami oraz zmieniac nazwę tablicy jak i usunąć projekt.
+- **Admin** – może zarządzać tablicą, jej zawartością oraz członkami, zgodnie z przyznanymi uprawnieniami.
+- **Member** – może korzystać z tablicy i wykonywać operacje związane z zarządzaniem zadaniami w zakresie przyznanych uprawnień.
+
+### Tabela uprawnień
+
+| Uprawnienie | Owner | Admin | Member |
+|---|:---:|:---:|:---:|
+| Dostęp do tablicy | ✓ | ✓ | ✓ |
+| Dostęp do tablicy | ✓ | ✓ | ✓ |
+| Dodawanie komentarzy i plików do nich | ✓ | ✓ | ✓ |
+| Zarządzanie listami | ✓ | ✓ | X |
+| Zarządzanie kartami | ✓ | ✓ | X |
+| Zarządzanie członkami | ✓ | ✓ | X |
+| Zapraszanie użytkowników | ✓ | ✓ | X |
+| Zmiana ról członków | ✓ | ✓ | X |
+| Zmiana ustawień tablicy | ✓ | ✓ | X |
+| Usuwanie projektu i zmiana nazwy tablicy | ✓ | X | X |
+
+Uprawnienia są weryfikowane po stronie serwera, aby uniemożliwić wykonywanie niedozwolonych operacji przez nieuprawnionych użytkowników.
+
 
 ## Struktura projektu
 
