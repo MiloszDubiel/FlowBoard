@@ -291,6 +291,7 @@ Utwórz plik `.env` w głównym katalogu projektu i uzupełnij go wymaganymi zmi
 | `EMAIL_PASSWORD` | Hasło lub klucz dostępu do konta pocztowego |
 | `UPSTASH_REDIS_REST_URL` | Adres URL instancji Redis w usłudze Upstash |
 | `UPSTASH_REDIS_REST_TOKEN` | Token autoryzacyjny umożliwiający dostęp do Redis w usłudze Upstash |
+| `IS_DEMO` | Przełącza aplikacje w tryb demonstracyjny |
 
 
 **Uwaga:**
@@ -374,6 +375,8 @@ API aplikacji FlowBoard zostało zaimplementowane przy użyciu Next.js API Route
 | PATCH | `/api/settings/profile` | Aktualizacja danych profilu (imię, nazwisko, biografia i avatar) | Tak |
 | PATCH | `/api/settings/security` | Zmiana hasła użytkownika | Tak |
 
+## Schemat bazy danych 
+<img width="1615" height="815" alt="supabase-schema-xtcthkndmdztgtieboyv" src="https://github.com/user-attachments/assets/b6a707d4-1470-463c-8e9d-95c82558376b" />
 
 
 
