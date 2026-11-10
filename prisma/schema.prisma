@@ -32,6 +32,8 @@ model User {
   email        String  @unique
   passwordHash String
   avatarUrl    String?
+  demoSession DemoSession?
+  isDemo Boolean @default(false)
 
   bio       String?
   createdAt DateTime @default(now())
@@ -49,8 +51,20 @@ model User {
   commentAttachments  CommentAttachment[]
   passwordResetTokens PasswordResetToken[]
   notifications       Notification[]
+  
 
   @@map("users")
+}
+
+model DemoSession {
+  id        String   @id @default(cuid())
+  userId    Int   @unique
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
 }
 
 

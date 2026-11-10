@@ -398,6 +398,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
+  DemoSession: 'DemoSession',
   Notification: 'Notification',
   PasswordResetToken: 'PasswordResetToken',
   Project: 'Project',
@@ -428,7 +429,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "notification" | "passwordResetToken" | "project" | "board" | "boardMember" | "boardInvite" | "list" | "card" | "cardMember" | "label" | "cardLabel" | "comment" | "commentAttachment" | "attachment" | "activity"
+    modelProps: "user" | "demoSession" | "notification" | "passwordResetToken" | "project" | "board" | "boardMember" | "boardInvite" | "list" | "card" | "cardMember" | "label" | "cardLabel" | "comment" | "commentAttachment" | "attachment" | "activity"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -503,6 +504,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number
+        }
+      }
+    }
+    DemoSession: {
+      payload: Prisma.$DemoSessionPayload<ExtArgs>
+      fields: Prisma.DemoSessionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DemoSessionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemoSessionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DemoSessionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemoSessionPayload>
+        }
+        findFirst: {
+          args: Prisma.DemoSessionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemoSessionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DemoSessionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemoSessionPayload>
+        }
+        findMany: {
+          args: Prisma.DemoSessionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemoSessionPayload>[]
+        }
+        create: {
+          args: Prisma.DemoSessionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemoSessionPayload>
+        }
+        createMany: {
+          args: Prisma.DemoSessionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DemoSessionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemoSessionPayload>[]
+        }
+        delete: {
+          args: Prisma.DemoSessionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemoSessionPayload>
+        }
+        update: {
+          args: Prisma.DemoSessionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemoSessionPayload>
+        }
+        deleteMany: {
+          args: Prisma.DemoSessionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DemoSessionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DemoSessionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemoSessionPayload>[]
+        }
+        upsert: {
+          args: Prisma.DemoSessionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemoSessionPayload>
+        }
+        aggregate: {
+          args: Prisma.DemoSessionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDemoSession>
+        }
+        groupBy: {
+          args: Prisma.DemoSessionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DemoSessionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DemoSessionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DemoSessionCountAggregateOutputType> | number
         }
       }
     }
@@ -1662,12 +1737,23 @@ export const UserScalarFieldEnum = {
   email: 'email',
   passwordHash: 'passwordHash',
   avatarUrl: 'avatarUrl',
+  isDemo: 'isDemo',
   bio: 'bio',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const DemoSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  expiresAt: 'expiresAt'
+} as const
+
+export type DemoSessionScalarFieldEnum = (typeof DemoSessionScalarFieldEnum)[keyof typeof DemoSessionScalarFieldEnum]
 
 
 export const NotificationScalarFieldEnum = {
@@ -1931,6 +2017,13 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -1955,13 +2048,6 @@ export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
  * Reference to a field of type 'NotificationType[]'
  */
 export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType[]'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -2214,6 +2300,7 @@ export interface PrismaClientOptionsWithAdapter extends PrismaClientBaseOptions 
 export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaClientOptionsWithAdapter
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  demoSession?: Prisma.DemoSessionOmit
   notification?: Prisma.NotificationOmit
   passwordResetToken?: Prisma.PasswordResetTokenOmit
   project?: Prisma.ProjectOmit

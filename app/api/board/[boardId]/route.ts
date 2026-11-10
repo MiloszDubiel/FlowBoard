@@ -6,7 +6,6 @@ export const POST = withAuth(async (user, request, context) => {
   const { boardId } = await context.params;
   const { name } = await request.json();
 
-  console.log(name);
 
   const board = await prisma.board.findFirst({
     where: {

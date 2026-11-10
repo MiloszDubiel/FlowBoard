@@ -10,7 +10,7 @@ export const useLogout = () => {
     mutationFn: async () => {
       await axios.post("/api/auth/logout");
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       router.push("/");
       router.refresh();
       toast.success("Wylogowano");
