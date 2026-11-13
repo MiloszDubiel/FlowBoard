@@ -21,7 +21,6 @@ import { useLogout } from "@/mutations/useLogout";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useUser } from "@/hooks/useUser";
 
-
 const mainItems = [
   {
     title: "Projekty",
@@ -46,6 +45,7 @@ type Props = {
   closeMobileMenu: () => void;
   setCreateProjectOpen: (_: boolean) => void;
   projects: Project[];
+  children?: React.ReactNode | null;
 };
 
 export const SideBarSheet = ({
@@ -54,6 +54,7 @@ export const SideBarSheet = ({
   closeMobileMenu,
   setCreateProjectOpen,
   projects,
+  children,
 }: Props) => {
   const {
     logout: { mutate: logout },
@@ -188,6 +189,7 @@ export const SideBarSheet = ({
               </p>
             </div>
           </div>
+          {children}
         </div>
       </SheetContent>
     </Sheet>

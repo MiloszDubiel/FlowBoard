@@ -15,6 +15,7 @@ import {
   ArrowLeft,
   Pencil,
   Trash2,
+  MoreHorizontal,
 } from "lucide-react";
 import CountdownTimer from "../CalculateTimeLeft";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,13 @@ import { DragDrop } from "../DragDropFile";
 import { colorRecord } from "@/lib/colors";
 import { Label } from "./Label";
 import { setStyle, priorityRecord } from "@/lib/priorityStyles";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "../ui/dropdown-menu";
+
 
 const safeParseTasks = (tasks: any): any[] => {
   if (!tasks) return [];
@@ -51,6 +59,7 @@ const safeParseTasks = (tasks: any): any[] => {
 };
 
 export default function CardDetails({ card, boardId, role }: any) {
+
   const router = useRouter();
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [files, setFiles] = useState<File[] | null>(null);
@@ -131,7 +140,7 @@ export default function CardDetails({ card, boardId, role }: any) {
       <div className="mx-auto max-w-7xl px-6 py-8">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
           <div className="min-w-0 space-y-8">
-            <div>
+            <div className="flex items-center justify-between gap-2">
               <Button
                 variant="ghost"
                 size="sm"
@@ -139,8 +148,46 @@ export default function CardDetails({ card, boardId, role }: any) {
                 className="group -ml-2 gap-2 text-muted-foreground hover:bg-muted hover:text-foreground"
               >
                 <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
-                <span>Powrót do boardu</span>
+                <span>Powrót do tablicy</span>
               </Button>
+
+              {["ADMIN", "OWNER"].includes(role) && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger
+                    render={
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="group  gap-2 text-muted-foreground hover:bg-muted hover:text-foreground"
+                      >
+                        <MoreHorizontal className="h-4 w-4" />
+                        Ustawienia
+                      </Button>
+                    }
+                  />
+
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem
+                      onClick={() =>
+                        router.replace(
+                          `/projects/board/${boardId}/card/edit/${card.id}`,
+                        )
+                      }
+                    >
+                      <Pencil className="mr-2 h-4 w-4" />
+                      Edytuj
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                      className="text-destructive focus:text-destructive"
+                      onClick={() => setDeleteModalOpen(true)}
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      Usuń kartę
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
 
             <section className="space-y-4">
@@ -714,30 +761,6 @@ export default function CardDetails({ card, boardId, role }: any) {
                 </div>
               </section>
             </div>
-            {["ADMIN", "OWNER"].includes(role) && (
-              <div className="grid grid-cols-2 gap-3 mt-3">
-                <Button
-                  className="h-11 rounded-xl"
-                  onClick={() =>
-                    router.replace(
-                      `/projects/board/${boardId}/card/edit/${card.id}`,
-                    )
-                  }
-                >
-                  <Pencil className="mr-2 h-4 w-4" />
-                  Edytuj
-                </Button>
-
-                <Button
-                  variant="destructive"
-                  className="h-11 rounded-xl"
-                  onClick={() => setDeleteModalOpen(true)}
-                >
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Usuń kartę
-                </Button>
-              </div>
-            )}
           </aside>
           <ConfirmModal
             open={isDeleteModalOpen}

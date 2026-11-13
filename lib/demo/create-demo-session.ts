@@ -4,9 +4,9 @@ import { createDemoData } from "@/lib/demo/create-demo-data";
 const DEMO_DURATION_HOURS = 1;
 
 export async function createDemoSession() {
-  const expiresAt = new Date(Date.now() + DEMO_DURATION_HOURS * 60 * 60 * 1000);
+  // const expiresAt = new Date(Date.now() + DEMO_DURATION_HOURS * 60 * 60 * 1000);
 
-  // const expiresAt = new Date(Date.now() + 10000); // 10 seconds for testing
+  const expiresAt = new Date(Date.now() + 20000); // 10 seconds for testing
 
   const userId = await prisma.$transaction(async (tx) => {
     const user = await tx.user.create({

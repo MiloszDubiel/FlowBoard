@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Children, useState } from "react";
 import Link from "next/link";
 import {
   FolderKanban,
@@ -58,9 +58,10 @@ const secondaryItems = [
 
 type AppNavbarProps = {
   projects?: any[];
+  children?: React.ReactElement | null;
 };
 
-const AppNavbar = ({ projects = [] }: AppNavbarProps) => {
+const AppNavbar = ({ projects = [], children }: AppNavbarProps) => {
   const { user } = useUser();
 
   const {
@@ -229,7 +230,9 @@ const AppNavbar = ({ projects = [] }: AppNavbarProps) => {
           setMobileMenuOpen={setMobileMenuOpen}
           setCreateProjectOpen={setCreateProjectOpen}
           projects={projects}
-        />
+        >
+          {children}
+        </SideBarSheet>
       </nav>
 
       <CreateProject

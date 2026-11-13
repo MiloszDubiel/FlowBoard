@@ -9,7 +9,7 @@ import { DemoTimer } from "@/components/DemoTimer";
 export default async function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode | null;
 }) {
   const projects = await getProjects();
   const user: any = await getCurrentUser();
@@ -23,14 +23,21 @@ export default async function DashboardLayout({
   return (
     <>
       <div className="min-h-screen w-full">
-        {session && <DemoTimer data={session.expiresAt?.getTime() || 0} />}
         <div className="block lg:flex">
           <div className="block lg:hidden ">
-            <AppNavbar projects={projects} />
+            <AppNavbar projects={projects}>
+              {session && (
+                <DemoTimer data={session.expiresAt?.getTime() || 0} />
+              )}
+            </AppNavbar>
           </div>
 
           <div className="hidden lg:block ">
-            <AppSidebar projects={projects} />
+            <AppSidebar projects={projects}>
+              {session && (
+                <DemoTimer data={session.expiresAt?.getTime() || 0} />
+              )}
+            </AppSidebar>
           </div>
           <main className="flex-1">{children}</main>
         </div>

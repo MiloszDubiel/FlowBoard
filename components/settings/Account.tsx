@@ -76,13 +76,17 @@ export const Account = ({ user }: any) => {
               <Input {...register("email")} disabled={editEmail} />
               <Button
                 variant="outline"
+                disabled={user.isDemo}
                 onClick={() => {
-                  setEditEmail((prev) => !prev);
+                  !user.isDemo && setEditEmail((prev) => !prev);
                 }}
               >
                 Zmień e-mail
               </Button>
-              <Button onClick={handleSubmit((data) => mutate(data))}>
+              <Button
+                onClick={handleSubmit((data) => !user.isDemo && mutate(data))}
+                disabled={user.isDemo}
+              >
                 Zapisz
               </Button>
             </div>
@@ -96,7 +100,11 @@ export const Account = ({ user }: any) => {
               Trwale usuń konto i powiązane z nim dane. Tej operacji nie można
               cofnąć.
             </p>
-            <Button variant="destructive" onClick={() => setIsOpen(true)}>
+            <Button
+              variant="destructive"
+              onClick={() => !user.isDemo && setIsOpen(true)}
+              disabled={user.isDemo}
+            >
               <Trash2 className="mr-2 size-4" />
               Usuń konto
             </Button>

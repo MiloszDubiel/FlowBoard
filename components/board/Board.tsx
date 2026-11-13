@@ -152,7 +152,8 @@ export default function Board({ board, members }: any) {
               variant="outline"
               size="sm"
               className="ml-2 cursor-pointer"
-              onClick={() => setShowMembers(true)}
+              onClick={() => !user.isDemo && setShowMembers(true)}
+              disabled={user.isDemo}
             >
               <Users className="mr-2 h-4 w-4" />
               Zarządzaj zespołem

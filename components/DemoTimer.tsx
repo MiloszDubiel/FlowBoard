@@ -1,7 +1,10 @@
 "use client";
 
+import { useLogout } from "@/mutations/useLogout";
 import { ClockAlert } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
 
 type DemoTimerProps = {
   data: string | number | Date;
@@ -9,6 +12,11 @@ type DemoTimerProps = {
 
 export const DemoTimer = ({ data }: DemoTimerProps) => {
   const [timeLeft, setTimeLeft] = useState("");
+  const {
+    logout: { mutate: logout },
+  } = useLogout();
+
+  const router = useRouter();
 
   useEffect(() => {
     const countDownDate = new Date(data).getTime();
@@ -17,7 +25,9 @@ export const DemoTimer = ({ data }: DemoTimerProps) => {
       const distance = countDownDate - Date.now();
 
       if (distance <= 0) {
-        setTimeLeft("EXPIRED");
+        setTimeLeft("Sesja zakończona");
+        logout();
+        router.replace("/");
         return false;
       }
 

@@ -4,6 +4,8 @@ import { createToken } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
+const isDemo = process.env.IS_DEMO === "1";
+
 export async function POST(request: Request) {
   const body = await request.json();
 
@@ -32,6 +34,13 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { message: "Niepoprawny email lub hasło" },
       { status: 400 },
+    );
+  }
+
+  if (isDemo && !user?.isDemo) {
+    return NextResponse.json(
+      { message: "Nie możesz się zalogować na tym koncie w wersji demo" },
+      { status: 403 },
     );
   }
 

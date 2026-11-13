@@ -2,8 +2,17 @@ import { prisma } from "@/lib/prisma";
 import { withAuth } from "@/lib/withAuth";
 import { NextResponse } from "next/server";
 
+const isDemo = process.env.IS_DEMO === "1";
+
 export const PUT = withAuth(async (user, request, context) => {
   const { boardId, uid } = await context.params;
+
+  if (isDemo) {
+    return NextResponse.json(
+      { message: "Nie możesz wysyłać zaproszeń w wersji demo" },
+      { status: 403 },
+    );
+  }
 
   const board = await prisma.board.findFirst({
     where: {

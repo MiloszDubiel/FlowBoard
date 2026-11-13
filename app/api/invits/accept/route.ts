@@ -2,7 +2,16 @@ import { prisma } from "@/lib/prisma";
 import { withAuth } from "@/lib/withAuth";
 import { NextResponse } from "next/server";
 
+const isDemo = process.env.IS_DEMO === "1";
+
 export const POST = withAuth(async (user, request, context) => {
+  if (isDemo && !user?.isDemo) {
+    return NextResponse.json(
+      { message: "Nie możesz zaakceptować zaproszenia w wersji demo" },
+      { status: 403 },
+    );
+  }
+
   const { boardId } = await request.json();
 
   const boardIvit = await prisma.boardInvite.findFirst({

@@ -55,7 +55,12 @@ const secondaryItems = [
   },
 ];
 
-const AppSidebar = ({ projects = [] }: any) => {
+type AppSidebarProps = {
+  projects?: any[];
+  children?: React.ReactNode | null;
+};
+
+const AppSidebar = ({ projects = [], children }: AppSidebarProps) => {
   const { user } = useUser();
   const {
     logout: { mutate: logout },
@@ -195,6 +200,7 @@ const AppSidebar = ({ projects = [] }: any) => {
             </p>
           </div>
         </div>
+        {children}
       </SidebarFooter>
       <CreateProject open={open} onOpenChange={setOpen} />
     </Sidebar>

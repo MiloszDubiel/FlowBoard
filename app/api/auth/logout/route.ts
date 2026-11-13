@@ -18,36 +18,44 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const userId = Number(payload.userID);
+
   const user = await prisma.user.findUnique({
-    where: {
-      id: Number(payload.userID),
+    where: { id: userId },
+    include: {
+      demoSession: true,
     },
   });
 
-  if (!user) {
-    return NextResponse.json(
-      { message: "Nieprawidłowa sesja." },
-      { status: 401 },
+  if (!user || !user.isDemo) {
+    const response = NextResponse.json(
+      { message: "To nie jest sesja demonstracyjna." },
+      { status: 403 },
     );
-  }
-
-  if (!user.isDemo) {
-    const response = NextResponse.json({
-      success: true,
-    });
 
     response.cookies.delete("token");
+    return response;
   }
 
-  await prisma.user.deleteMany({
+  if (!user.demoSession || user.demoSession.expiresAt <= new Date()) {
+    const response = NextResponse.json(
+      { message: "Sesja demonstracyjna wygasła." },
+      { status: 401 },
+    );
+
+    response.cookies.delete("token");
+    return response;
+  }
+
+  await prisma.user.delete({
     where: {
-      id: Number(payload.userID),
-      isDemo: true,
+      id: userId,
     },
   });
 
   const response = NextResponse.json({
     success: true,
+    message: "Sesja demonstracyjna została zakończona.",
   });
 
   response.cookies.delete("token");
